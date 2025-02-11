@@ -1,0 +1,1 @@
+ALTER TABLE "users" RENAME COLUMN "is_ligged_in" TO "is_logged_in";
