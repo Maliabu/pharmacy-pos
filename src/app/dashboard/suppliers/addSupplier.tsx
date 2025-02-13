@@ -23,7 +23,7 @@ export default function AddSupplier() {
           name: "",
           email: "",
           phone: "",
-          address: "",
+          physicalAddress: "",
           token: "",
           userId: tokenise()[3]
         },
@@ -111,7 +111,7 @@ export default function AddSupplier() {
           <div className="flex flex-col space-y-1.5">
               <FormField
                   control={form.control}
-                  name="address"
+                  name="physicalAddress"
                   render={({ field }) => (
                       <FormItem>
                       <FormLabel>Physical Address</FormLabel>

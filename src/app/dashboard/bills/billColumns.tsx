@@ -1,42 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { avatar } from "@/app/services/services"
+import { avatar, date } from "@/app/services/services"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, Circle, CircleAlertIcon, Dot, File, LucideIcon } from "lucide-react"
 
-type Bill = {
+export type Bill = {
     id: string
-    status: "paid" | "pending"
+    status: string
     name: string
     description: string
     amount: number
-    currency: string
-    created: string
+    currency: {
+        code: string
+    }
+    createdAt: string
   }
-  
-export const data: Bill[] = [
-    {
-        id: "1",
-        status: "paid",
-        name: "water",
-        description: "needed water in the dispenser",
-        amount: 7000,
-        currency: "UGX",
-        created: "25 jan 2025",
-    },
-    {
-        id: "2",
-        status: "pending",
-        name: "toiletries",
-        description: "soap and detergent",
-        amount: 10000,
-        currency: "UGX",
-        created: "25 jan 2025",
-    },
-]
 
 export const columns: ColumnDef<Bill>[] = [
   {
@@ -89,24 +70,17 @@ export const columns: ColumnDef<Bill>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("description")}</div>,
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "UGX",
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
-    },
-  },
+    accessorKey: "currency",
+    header: "currency",
+    cell: ({row}) => {
+      // Custom render for nested address object
+      const currency: {code: string} = row.getValue("currency");
+      return `${currency.code}`;
+    },  },
   {
-    accessorKey: "created",
-    header: "created",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("created")}</div>,
+    accessorKey: "createdAt",
+    header: "createdAt",
+    cell: ({ row }) => <div className="capitalise">{date(row.getValue("createdAt"))}</div>,
   },
 //   {
 //     id: "actions",

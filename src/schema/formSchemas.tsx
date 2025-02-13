@@ -70,7 +70,7 @@ export const addSupplier = z.object({
         message: "email too short"
     }),
     phone: z.string({required_error: "Please enter a phone.",}),
-    address: z.string(),
+    physicalAddress: z.string(),
     token: z.string(),
     userId: z.string(),
 })
@@ -83,7 +83,7 @@ export const addVendor = z.object({
         message: "email too short"
     }),
     phone: z.string({required_error: "Please provide a phone number.",}),
-    address: z.string(),
+    physicalAddress: z.string(),
     userId: z.string(),
 })
 

@@ -1,171 +1,14 @@
 "use client"
 
+import { date, fetcher } from "@/app/services/services"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
+import { Stock } from "../stock/dataColumns"
 
-export type Product = {
-    id: string
-    orderDate: string
-    name: string
-    description: string
-    supplierVendor: string
-    currency: string
-    unitAmount: number
-    price: number
-    unitsPurchased: number
-    unit: string,
-    expiryDate: string
-  }
-  
-export const data: Product[] = [
-    {
-        id: "1",
-        orderDate: "25 feb 2025",
-        name: "paracetamol",
-        description: "pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        unitsPurchased: 6,
-        price: 3000,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-    {
-        id: "2",
-        orderDate: "25 feb 2025",
-        name: "vitamin c",
-        description: "pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        price: 3000,
-        unitsPurchased: 6,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-    {
-        id: "3",
-        orderDate: "25 feb 2025",
-        name: "paracetamol",
-        description: "pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        unitsPurchased: 6,
-        price: 3000,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-    {
-        id: "4",
-        orderDate: "25 feb 2025",
-        name: "mabendazol",
-        description: "pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        unitsPurchased: 6,
-        price: 3000,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-    {
-        id: "5",
-        orderDate: "25 feb 2025",
-        name: "paracetamol",
-        description: "pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        price: 3000,
-        unitsPurchased: 6,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-    {
-        id: "6",
-        orderDate: "25 feb 2025",
-        name: "ampicilin",
-        description: "pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        price: 3000,
-        unitsPurchased: 6,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-    {
-        id: "7",
-        orderDate: "25 feb 2025",
-        name: "charchoal",
-        description: "stomach pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        unitsPurchased: 6,
-        price: 3000,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-    {
-        id: "8",
-        orderDate: "25 feb 2025",
-        name: "magnesium",
-        description: "pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        unitsPurchased: 6,
-        price: 3000,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-    {
-        id: "9",
-        orderDate: "25 feb 2025",
-        name: "chloroquin",
-        description: "pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        unitsPurchased: 6,
-        price: 3000,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-    {
-        id: "10",
-        orderDate: "25 feb 2025",
-        name: "ampicilin",
-        description: "pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        price: 3000,
-        unitsPurchased: 6,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-    {
-        id: "11",
-        orderDate: "25 feb 2025",
-        name: "amoxylin",
-        description: "pain killers",
-        supplierVendor: "medic pharm",
-        currency: "ugx",
-        unitAmount: 2500,
-        unitsPurchased: 6,
-        price: 3000,
-        unit: "box",
-        expiryDate: "25 feb 2027"
-    },
-]
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<Stock>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -189,17 +32,17 @@ export const columns: ColumnDef<Product>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: "id",
-    header: "No.",
+    accessorKey: "stockStatus",
+    header: "stockStatus",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("id")}</div>
+      <div className={row.getValue("stockStatus") == "active"?"text-lime-600 p-1 rounded-md border border-lime-600 flex justify-center":row.getValue("stockStatus")=="safety"?"text-destructive p-1 rounded-md border border-red-600 flex justify-center":row.getValue("stockStatus")=="quarantine"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("stockStatus")}</div>
     ),
   },
   {
     accessorKey: "orderDate",
     header: "orderDate",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("orderDate")}</div>
+      <div className="capitalize">{date(row.getValue("orderDate"))}</div>
     ),
   },
   {
@@ -223,24 +66,14 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("description")}</div>,
   },
   {
-    accessorKey: "price",
-    header: () => <div className="text-right">Price</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("price"))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "UGX",
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
-    },
+    accessorKey: "createdAt",
+    header: "createdAt",
+    cell: ({ row }) => <div className="capitalise">{date(row.getValue("createdAt"))}</div>,
   },
   {
     accessorKey: "expiryDate",
     header: "expiryDate",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("expiryDate")}</div>,
+    cell: ({ row }) => <div className="capitalise">{date(row.getValue("expiryDate"))}</div>,
   },
 //   {
 //     id: "actions",

@@ -23,7 +23,7 @@ export default function AddVendor() {
           name: "",
           email: "",
           phone: "",
-          address: "",
+          physicalAddress: "",
           userId: tokenise()[3]
       },
     })
@@ -110,7 +110,7 @@ export default function AddVendor() {
           <div className="flex flex-col space-y-1.5">
               <FormField
                   control={form.control}
-                  name="address"
+                  name="physicalAddress"
                   render={({ field }) => (
                       <FormItem>
                       <FormLabel>Physical Address</FormLabel>

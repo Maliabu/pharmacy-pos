@@ -7,18 +7,19 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, Circle, CircleAlertIcon, Dot, File, LucideIcon } from "lucide-react"
 
-export type Supplier = {
+export type User = {
     id: string
     isActive: boolean
     name: string
     email: string
     phone: number
-    physicalAddress: string
     createdAt: string
-    token: string
+    lastLogin: string
+    isLoggedIn: string
+    username: string
   }
 
-export const columns: ColumnDef<Supplier>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     id: "select",
     // header: ({ table }) => (
@@ -49,14 +50,16 @@ export const columns: ColumnDef<Supplier>[] = [
     ),
   },
   {
+    accessorKey: "isLoggedIn",
+    header: "isLoggedIn",
+    cell: ({ row }) => (
+      <div className={row.getValue("isLoggedIn") == true?"text-lime-400 p-1 rounded-full":row.getValue("isLoggedIn")==false?"text-red-600 p-1":""}><Dot size={40}/></div>
+    ),
+  },
+  {
     accessorKey: "profile",
     header: "profile",
     cell: ({ row }) => <div className="h-10 w-10 rounded-full bg-primary text-muted flex items-center justify-center">{avatar(row.getValue("name"))}</div>,
-  },
-  {
-    accessorKey: "token",
-    header: "Reg Number",
-    cell: ({ row }) => <div className="uppercase">{row.getValue("token")}</div>,
   },
   {
     accessorKey: "name",
@@ -84,9 +87,14 @@ export const columns: ColumnDef<Supplier>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
   },
   {
-    accessorKey: "physicalAddress",
-    header: "address",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("physicalAddress")}</div>,
+    accessorKey: "username",
+    header: "username",
+    cell: ({ row }) => <div className="lowercase">{row.getValue("username")}</div>,
+  },
+  {
+    accessorKey: "lastLogin",
+    header: "lastLogin",
+    cell: ({ row }) => <div className="capitalise">{date(row.getValue("lastLogin"))}</div>,
   },
   {
     accessorKey: "createdAt",

@@ -99,8 +99,8 @@ export const Bills = pgTable('bills', {
   updatedAt,
 });
 
-export const billsRelations = relations(Bills, ({many}) => ({
-  currency: many(supplierTable),
+export const billsRelations = relations(Bills, ({one}) => ({
+  currency: one(currencyTable, {fields: [Bills.currency], references: [currencyTable.id]}),
 }))
 
 export const vendorTable = pgTable('vendor', {

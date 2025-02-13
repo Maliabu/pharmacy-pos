@@ -7,7 +7,7 @@ import { Stock, columns } from "./dataColumns"
 import { fetcher } from "@/app/services/services"
 import { Loader2 } from "lucide-react"
 
-export default function Page(){
+export default function PageStock(){
 
     let stock: Stock[] = []
     const { data, error } = useSWR("/api/stock", fetcher);

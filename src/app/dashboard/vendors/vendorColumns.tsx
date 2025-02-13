@@ -1,49 +1,42 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { avatar } from "@/app/services/services"
+import { avatar, date } from "@/app/services/services"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, Circle, CircleAlertIcon, Dot, File, LucideIcon } from "lucide-react"
 
-type Vendor = {
+export type Vendor = {
     id: string
     isActive: boolean
     name: string
     email: string
     phone: number
-    address: string
-    created: string
-    token: string
+    physicalAddress: string
+    createdAt: string
   }
-  
-export const data: Vendor[] = [
-    {
-        id: "1",
-        isActive: true,
-        name: "Admin",
-        email: "admin@pharmacy.com",
-        phone: 3200007867,
-        address: "Bombo rd",
-        created: "25 jan 2025",
-        token: "ghasfuahds"
-    },
-    {
-        id: "2",
-        isActive: false,
-        name: "Admin",
-        email: "admin@pharmacy.com",
-        phone: 3288007867,
-        address: "Jinja rd",
-        created: "25 jan 2025",
-        token: "ukafiahufdhsv"
-    },
-]
 
 export const columns: ColumnDef<Vendor>[] = [
   {
     id: "select",
+    // header: ({ table }) => (
+    //   <Checkbox
+    //     checked={
+    //       table.getIsAllPageRowsSelected() ||
+    //       (table.getIsSomePageRowsSelected() && "indeterminate")
+    //     }
+    //     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+    //     aria-label="Select all"
+    //   />
+    // ),
+    // cell: ({ row }) => (
+    //   <Checkbox
+    //     checked={row.getIsSelected()}
+    //     onCheckedChange={(value) => row.toggleSelected(!!value)}
+    //     aria-label="Select row"
+    //   />
+    // ),
     enableSorting: true,
     enableHiding: true,
   },
@@ -85,19 +78,14 @@ export const columns: ColumnDef<Vendor>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
   },
   {
-    accessorKey: "address",
+    accessorKey: "physicalAddress",
     header: "address",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("address")}</div>,
+    cell: ({ row }) => <div className="capitalise">{row.getValue("physicalAddress")}</div>,
   },
   {
-    accessorKey: "created",
+    accessorKey: "createdAt",
     header: "created",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("created")}</div>,
-  },
-  {
-    accessorKey: "token",
-    header: "Reg Number",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("token")}</div>,
+    cell: ({ row }) => <div className="capitalise">{date(row.getValue("createdAt"))}</div>,
   },
 //   {
 //     id: "actions",
