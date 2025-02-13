@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { ChartBar, ChartBarIcon, File, PenToolIcon, Pill, Plus, Receipt, Settings2, ShoppingBasket, Store, StoreIcon, Sun, Tag, TruckIcon, User, View, Wallet } from "lucide-react"
+import { BarChart, ChartBar, ChartBarIcon, File, LineChart, ListChecks, PenToolIcon, Pill, Plus, Receipt, Settings2, ShoppingBasket, Store, StoreIcon, Sun, Tag, TruckIcon, User, View, Wallet } from "lucide-react"
 
 import {
   Sidebar,
@@ -24,7 +24,7 @@ const data = {
       items: [
         {
           title: "Overview",
-          icon: ChartBar,
+          icon: LineChart,
           url: "/dashboard/salesChart",
         },
         {
@@ -42,17 +42,17 @@ const data = {
     {
       title: "Inventory",
       url: "#",
-      icon: StoreIcon,
+      icon: ListChecks,
       isActive: false,
       items: [
         {
           title: "Overview",
-          icon: ChartBarIcon,
+          icon: BarChart,
           url: "/dashboard/inventoryChart",
         },
         {
           title: "Stock",
-          icon: Store,
+          icon: Pill,
           url: "/dashboard/stock",
         },
         {

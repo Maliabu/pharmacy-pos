@@ -7,7 +7,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { DataTableDemo } from "../dataTable"
-import { columns, data } from "../stock/dataColumns"
+import { columns, stock } from "../stock/dataColumns"
 import { columns as invoiceColumns, data as invoiceData } from "../invoice/invoiceColumns"
 import { columns as supplyColumns, data as supplyData } from "../suppliers/supplyColumns"
 import { columns as authColumns, data as authData } from "@/app/auth/usersColumns"
@@ -35,7 +35,7 @@ export default function Page() {
       <TabsContent value="stock">
         <Card className="shadow-none border-none p-6">
         <div className="text-2xl font-bold tracking-tight">Stock</div>
-          <DataTableDemo data={data} columns={columns} id="stock"/>
+          <DataTableDemo data={stock} columns={columns} id="stock"/>
         </Card>
       </TabsContent>
       <TabsContent value="supplier">

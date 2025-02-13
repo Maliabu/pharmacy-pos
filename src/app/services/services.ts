@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
+
+export const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export function username(name: string){
     return name.split(" ").concat(String(Math.floor((Math.random() * 10) + 1)))
@@ -23,6 +26,19 @@ export const togglePasswordVisibility = ()=>{
         see.innerHTML = "Password: Now you dont"
     }}
 }
+export const togglePasswordVisibility2 = ()=>{
+  const pass = document.getElementById("pass")
+  const see = document.getElementById("seen")
+
+  if(pass !== null && see !== null){
+  if(pass.getAttribute('type') === "password"){
+      pass.setAttribute('type', 'text')
+      see.innerHTML = "Password: Now you see me"
+  } else{
+      pass.setAttribute('type', 'password')
+      see.innerHTML = "Password: Now you dont"
+  }}
+}
 
 export function onSelection(selection: boolean){
     return selection
@@ -33,13 +49,14 @@ export function avatar(name: string){
 }
 
 export function tokenise(){
-    let name = '',email = '',username = ''
+    let name = '',email = '',username = '', id = ''
     if(window){
         name = localStorage.getItem("name") || ''
         username = localStorage.getItem("username") || ''
         email = localStorage.getItem("email") || ''
+        id = localStorage.getItem("id") || ''
     }
-    return [name, username, email]
+    return [name, username, email, id]
 }
 
 export function nextCourse(){
@@ -177,3 +194,57 @@ export const groupBy = (by: string, arr: IObject[]) => {
     return accumulatedObject
   }, {} as IObjectKeys)
 }
+
+export function getMyMonth(num: number){
+  switch(num){
+    case 1:
+      return "January"
+    case 2:
+      return "February"
+    case 3:
+      return "March"
+    case 4:
+      return "April"
+    case 5:
+      return "May"
+    case 6:
+      return "June"
+    case 7:
+      return "July"
+    case 8:
+      return "August"
+    case 9:
+      return "September"
+    case 10:
+      return "October"
+    case 11:
+      return "November"
+    case 12:
+      return "December"
+  }
+}
+
+export function getMyDay(num: number | null){
+  switch(num){
+    case 1:
+      return "Monday"
+    case 2:
+      return "Tuesday"
+    case 3:
+      return "Wednesday"
+    case 4:
+      return "Thursday"
+    case 5:
+      return "Friday"
+    case 6:
+      return "Saturday"
+    case 7:
+      return "Sunday"
+  }
+}
+
+export function date(dateString: string){
+    let date = new Date(dateString)
+    return date.toDateString()
+}
+

@@ -1,5 +1,5 @@
 {
-  "id": "8c905b9c-6134-4bdd-a2c9-4480cd145108",
+  "id": "9ee59fc6-3b54-4379-a8c1-dc5d38c15825",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -55,15 +55,15 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "bills_currency_id_currency_table_id_fk": {
-          "name": "bills_currency_id_currency_table_id_fk",
+        "bills_currency_id_currency_id_fk": {
+          "name": "bills_currency_id_currency_id_fk",
           "tableFrom": "bills",
-          "tableTo": "currency_table",
+          "tableTo": "currency",
           "columnsFrom": [
             "currency_id"
           ],
@@ -80,8 +80,66 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.currency_table": {
-      "name": "currency_table",
+    "public.activity": {
+      "name": "activity",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user": {
+          "name": "user",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "activity_user_users_id_fk": {
+          "name": "activity_user_users_id_fk",
+          "tableFrom": "activity",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.currency": {
+      "name": "currency",
       "schema": "",
       "columns": {
         "id": {
@@ -102,8 +160,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "name": {
-          "name": "name",
+        "country_name": {
+          "name": "country_name",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -125,7 +183,7 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -136,8 +194,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.vendor": {
-      "name": "vendor",
+    "public.invoice": {
+      "name": "invoice",
       "schema": "",
       "columns": {
         "id": {
@@ -146,54 +204,130 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "phone": {
-          "name": "phone",
+        "product_id": {
+          "name": "product_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "profile_picture": {
-          "name": "profile_picture",
-          "type": "varchar",
+        "user": {
+          "name": "user",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "address": {
-          "name": "address",
+        "status": {
+          "name": "status",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "is_active": {
-          "name": "is_active",
-          "type": "boolean",
+        "invoice_products_id": {
+          "name": "invoice_products_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
-          "default": true
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "invoice_product_id_stock_id_fk": {
+          "name": "invoice_product_id_stock_id_fk",
+          "tableFrom": "invoice",
+          "tableTo": "stock",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
-        "token": {
-          "name": "token",
-          "type": "text",
-          "primaryKey": false,
+        "invoice_user_users_id_fk": {
+          "name": "invoice_user_users_id_fk",
+          "tableFrom": "invoice",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.packaging": {
+      "name": "packaging",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
           "notNull": true
         },
-        "decInitVector": {
-          "name": "decInitVector",
+        "manufacturer": {
+          "name": "manufacturer",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "manufacturer_id": {
+          "name": "manufacturer_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "seal_label": {
+          "name": "seal_label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "regulation": {
+          "name": "regulation",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "recycle": {
+          "name": "recycle",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "leaching_absorption": {
+          "name": "leaching_absorption",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "barriers": {
+          "name": "barriers",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -206,32 +340,25 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "vendor_email_unique": {
-          "name": "vendor_email_unique",
+        "packaging_seal_label_unique": {
+          "name": "packaging_seal_label_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "email"
+            "seal_label"
           ]
         },
-        "vendor_phone_unique": {
-          "name": "vendor_phone_unique",
+        "packaging_regulation_unique": {
+          "name": "packaging_regulation_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "phone"
-          ]
-        },
-        "vendor_token_unique": {
-          "name": "vendor_token_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "token"
+            "regulation"
           ]
         }
       },
@@ -257,6 +384,12 @@
         },
         "description": {
           "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -303,8 +436,14 @@
           "primaryKey": false,
           "notNull": true
         },
-        "unit": {
-          "name": "unit",
+        "payment": {
+          "name": "payment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "packaging_id": {
+          "name": "packaging_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -320,7 +459,7 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -351,10 +490,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "stock_currency_id_currency_table_id_fk": {
-          "name": "stock_currency_id_currency_table_id_fk",
+        "stock_currency_id_currency_id_fk": {
+          "name": "stock_currency_id_currency_id_fk",
           "tableFrom": "stock",
-          "tableTo": "currency_table",
+          "tableTo": "currency",
           "columnsFrom": [
             "currency_id"
           ],
@@ -364,12 +503,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "stock_unit_units_id_fk": {
-          "name": "stock_unit_units_id_fk",
+        "stock_packaging_id_packaging_id_fk": {
+          "name": "stock_packaging_id_packaging_id_fk",
           "tableFrom": "stock",
-          "tableTo": "units",
+          "tableTo": "packaging",
           "columnsFrom": [
-            "unit"
+            "packaging_id"
           ],
           "columnsTo": [
             "id"
@@ -408,7 +547,7 @@
         },
         "phone": {
           "name": "phone",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -431,15 +570,9 @@
           "notNull": true,
           "default": true
         },
-        "token": {
-          "name": "token",
+        "reg_number/license": {
+          "name": "reg_number/license",
           "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "decInitVector": {
-          "name": "decInitVector",
-          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -454,7 +587,7 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -475,70 +608,11 @@
             "phone"
           ]
         },
-        "supplier_token_unique": {
-          "name": "supplier_token_unique",
+        "supplier_reg_number/license_unique": {
+          "name": "supplier_reg_number/license_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "token"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.units": {
-      "name": "units",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "value": {
-          "name": "value",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "units_name_unique": {
-          "name": "units_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        },
-        "units_value_unique": {
-          "name": "units_value_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "value"
+            "reg_number/license"
           ]
         }
       },
@@ -586,6 +660,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "profile_picture": {
           "name": "profile_picture",
           "type": "varchar",
@@ -612,6 +692,19 @@
           "primaryKey": false,
           "notNull": true
         },
+        "is_logged_in": {
+          "name": "is_logged_in",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "last_login": {
+          "name": "last_login",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -623,7 +716,7 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -649,6 +742,97 @@
           "nullsNotDistinct": false,
           "columns": [
             "username"
+          ]
+        },
+        "users_phone_unique": {
+          "name": "users_phone_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "phone"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.vendor": {
+      "name": "vendor",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile_picture": {
+          "name": "profile_picture",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "vendor_email_unique": {
+          "name": "vendor_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        },
+        "vendor_phone_unique": {
+          "name": "vendor_phone_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "phone"
           ]
         }
       },

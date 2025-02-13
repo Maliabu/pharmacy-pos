@@ -39,6 +39,7 @@ export default function Login(){
           const name = data[6]
           const email = data[4]
           const username = data[5]
+          const id = data[7]
 
         // decrypt password n compare
         const dec = handleDecryption(second, third)
@@ -62,6 +63,7 @@ export default function Login(){
                 localStorage.setItem("name", name)
                 localStorage.setItem("username", username)
                 localStorage.setItem("email", email)
+                localStorage.setItem("id", id)
                 redirect("/dashboard/salesChart")
             } 
             else if(res.toString() !== values.password){

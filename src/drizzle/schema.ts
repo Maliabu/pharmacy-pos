@@ -12,6 +12,7 @@ export const usersTable = pgTable('users', {
   email: text('email').notNull().unique(),
   token: text('token').notNull().unique(),
   username: varchar('username').notNull().unique(),
+  phone: text('phone').unique(),
   profilePicture: varchar('profile_picture'),
   userType: text('type').notNull().default("user"),
   isActive: boolean("is_active").notNull().default(true),
@@ -22,20 +23,25 @@ export const usersTable = pgTable('users', {
   updatedAt,
 });
 
-export const currencyTable = pgTable('currency_table', {
+export const userRelations = relations(usersTable, ({many}) => ({
+  activity: many(activityTable)
+}))
+
+
+export const currencyTable = pgTable('currency', {
   id: serial('id').primaryKey(),
   code: text('currency_code').notNull(),
   currency: text('currency_name').notNull(),
-  country: text('name').notNull(),
+  country: text('country_name').notNull(),
   country_code: text('country_code').notNull(),
   createdAt,
   updatedAt,
 });
 
-export const invoiceTable = pgTable('currency_table', {
+export const invoiceTable = pgTable('invoice', {
   id: serial('id').primaryKey(),
   product: integer("product_id").notNull().references(() => stockTable.id, {onDelete: 'cascade'}),
-  user: integer("currency_id").notNull().references(() => usersTable.id, {onDelete: 'cascade'}),
+  user: integer("user").notNull().references(() => usersTable.id, {onDelete: 'cascade'}),
   invoiceStatus: text("status").notNull(),
   invoiceGroup: text("invoice_products_id").notNull(),
   createdAt,
@@ -51,11 +57,12 @@ export const stockTable = pgTable('stock', {
   vendor: integer('vendor')
     .references(() => vendorTable.id, { onDelete: 'cascade' }),
   orderDate: timestamp('start_date').notNull(),
-  expDate: timestamp('end_date').notNull(),
+  expiryDate: timestamp('end_date').notNull(),
   currency: integer("currency_id").notNull().references(() => currencyTable.id, {onDelete: 'cascade'}),
   unitAmount: integer('amount').notNull(),
   unitsPurchased: integer('units').notNull(),
-  unit: integer('unit').notNull().references(() => unitsTable.id, {onDelete: 'cascade'}),
+  paymentMeans: text('payment').notNull(),
+  packaging: integer("packaging_id").notNull().references(() => packagingTable.id, {onDelete: 'cascade'}),
   createdAt,
   updatedAt,
 });
@@ -65,21 +72,20 @@ export const supplierTable = pgTable('supplier', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').unique(),
-  phone: integer('phone').unique(),
+  phone: text('phone').unique(),
   profilePicture: varchar('profile_picture'),
   physicalAddress: text('address'),
   isActive: boolean("is_active").notNull().default(true),
-  token: text('token').notNull().unique(),
-  decInit: varchar('decInitVector').notNull(),
+  token: text('reg_number/license').notNull().unique(),
   createdAt,
   updatedAt,
 });
 
 export const stockRelations = relations(stockTable, ({many, one}) => ({
-  supplier: many(supplierTable),
-  vendor: many(vendorTable),
-  currency: many(supplierTable),
-  unit: one(supplierTable, {fields: [stockTable.supplier], references: [supplierTable.id]}),
+  supplier: one(supplierTable, {fields: [stockTable.supplier], references: [supplierTable.id]}),
+  vendor: one(vendorTable, {fields: [stockTable.vendor], references: [vendorTable.id]}),
+  currency: one(currencyTable, {fields: [stockTable.currency], references: [currencyTable.id]}),
+  packaging: one(packagingTable, {fields: [stockTable.packaging], references: [packagingTable.id]})
 }))
 
 export const Bills = pgTable('bills', {
@@ -101,19 +107,16 @@ export const vendorTable = pgTable('vendor', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').unique(),
-  phone: integer('phone').unique(),
+  phone: text('phone').unique(),
   profilePicture: varchar('profile_picture'),
   physicalAddress: text('address'),
   isActive: boolean("is_active").notNull().default(true),
-  token: text('token').notNull().unique(),
-  decInit: varchar('decInitVector').notNull(),
   createdAt,
   updatedAt,
 });
 
-export const packagingTable = pgTable('vendor', {
+export const packagingTable = pgTable('packaging', {
   id: serial('id').primaryKey(),
-  product: integer("stock_id").notNull().references(() => stockTable.id, {onDelete: 'cascade'}),
   manufacturer: varchar('manufacturer').notNull(),
   manufacturerId: varchar('manufacturer_id').notNull(),
   material: varchar('name').notNull(),
@@ -126,18 +129,17 @@ export const packagingTable = pgTable('vendor', {
   updatedAt,
 });
 
-export const packagingRelations = relations(packagingTable, ({one}) => ({
-  stock: one(stockTable, {fields: [packagingTable.product], references: [stockTable.id]}),
-}))
-
-export const unitsTable = pgTable('units', {
+export const activityTable = pgTable('activity', {
   id: serial('id').primaryKey(),
-  name: text('name').notNull().unique(),
-  value: text('value').notNull().unique(),
+  user: integer("user").notNull().references(() => usersTable.id, {onDelete: 'cascade'}),
+  activity: text('value').notNull(),
     createdAt,
     updatedAt,
 });
 
+export const activityRelations = relations(activityTable, ({ one }) => ({
+	users: one(usersTable, { fields: [activityTable.user], references: [usersTable.id] }),
+}));
 
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
@@ -154,8 +156,8 @@ export type SelectBills = typeof Bills.$inferSelect;
 export type InsertVendor = typeof vendorTable.$inferInsert;
 export type SelectVendor = typeof vendorTable.$inferSelect;
 
-export type InsertUnits = typeof unitsTable.$inferInsert;
-export type SelectUnits = typeof unitsTable.$inferSelect;
+export type InsertActvity = typeof activityTable.$inferInsert;
+export type SelectActivity = typeof activityTable.$inferSelect;
 
 export type InsertPackaging = typeof packagingTable.$inferInsert;
 export type SelectPackaging = typeof packagingTable.$inferSelect;

@@ -83,7 +83,7 @@ export function DataTableDemo<TData, TValue>({data, columns, id}: DataTableProps
         </div>
         <div className="flex gap-1 mt-1 sm:mt-0">
         { id=="product" && <Button className={table.getIsSomeRowsSelected() == true?"bg-foreground":"bg-muted-foreground hover:bg-muted-foreground"}>New Invoice</Button>}
-        { id=="stock" && <Button className={table.getIsSomeRowsSelected() == true?"bg-foreground":"bg-muted-foreground hover:bg-muted-foreground"}>Manage Product</Button>}
+        {/* { id=="stock" && <Button className={table.getIsSomeRowsSelected() == true?"bg-foreground":"bg-muted-foreground hover:bg-muted-foreground"}>Manage Product</Button>} */}
         { id=="stock" && <Button ><Link href="/dashboard/management#stock">Add new Stock</Link></Button>}
         { id=="user" && <div className=" gap-1 flex">
             <Button ><Link href="/dashboard/management">Add new User</Link></Button>
