@@ -13,6 +13,7 @@ export function token(){
     }
     return rand()+rand()+rand()
 }
+
 export const togglePasswordVisibility = ()=>{
     const pass = document.getElementById("password")
     const see = document.getElementById("see")
@@ -49,14 +50,15 @@ export function avatar(name: string){
 }
 
 export function tokenise(){
-    let name = '',email = '',username = '', id = ''
+    let name = '',email = '',username = '', id = '', userType = ''
     if(window){
         name = localStorage.getItem("name") || ''
         username = localStorage.getItem("username") || ''
         email = localStorage.getItem("email") || ''
         id = localStorage.getItem("id") || ''
-    }
-    return [name, username, email, id]
+        userType = localStorage.getItem("userType") || ''
+      }
+    return [name, username, email, id, userType]
 }
 
 export function nextCourse(){
@@ -244,7 +246,7 @@ export function getMyDay(num: number | null){
 }
 
 export function date(dateString: string){
-    let date = new Date(dateString)
+    const date = new Date(dateString)
     return date.toDateString()
 }
 

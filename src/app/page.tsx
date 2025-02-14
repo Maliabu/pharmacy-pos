@@ -40,6 +40,7 @@ export default function Login(){
           const email = data[4]
           const username = data[5]
           const id = data[7]
+          const userType = data[8]
 
         // decrypt password n compare
         const dec = handleDecryption(second, third)
@@ -52,7 +53,7 @@ export default function Login(){
                     "message": "Invalid login credentails"
                 })
             }
-            else if(res.toString() === values.password && forth === 'admin'){
+            else if(res.toString() === values.password && forth === 'admin' || forth === 'staff'){
                 if(app !== null){
                     app.innerHTML = "Successful";
                 }
@@ -64,13 +65,14 @@ export default function Login(){
                 localStorage.setItem("username", username)
                 localStorage.setItem("email", email)
                 localStorage.setItem("id", id)
+                localStorage.setItem("userType", userType)
                 redirect("/dashboard/salesChart")
             } 
             else if(res.toString() !== values.password){
                 form.setError("root", {
                 "message": "invalid login credentials"
                 })
-            }else if(forth !== 'admin'){
+            }else if(forth !== 'admin' && forth !== "staff"){
                 form.setError("root", {
                 "message": "unauthorised user login"
                 })

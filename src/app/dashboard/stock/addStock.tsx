@@ -12,8 +12,8 @@ import { useForm } from "react-hook-form"
 import z from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { addNewStock, addSuppliers, addUsers } from "@/server/fetch.actions"
-import { addStock, addSupplier, addUserSchema } from '@/schema/formSchemas'
+import { addNewStock} from "@/server/fetch.actions"
+import { addStockSchema } from '@/schema/formSchemas'
 import { DatePicker } from "@/app/services/datePicker"
 import { fetcher, tokenise } from "@/app/services/services"
 import Packaging from "../packaging/fetchPackaging"
@@ -25,8 +25,8 @@ export default function AddStock() {
     const [supplier, setSupplier] = React.useState("");
     const [status, setStatus] = React.useState("");
 
-    const form = useForm<z.infer<typeof addStock>>({
-      resolver: zodResolver(addStock),
+    const form = useForm<z.infer<typeof addStockSchema>>({
+      resolver: zodResolver(addStockSchema),
         defaultValues: {
           name: "",
           description: "",
@@ -112,7 +112,7 @@ export default function AddStock() {
         } else return []
     }
 
-    async function onSubmit(values: z.infer<typeof addStock>) {  
+    async function onSubmit(values: z.infer<typeof addStockSchema>) {  
       
       const app = document.getElementById('submit');
       const text = 'processing';

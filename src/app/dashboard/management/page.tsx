@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+"use client"
+
 import AddUser from "@/app/auth/page"
 import {
   Card,
@@ -15,13 +17,14 @@ import AddStock from "../stock/addStock"
 import AddBill from "../bills/addBill"
 import AddPackaging from "../packaging/addPackage"
 import { Box, Pill, Receipt, Store, Truck, User } from "lucide-react"
+import { tokenise } from "@/app/services/services"
 
 export default function Page() {
   return (
-    <Tabs defaultValue="user" className="">
+    <Tabs defaultValue="stock" className="">
         <div className="text-3xl font-bold tracking-tight sm:my-4 m-4 sm:mx-0">Add</div>
       <TabsList className="grid w-full grid-cols-6">
-      <TabsTrigger value="user" className="p-2 border-none"><User size={16} className="mr-2"/>Users</TabsTrigger>
+      {tokenise()[4]=="admin" && <TabsTrigger value="user" className="p-2 border-none"><User size={16} className="mr-2"/>Users</TabsTrigger>}
         <TabsTrigger value="stock" className="p-2 border-none"><Pill size={16} className="mr-2"/>Stock</TabsTrigger>
         <TabsTrigger value="supplier" className="p-2 border-none"><Truck size={16} className="mr-2"/>Supplier</TabsTrigger>
         <TabsTrigger value="vendor" className="p-2 border-none"><Store size={16} className="mr-2"/>Vendor</TabsTrigger>

@@ -33,8 +33,8 @@ const data = {
           url: "/dashboard/invoice",
         },
         {
-          title: "Products",
-          icon: Tag,
+          title: "Products List",
+          icon: ListChecks,
           url: "/dashboard/products",
         },
       ],
@@ -42,7 +42,7 @@ const data = {
     {
       title: "Inventory",
       url: "#",
-      icon: ListChecks,
+      icon: Tag,
       isActive: false,
       items: [
         {

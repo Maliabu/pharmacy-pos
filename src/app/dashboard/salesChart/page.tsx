@@ -1,86 +1,63 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client"
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Product } from "../products/dataColumns";
+import { Stock } from "../stock/dataColumns";
+import { Loader2, ThumbsUp } from "lucide-react";
+import { date, fetcher } from "@/app/services/services";
+import useSWR from "swr";
 
 export default function Page(){
 
-    const expires: Product[] = [
-        {
-            id: "1",
-            orderDate: "25 feb 2025",
-            name: "paracetamol",
-            description: "pain killers",
-            supplierVendor: "medic pharm",
-            currency: "ugx",
-            unitAmount: 2500,
-            unitsPurchased: 6,
-            price: 3000,
-            unit: "box",
-            expiryDate: "25 feb 2027"
-        },
-        {
-            id: "2",
-            orderDate: "25 feb 2025",
-            name: "vitamin c",
-            description: "pain killers",
-            supplierVendor: "medic pharm",
-            currency: "ugx",
-            unitAmount: 2500,
-            price: 3000,
-            unitsPurchased: 6,
-            unit: "box",
-            expiryDate: "25 feb 2027"
-        },
-        {
-            id: "3",
-            orderDate: "25 feb 2025",
-            name: "paracetamol",
-            description: "pain killers",
-            supplierVendor: "medic pharm",
-            currency: "ugx",
-            unitAmount: 2500,
-            unitsPurchased: 6,
-            price: 3000,
-            unit: "box",
-            expiryDate: "25 feb 2027"
-        },
-        {
-            id: "4",
-            orderDate: "25 feb 2025",
-            name: "mabendazol",
-            description: "pain killers",
-            supplierVendor: "medic pharm",
-            currency: "ugx",
-            unitAmount: 2500,
-            unitsPurchased: 6,
-            price: 3000,
-            unit: "box",
-            expiryDate: "25 feb 2027"
-        },
-    ]
+    let stock: Stock[] = []
+    const { data, error } = useSWR("/api/stock", fetcher);
+    if(data){
+        console.log(data)
+        stock = data
+    }
+    if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/></div>;
+
+    function filterObjectsByDaysRemaining(objects: Stock[]): Stock[] {
+        const today = new Date();
+        const result: Stock[] = [];
+      
+        objects.forEach((obj) => {
+          const targetDate = new Date(obj.expiryDate);
+          const timeDiff = targetDate.getTime() - today.getTime();
+          const daysRemaining = Math.floor(timeDiff / (1000 * 3600 * 24)); // Convert time difference to days
+      
+          if (daysRemaining < 14) {
+            result.push(obj);
+          }
+        });
+        return result
+    }
+    
     return<div className="bg-background p-8 rounded-lg mt-2">
         <div className="grid sm:grid-cols-3 gap-2">
-            <div className="p-6 bg-primary text-lime-300 rounded-lg">
+            <div className="p-6 bg-primary text-lime-200 rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
-                    4
+                    {stock.length}
                 </div>
                 <span>Products</span>
-                <div className="text-sm leading-4 text-lime-300 p-3 rounded-md bg-lime-600 mt-4">Total products in stock</div>
+                <div className="text-sm leading-4 text-lime-200 p-3 rounded-md bg-lime-600 mt-4">Total products in stock</div>
             </div>
-            <div className="p-2 bg-red-600 text-red-200 rounded-lg col-span-2">
-                <div className="flex justify-between items-center p-2 border-b border-red-400">
-                <div className="text-base font-bold tracking-tight leading-4">Stock due for Expiry (14 days window)</div>
-                <div className="h-10 w-10 rounded-full bg-red-500 text-red-200 flex justify-center items-center">5</div>
+            {filterObjectsByDaysRemaining(stock).length >= 1 &&
+            <div className="p-2 border border-red-600 text-red-600 rounded-lg col-span-2">
+                <div className="flex justify-between items-center border-red-600 p-2">
+                <div className=" font-bold tracking-tight leading-4">Stock due for Expiry (14 days window)</div>
+                <div className="h-10 w-10 rounded-full dark:bg-red-500 bg-red-500 text-red-100 flex justify-center items-center">{filterObjectsByDaysRemaining(stock).length}</div>
                 </div>
-                <Carousel className="sm:w-full w-[300px] sm:px-12 sm:py-6">
+                <Carousel className="sm:w-full w-[300px] sm:px-16 sm:py-6 dark:bg-red-600 bg-red-100 rounded-md">
                 <CarouselContent className="-ml-1">
-                    {expires.map((product) => (
+                    {filterObjectsByDaysRemaining(stock).map((product) => (
                     <CarouselItem key={product.id} className="pl-1 md:basis-1/2 lg:basis-1/3">
                         <div className="">
-                        <Card className="shadow-none border-none bg-red-500 text-red-200 rounded-md">
-                            <CardContent className="flex flex-col items-center justify-center p-3">
+                        <Card className="shadow-none border-none bg-red-500 text-red-100 rounded-md">
+                            <CardContent className="flex flex-col p-3">
                             <span className="text-base font-semibold">{product.name}</span>
-                            <div>{product.expiryDate}</div>
+                            <div className="text-sm">{date(product.expiryDate)}</div>
                             </CardContent>
                         </Card>
                         </div>
@@ -90,10 +67,22 @@ export default function Page(){
                 <CarouselPrevious className="ml-12 text-red-200 border bg-red-500 border-red-500 hover:bg-red-500 hover:text-red-300" />
                 <CarouselNext className="mr-12 text-red-200 border bg-red-500 border-red-500 hover:bg-red-500 hover:text-red-300" />
                 </Carousel>
-            </div>
+            </div>}
+            {filterObjectsByDaysRemaining(stock).length < 1 &&
+            <div className="p-6 bg-muted rounded-lg col-span-2 flex bg-primary text-lime-200 flex-col justify-center items-center">
+                <ThumbsUp size={40}/>
+                <div className="mt-2">No items due to expire yet</div>
+            </div>}
         </div>
         <div>
-            <div className="text-2xl tracking-tight font-bold mt-8">Sales Overview</div>
+            <div className="bg-muted p-6 mt-2 rounded-md">
+                <div className="text-md tracking-tight">Actual Sales</div>
+                <div className="text-sm tracking-tight text-muted-foreground">Actual Sales made from products paid for in full</div>
+                </div>
+            <div className="bg-muted mt-2 p-6 rounded-md">
+                <div className="text-md tracking-tight">Sales Projection</div>
+                <div className="text-sm tracking-tight text-muted-foreground">projections for Sales made from products paid for in full and those pending payment</div>
+                </div>
         </div>
     </div>
 }

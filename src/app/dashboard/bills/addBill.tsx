@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client"
@@ -11,15 +12,15 @@ import { useForm } from "react-hook-form"
 import z from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { addNewBill, addSuppliers, addUsers, addvendors } from "@/server/fetch.actions"
-import { addBill, addSupplier, addUserSchema, addVendor } from '@/schema/formSchemas'
+import { addNewBill } from "@/server/fetch.actions"
 import { fetcher, tokenise } from "@/app/services/services"
 import useSWR from "swr"
+import { addBillSchema } from "@/schema/formSchemas"
 
 export default function AddBill() {
 
-    const form = useForm<z.infer<typeof addBill>>({
-      resolver: zodResolver(addBill),
+    const form = useForm<z.infer<typeof addBillSchema>>({
+      resolver: zodResolver(addBillSchema),
         defaultValues: {
           name: "",
           description: "",
@@ -30,7 +31,6 @@ export default function AddBill() {
           userId: tokenise()[3]
       },
     })
-    console.log(form.getValues())
     const status = [
         {
             id: 1,
@@ -51,7 +51,7 @@ export default function AddBill() {
         } else return []
     }
      
-    async function onSubmit(values: z.infer<typeof addBill>) {  
+    async function onSubmit(values: z.infer<typeof addBillSchema>) {  
       
       const app = document.getElementById('submit');
       const text = 'processing';

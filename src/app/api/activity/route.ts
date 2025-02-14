@@ -1,6 +1,4 @@
 import { db } from "@/drizzle/db";
-import { activityTable } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 // This will handle the GET request to /api/packaging

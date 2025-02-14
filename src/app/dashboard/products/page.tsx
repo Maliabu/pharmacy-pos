@@ -22,7 +22,7 @@ export default function Page(){
         <div>
             <div className="text-3xl tracking-tight font-bold">Product list</div>
             <div>
-                <DataTableDemo data={stock} columns={columns} id="stock"/>
+                <DataTableDemo data={stock} columns={columns} id="product"/>
             </div>
         </div>
     </div>

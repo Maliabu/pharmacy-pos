@@ -10,15 +10,15 @@ import { useForm } from "react-hook-form"
 import z from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { addNewBill, addNewPackaging, addSuppliers, addUsers, addvendors } from "@/server/fetch.actions"
-import { addBill, addPackaging, addSupplier, addUserSchema, addVendor } from '@/schema/formSchemas'
+import { addNewPackaging} from "@/server/fetch.actions"
+import { addPackagingSchema } from '@/schema/formSchemas'
 import FetchPackaging from "./fetchPackaging"
 import { tokenise } from "@/app/services/services"
 
 export default function AddPackaging() {
 
-    const form = useForm<z.infer<typeof addPackaging>>({
-      resolver: zodResolver(addPackaging),
+    const form = useForm<z.infer<typeof addPackagingSchema>>({
+      resolver: zodResolver(addPackagingSchema),
         defaultValues: {
             manufacturer: "",
             manufacturerId: "",
@@ -28,11 +28,12 @@ export default function AddPackaging() {
             envConsiderations: "",
             productCompatibility: "",
             barrierProperties: "",
+            unit: "",
             userId: tokenise()[3]
       },
     })
      
-    async function onSubmit(values: z.infer<typeof addPackaging>) {  
+    async function onSubmit(values: z.infer<typeof addPackagingSchema>) {  
       
       const app = document.getElementById('submit');
       const text = 'processing';

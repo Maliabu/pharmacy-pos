@@ -1,15 +1,16 @@
 "use server"
 
 import { db } from "@/drizzle/db";
-import { Bills, activityTable, currencyTable, packagingTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
+import { Bills, activityTable, currencyTable, invoiceItemsTable, invoiceTable, packagingTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
 // import "use-server"
 import { z } from "zod";
-import { loginUserSchema, addUserSchema, addSupplier, addVendor, addStock, addBill, addPackaging } from '@/schema/formSchemas'
+import { loginUserSchema, addUserSchema, addSupplierSchema, addVendorSchema, addStockSchema, addBillSchema, addPackagingSchema, addInvoiceSchema, addInvoiceItemsSchema } from '@/schema/formSchemas'
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { File } from "node:buffer";
 import { promises as fs } from "node:fs";
 import { sendEmail } from "../nodemailer";
+import { desc } from 'drizzle-orm';
 
 const today = new Date()
 
@@ -67,6 +68,7 @@ export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>){
    let username = ''
    let name = ''
    let id = 0
+   let userType = ''
 
    const checkEmail = await db.query.usersTable.findFirst({
     where: eq(usersTable.email, data.email)
@@ -80,6 +82,7 @@ export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>){
     username = checkEmail.username
     name = checkEmail.name
     id = checkEmail.id
+    userType = checkEmail.userType
 
     // before login, update isloggedin and lastlogin
     await db.update(usersTable).set({
@@ -90,12 +93,12 @@ export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>){
     )
    }
    
-   return [token, encrPass, initVector, usertype, email, username, name, id.toString()]
+   return [token, encrPass, initVector, usertype, email, username, name, id.toString(), userType]
 }
 
-export async function addSuppliers(unsafeData: z.infer<typeof addSupplier>) : 
+export async function addSuppliers(unsafeData: z.infer<typeof addSupplierSchema>) : 
 Promise<{error: boolean | undefined}> {
-   const {success, data} = addSupplier.safeParse(unsafeData)
+   const {success, data} = addSupplierSchema.safeParse(unsafeData)
 
    if (!success){
     return {error: true}
@@ -109,9 +112,9 @@ Promise<{error: boolean | undefined}> {
 //    redirect("/admin/dashboard")
 }
 
-export async function addvendors(unsafeData: z.infer<typeof addVendor>) : 
+export async function addvendors(unsafeData: z.infer<typeof addVendorSchema>) : 
 Promise<{error: boolean | undefined}> {
-   const {success, data} = addVendor.safeParse(unsafeData)
+   const {success, data} = addVendorSchema.safeParse(unsafeData)
 
    if (!success){
     return {error: true}
@@ -124,9 +127,9 @@ Promise<{error: boolean | undefined}> {
 //    redirect("/admin/dashboard")
 }
 
-export async function addNewStock(unsafeData: z.infer<typeof addStock>) : 
+export async function addNewStock(unsafeData: z.infer<typeof addStockSchema>) : 
 Promise<{error: boolean | undefined}> {
-   const {success, data} = addStock.safeParse(unsafeData)
+   const {success, data} = addStockSchema.safeParse(unsafeData)
 
    if (!success){
     return {error: true}
@@ -170,9 +173,9 @@ Promise<{error: boolean | undefined}> {
 //    redirect("/admin/dashboard")
 }
 
-export async function addNewBill(unsafeData: z.infer<typeof addBill>) : 
+export async function addNewBill(unsafeData: z.infer<typeof addBillSchema>) : 
 Promise<{error: boolean | undefined}> {
-   const {success, data} = addBill.safeParse(unsafeData)
+   const {success, data} = addBillSchema.safeParse(unsafeData)
 
    if (!success){
     return {error: true}
@@ -192,9 +195,9 @@ Promise<{error: boolean | undefined}> {
 //    redirect("/admin/dashboard")
 }
 
-export async function addNewPackaging(unsafeData: z.infer<typeof addPackaging>) : 
+export async function addNewPackaging(unsafeData: z.infer<typeof addPackagingSchema>) : 
 Promise<{error: boolean | undefined}> {
-   const {success, data} = addPackaging.safeParse(unsafeData)
+   const {success, data} = addPackagingSchema.safeParse(unsafeData)
 
    if (!success){
     return {error: true}
@@ -203,6 +206,53 @@ Promise<{error: boolean | undefined}> {
    await db.insert(packagingTable).values({...data})
 
    await logActivity("Added new Packaging: "+data.manufacturer, data.userId)
+
+   return {error: false}
+//    redirect("/admin/dashboard")
+}
+
+export async function addNewInvoice(unsafeData: z.infer<typeof addInvoiceSchema>) : 
+Promise<{error: boolean | undefined, id: number}> {
+   const {success, data} = addInvoiceSchema.safeParse(unsafeData)
+
+   if (!success){
+    return {error: true, id: 0}
+   }
+   console.log("SERVER SIDE")
+  
+   // upload invoice data
+   await db.insert(invoiceTable).values({...data})
+   console.log("ADDED INVOICE DATA")
+   // get last invoice id by this user
+   const result = await db.query.invoiceTable.findMany({
+    where: eq(invoiceTable.user, data.user),
+    orderBy: [desc(invoiceTable.id)],
+    limit: 1,
+    })
+    let lastId = 0
+    if (result.length > 0) {
+        lastId = result[0].id; // return the last id
+    }
+    console.log("GETTING INVOICE ID SERVER SIDE")
+    // update items data
+   // update today of the invoice
+   return {error: false, id: lastId}
+//    redirect("/admin/dashboard")
+}
+
+export async function addInvoiceItems(unsafeData: z.infer<typeof addInvoiceItemsSchema>) : 
+Promise<{error: boolean | undefined}> {
+   const {success, data} = addInvoiceItemsSchema.safeParse(unsafeData)
+
+   if (!success){
+    return {error: true}
+   }
+   // upload invoice data
+   // get last invoice id by this user
+   // update items data
+   // update today of the invoice
+
+   await db.insert(invoiceItemsTable).values({...data})
 
    return {error: false}
 //    redirect("/admin/dashboard")

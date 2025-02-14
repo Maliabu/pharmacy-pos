@@ -2,22 +2,35 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 
-import { Bell, Moon, Sun } from "lucide-react";
+import { Bell, Loader2, Moon, Sun } from "lucide-react";
 import Profile from "../auth/profile";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
+import { fetcher, tokenise } from "../services/services";
+import useSWR from "swr";
+import { User } from "./users/userColumns";
 
 export default function Header(){
     const { setTheme } = useTheme()
+    let user: User[] = []
+    const { data, error } = useSWR("/api/users", fetcher);
+    if(data){
+        console.log(data)
+        user = data
+    }
+    if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/>Loading Users ...</div>;
     return <div className="">
-        <div className="bg-background rounded-lg grid grid-cols-1 gap-2">
+        <div className="bg-background rounded-lg grid grid-cols-2 gap-2">
+            <div className="col-span-1">
+            {tokenise()[4]=="admin" && 
+            <div className=" bg-muted p-2 rounded-md flex justify-between items-center">
+                <div>Logged in users: {user.length}</div>
+                <div className="flex">{user.map(user => (
+                    <div key={user.id} className="h-8 w-8 -ml-4 border border-2 border-muted bg-primary text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
+                ))}</div>
+            </div>}
+            </div>
             <div className="col-span-1">
                 <div className="flex items-center justify-end">
                 <DropdownMenu>

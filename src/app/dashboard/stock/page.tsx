@@ -12,7 +12,6 @@ export default function PageStock(){
     let stock: Stock[] = []
     const { data, error } = useSWR("/api/stock", fetcher);
     if(data){
-        console.log(data)
         stock = data
     }
     if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/>Loading Stock ...</div>;

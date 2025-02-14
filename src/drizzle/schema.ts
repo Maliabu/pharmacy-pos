@@ -40,12 +40,27 @@ export const currencyTable = pgTable('currency', {
 
 export const invoiceTable = pgTable('invoice', {
   id: serial('id').primaryKey(),
-  product: integer("product_id").notNull().references(() => stockTable.id, {onDelete: 'cascade'}),
   user: integer("user").notNull().references(() => usersTable.id, {onDelete: 'cascade'}),
+  address: text("address").notNull(),
   invoiceStatus: text("status").notNull(),
-  invoiceGroup: text("invoice_products_id").notNull(),
+  paymentMeans: text("payment_means"),
+  paymentID: text("payment_means_id"),
   createdAt,
+  updatedAt
 });
+
+export const invoiceItemsTable = pgTable('invoice_items', {
+  id: serial('id').primaryKey(),
+  invoice: integer("invoice_id").notNull().references(() => invoiceTable.id, {onDelete: 'cascade'}),
+  product: integer("product_id").notNull().references(() => stockTable.id, {onDelete: 'cascade'}),
+  createdAt,
+  updatedAt
+});
+
+export const invoiceItemsRelations = relations(invoiceItemsTable, ({one}) => ({
+  product: one(stockTable, {fields: [invoiceItemsTable.product], references: [stockTable.id]}),
+  invoice: one(invoiceTable, {fields: [invoiceItemsTable.invoice], references: [invoiceTable.id]}),
+}))
 
 export const stockTable = pgTable('stock', {
   id: serial('id').primaryKey(),
@@ -81,7 +96,7 @@ export const supplierTable = pgTable('supplier', {
   updatedAt,
 });
 
-export const stockRelations = relations(stockTable, ({many, one}) => ({
+export const stockRelations = relations(stockTable, ({one}) => ({
   supplier: one(supplierTable, {fields: [stockTable.supplier], references: [supplierTable.id]}),
   vendor: one(vendorTable, {fields: [stockTable.vendor], references: [vendorTable.id]}),
   currency: one(currencyTable, {fields: [stockTable.currency], references: [currencyTable.id]}),
@@ -125,6 +140,7 @@ export const packagingTable = pgTable('packaging', {
   envConsiderations: varchar('recycle'),
   productCompatibility: varchar('leaching_absorption'),
   barrierProperties: varchar("barriers"),
+  unit: varchar("packaging_unit"),
   createdAt,
   updatedAt,
 });
@@ -143,6 +159,9 @@ export const activityRelations = relations(activityTable, ({ one }) => ({
 
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
+
+export type InsertInvoiceItem = typeof invoiceItemsTable.$inferInsert;
+export type SelectInvoiceItem = typeof invoiceItemsTable.$inferSelect;
 
 export type InsertStock = typeof stockTable.$inferInsert;
 export type SelectStock = typeof stockTable.$inferSelect;

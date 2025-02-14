@@ -14,13 +14,14 @@ import PageStock from "../stock/page"
 import PageSupplier from "../suppliers/page"
 import PageBill from "../bills/page"
 import PageVendor from "../vendors/page"
+import { tokenise } from "@/app/services/services"
 
 export default function Page() {
   return (
-    <Tabs defaultValue="user" className="">
+    <Tabs defaultValue="stock" className="">
         <div className="text-3xl font-bold tracking-tight sm:my-4 m-4 sm:mx-0">View</div>
       <TabsList className="grid w-full grid-cols-5">
-        <TabsTrigger value="user" className="p-2 border-none"><User size={16} className="mr-2"/>Users</TabsTrigger>
+        {tokenise()[4]=="admin" && <TabsTrigger value="user" className="p-2 border-none"><User size={16} className="mr-2"/>Users</TabsTrigger>}
         <TabsTrigger value="stock" className="p-2 border-none"><Pill size={16} className="mr-2"/>Stock</TabsTrigger>
         <TabsTrigger value="supplier" className="p-2 border-none"><Truck size={16} className="mr-2"/>Suppliers</TabsTrigger>
         <TabsTrigger value="bill" className="p-2 border-none"><Receipt size={16} className="mr-2"/>Bills</TabsTrigger>

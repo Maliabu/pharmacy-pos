@@ -128,8 +128,9 @@ export default function AddUser() {
                               <SelectValue placeholder="User"/>
                               </SelectTrigger>
                               <SelectContent position="popper" className=" font-[family-name:var(--font-futura)]">
-                              <SelectItem value="user">Normal User</SelectItem>
+                              <SelectItem value="guest">Guest User</SelectItem>
                               <SelectItem value="admin">Admin User</SelectItem>
+                              <SelectItem value="staff">Staff User</SelectItem>
                               </SelectContent>
                           </Select>
                       </FormControl>

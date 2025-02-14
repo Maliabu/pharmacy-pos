@@ -1,6 +1,6 @@
 "use client"
 
-import { date, fetcher } from "@/app/services/services"
+import { date } from "@/app/services/services"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
@@ -16,7 +16,9 @@ export type Stock = {
     id: string
     name: string
     orderDate: string
-    packaging: number
+    packaging: {
+      unit: string
+    }
     paymentMeans: ""
     stockStatus: "active" | "quarantine" | "safety"
     supplier: {
@@ -27,6 +29,17 @@ export type Stock = {
     vendor: {
       name: string
     },
+  }
+
+  function expired(expiryDate: string){
+    const today = new Date();
+    const targetDate = new Date(expiryDate);
+    const timeDiff = targetDate.getTime() - today.getTime();
+    const daysRemaining = Math.floor(timeDiff / (1000 * 3600 * 24)); // Convert time difference to days
+
+    if (daysRemaining < 14) {
+      return true
+    }
   }
 
 export const columns: ColumnDef<Stock>[] = [
@@ -131,7 +144,7 @@ export const columns: ColumnDef<Stock>[] = [
   {
     accessorKey: "expiryDate",
     header: "expiryDate",
-    cell: ({ row }) => <div className="capitalise">{date(row.getValue("expiryDate"))}</div>,
+    cell: ({ row }) => <div className={expired(row.getValue("expiryDate"))==true?"capitalise text-red-600":"capitalise text-lime-600"}>{date(row.getValue("expiryDate"))}</div>,
   },
 //   {
 //     id: "actions",

@@ -39,7 +39,7 @@ export const loginUserSchema = z.object({
     }).max(50),
 })
 
-export const addStock = z.object({
+export const addStockSchema = z.object({
     name: z.string({required_error: "Please enter a name.",}).min(2, {
         message: "title should be atleast a character"
     }).max(50),
@@ -62,7 +62,7 @@ export const addStock = z.object({
 })
 
 //remember to coerce numbers else form doesnot submit
-export const addSupplier = z.object({
+export const addSupplierSchema = z.object({
     name: z.string({required_error: "Please enter a name.",}).min(2, {
         message: "title should be atleast a character"
     }).max(50),
@@ -75,7 +75,7 @@ export const addSupplier = z.object({
     userId: z.string(),
 })
 
-export const addVendor = z.object({
+export const addVendorSchema = z.object({
     name: z.string({required_error: "Please enter a name.",}).min(2, {
         message: "title should be atleast a character"
     }).max(50),
@@ -87,17 +87,21 @@ export const addVendor = z.object({
     userId: z.string(),
 })
 
-export const addInoice = z.object({
-    product: z.coerce.number({required_error: "Please provide a product.",}),
-    user: z.coerce.number({required_error: "Please enter a user",}),
-    invoiceStatus: z.any(),
-    invoiceGroup: z.string(),
-    product1: z.string(),
-    user1: z.string(),
+export const addInvoiceSchema = z.object({
+    invoiceStatus: z.string(),
+    address: z.string(),
+    paymentMeans: z.string(),
+    paymentID: z.string(),
+    user: z.coerce.number({required_error: "Please provide a user.",}),
     userId: z.string(),
 })
 
-export const addBill = z.object({
+export const addInvoiceItemsSchema = z.object({
+    product: z.coerce.number({required_error: "Please provide a product.",}),
+    invoice: z.coerce.number({required_error: "Please enter an invoice",}),
+})
+
+export const addBillSchema = z.object({
     name: z.string({required_error: "Please enter your purchase.",}).min(2, {
         message: "name should be atleast a character"
     }).max(50),
@@ -109,7 +113,7 @@ export const addBill = z.object({
     userId: z.string(),
 })
 
-export const addPackaging = z.object({  
+export const addPackagingSchema = z.object({  
     manufacturer: z.string({required_error: "Please enter name of manufacturer.",}).min(2, {
     message: "name should be atleast a character"
     }).max(50) ,

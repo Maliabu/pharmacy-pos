@@ -14,7 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, InfoIcon, MoreHorizontal, X } from "lucide-react"
+import { ArrowUpDown, ChevronDown, Dot, InfoIcon, MoreHorizontal, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -37,6 +37,12 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import Link from "next/link"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Stock } from "./stock/dataColumns"
+import Invoice from "./invoice/invoice"
+import { useToast } from "@/hooks/use-toast"
+import InvoiceDialog from "./invoice/dialog"
+import StepWise from "./invoice/stepWise"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -45,6 +51,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTableDemo<TData, TValue>({data, columns, id}: DataTableProps<TData, TValue>) {
+  const { toast } = useToast()
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -52,6 +59,13 @@ export function DataTableDemo<TData, TValue>({data, columns, id}: DataTableProps
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+
+  const Toast = () => {
+    toast({
+      title: "Scheduled: Catch up",
+      description: "Friday, February 10, 2023 at 5:57 PM",
+    })
+  }
 
   const table = useReactTable({
     data,
@@ -72,6 +86,8 @@ export function DataTableDemo<TData, TValue>({data, columns, id}: DataTableProps
     },
   })
 
+  const selectedRows = table.getSelectedRowModel().rows.map(row=>row.original)
+
   return (
     <div className="w-full">
         <div className="sm:flex justify-between items-center">
@@ -82,7 +98,23 @@ export function DataTableDemo<TData, TValue>({data, columns, id}: DataTableProps
             </div>
         </div>
         <div className="flex gap-1 mt-1 sm:mt-0">
-        { id=="product" && <Button className={table.getIsSomeRowsSelected() == true?"bg-foreground":"bg-muted-foreground hover:bg-muted-foreground"}>New Invoice</Button>}
+        { id=="product" &&
+        <Dialog>
+        <DialogTrigger>
+        <div 
+        className={table.getIsSomeRowsSelected()==true || table.getIsAllRowsSelected()==true?"bg-primary text-sm rounded-md p-2 text-lime-100 hover:bg-lime-600":"bg-muted-foreground hover:bg-muted-foreground hidden p-2 rounded-md"}>New Invoice</div>
+        </DialogTrigger>
+        <DialogContent className="max-w-fit h-screen overflow-y-auto">
+        <DialogHeader className="hidden">
+          <DialogTitle>Invoice</DialogTitle>
+          <DialogDescription>
+            Invoice template
+          </DialogDescription>
+        </DialogHeader>
+        {/* <InvoiceDialog selectedRows={selectedRows as unknown as Stock[]}/> */}
+        <StepWise selectedRows={selectedRows as unknown as Stock[]}/>
+        </DialogContent>
+      </Dialog>}
         {/* { id=="stock" && <Button className={table.getIsSomeRowsSelected() == true?"bg-foreground":"bg-muted-foreground hover:bg-muted-foreground"}>Manage Product</Button>} */}
         { id=="stock" && <Button ><Link href="/dashboard/management#stock">Add new Stock</Link></Button>}
         { id=="user" && <div className=" gap-1 flex">
@@ -171,7 +203,7 @@ export function DataTableDemo<TData, TValue>({data, columns, id}: DataTableProps
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Loading Table Data...
                 </TableCell>
               </TableRow>
             )}
@@ -221,6 +253,12 @@ export function DataTableDemo<TData, TValue>({data, columns, id}: DataTableProps
         </div>
       </div>
       <div className="text-sm p-2 bg-muted rounded-md text-muted-foreground">Display: 10 rows per page</div>
+      {
+        (id=="stock" || id=="product") && <div className="flex">
+          <div className=" flex text-sm items-center text-red-300"><Dot size={40} className="text-red-600"/> Product due for expiry in 2 weeks</div>
+          <div className=" flex text-sm items-center text-lime-500 ml-12"><Dot size={40} className="text-primary"/> Product still okay</div>
+          </div>
+      }
       </div>
   )
 }
