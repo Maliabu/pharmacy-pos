@@ -20,7 +20,7 @@ export default function PageStock(){
         <div>
             <div className="text-3xl tracking-tight font-bold">Stock</div>
             <div>
-                <DataTableDemo data={stock} columns={columns} id="stock"/>
+                <DataTableDemo data={stock} columns={columns} id="stock" name="name"/>
             </div>
         </div>
     </div>

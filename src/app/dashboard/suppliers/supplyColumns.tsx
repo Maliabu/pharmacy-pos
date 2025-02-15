@@ -45,7 +45,7 @@ export const columns: ColumnDef<Supplier>[] = [
     accessorKey: "isActive",
     header: "isActive",
     cell: ({ row }) => (
-      <div className={row.getValue("isActive") == true?"text-lime-400 p-1 rounded-full":row.getValue("isActive")==false?"text-red-600 p-1":""}><Dot size={40}/></div>
+      <div className={row.getValue("isActive") == true?"text-green-400 p-1 rounded-full":row.getValue("isActive")==false?"text-red-600 p-1":""}><Dot size={40}/></div>
     ),
   },
   {

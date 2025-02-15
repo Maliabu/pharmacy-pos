@@ -63,7 +63,7 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-      <div className={row.getValue("status") == "active"?"text-lime-600 p-1 rounded-md border border-lime-600 flex justify-center":row.getValue("status")=="inactive"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("status")}</div>
+      <div className={row.getValue("status") == "active"?"text-green-600 p-1 rounded-md border border-green-600 flex justify-center":row.getValue("status")=="inactive"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("status")}</div>
     ),
   },
   {
@@ -101,7 +101,7 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "isLoggedIn",
     header: "Logged In",
-    cell: ({ row }) => <div className={row.getValue("isLoggedIn") == true?"text-lime-400 p-1 rounded-full":row.getValue("isLoggedIn")==false?"text-red-600 p-1":""}><Dot size={40}/></div>,
+    cell: ({ row }) => <div className={row.getValue("isLoggedIn") == true?"text-green-400 p-1 rounded-full":row.getValue("isLoggedIn")==false?"text-red-600 p-1":""}><Dot size={40}/></div>,
   },
   {
     accessorKey: "created",

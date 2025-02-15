@@ -148,7 +148,7 @@ export default function StepWise({selectedRows}: rowsSelected) {
         const currStep = currentStep;
         if (currStep == 1) {
             return ( 
-                <div className="p-2 bg-primary text-lime-200 text-center rounded-md mt-4 w-full cursor-pointer"
+                <div className="p-2 bg-primary text-green-200 text-center rounded-md mt-4 w-full cursor-pointer"
                 onClick = { _next } >
                 Next 
                 </div>        

@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import useSWR from "swr";
 import { Stock } from "../stock/dataColumns";
 import { fetcher } from "@/app/services/services";
 import { Loader2 } from "lucide-react";
+import DonutChart from "./donuts";
 
 export default function Page(){
     let stock: Stock[] = []
@@ -34,14 +36,31 @@ export default function Page(){
         });
         return [active, quarantine, safety]
     }
+    const perTotal = stockStatus(stock)[0].length + stockStatus(stock)[1].length + stockStatus(stock)[2].length
+    const perActive = (stockStatus(stock)[0].length/perTotal)*100
+    const perQuarantine = (stockStatus(stock)[1].length/perTotal)*100
+    const perSafety = (stockStatus(stock)[2].length/perTotal)*100
+
+    const activeData = [
+        { name: 'Filled', value: perActive },
+        { name: 'Empty', value: 100 - perActive }
+      ];
+      const quarantineData = [
+        { name: 'Filled', value: perQuarantine },
+        { name: 'Empty', value: 100 - perQuarantine }
+      ];
+      const safetyData = [
+        { name: 'Filled', value: perSafety },
+        { name: 'Empty', value: 100 - perSafety }
+      ];
     return<div className="bg-background p-8 rounded-lg mt-2">
         <div className="grid sm:grid-cols-3 gap-2">
-            <div className="p-6 bg-lime-600 text-lime-200 rounded-lg">
+            <div className="p-6 bg-green-600 text-green-200 rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
                     {stockStatus(stock)[0].length}
                 </div>
                 <span>Active Stock</span>
-                <div className="text-sm leading-4 text-lime-100 p-3 rounded-md bg-lime-500 mt-4">Passed quality checks and Ready for dispatch or use</div>
+                <div className="text-sm leading-4 text-green-100 p-3 rounded-md bg-green-500 mt-4">Passed quality checks and Ready for dispatch or use</div>
             </div>
             <div className="p-6 bg-muted rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
@@ -60,6 +79,11 @@ export default function Page(){
         </div>
         <div>
             <div className="text-2xl tracking-tight font-bold mt-8">Stock Overview</div>
+        </div>
+        <div className="grid sm:grid-cols-3 gap-2">
+            <DonutChart data={activeData} name="active"/>
+            <DonutChart data={quarantineData} name="quarantine"/>
+            <DonutChart data={safetyData} name="safety"/>
         </div>
     </div>
 }

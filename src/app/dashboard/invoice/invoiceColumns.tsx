@@ -49,7 +49,7 @@ export const columns: ColumnDef<Invoice>[] = [
     accessorKey: "invoiceStatus",
     header: "Status",
     cell: ({ row }) => (
-      <div className={row.getValue("invoiceStatus") == "paid"?"text-lime-600 p-1 rounded-md border border-lime-600 flex justify-center":row.getValue("invoiceStatus")=="pending"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("invoiceStatus")}</div>
+      <div className={row.getValue("invoiceStatus") == "paid"?"text-green-600 p-1 rounded-md border border-green-600 flex justify-center":row.getValue("invoiceStatus")=="pending"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("invoiceStatus")}</div>
     ),
   },
   {

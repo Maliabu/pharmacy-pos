@@ -82,6 +82,6 @@ const groupByYearMonth = (data1: Invoice[]) => {
     if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/></div>;
     
     return<div className="bg-background py-16 rounded-lg mt-2">
-        <Graph result={dataForGraph}/>
+        <Graph result={dataForGraph} graphId="actual"/>
     </div>
 }

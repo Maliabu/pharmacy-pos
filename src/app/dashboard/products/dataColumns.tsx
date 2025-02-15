@@ -45,7 +45,7 @@ export const columns: ColumnDef<Stock>[] = [
     accessorKey: "stockStatus",
     header: "stockStatus",
     cell: ({ row }) => (
-      <div className={row.getValue("stockStatus") == "active"?"text-lime-600 p-1 rounded-md border border-lime-600 flex justify-center":row.getValue("stockStatus")=="safety"?"text-destructive p-1 rounded-md border border-red-600 flex justify-center":row.getValue("stockStatus")=="quarantine"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("stockStatus")}</div>
+      <div className={row.getValue("stockStatus") == "active"?"text-green-600 p-1 rounded-md border border-green-600 flex justify-center":row.getValue("stockStatus")=="safety"?"text-destructive p-1 rounded-md border border-red-600 flex justify-center":row.getValue("stockStatus")=="quarantine"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("stockStatus")}</div>
     ),
   },
   {
@@ -83,7 +83,7 @@ export const columns: ColumnDef<Stock>[] = [
   {
     accessorKey: "expiryDate",
     header: "expiryDate",
-    cell: ({ row }) => <div className={expired(row.getValue("expiryDate"))==true?"capitalise text-red-600":"capitalise text-lime-600"}>{date(row.getValue("expiryDate"))}</div>,
+    cell: ({ row }) => <div className={expired(row.getValue("expiryDate"))==true?"capitalise text-red-600":"capitalise text-green-600"}>{date(row.getValue("expiryDate"))}</div>,
   },
 //   {
 //     id: "actions",

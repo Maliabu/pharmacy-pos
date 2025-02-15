@@ -118,9 +118,9 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex justify-between items-center p-3 rounded-lg bg-primary text-muted">
+        <div className="flex justify-between items-center p-3 rounded-lg bg-muted">
           <Pill/>
-          <div className="text-2xl font-bold tracking-tight">Medic Pharm</div>
+          <div className="text-xl font- tracking-tight leading-6">LIGHT<br/> MEDICARE</div>
         </div>
       </SidebarHeader>
       <SidebarContent>

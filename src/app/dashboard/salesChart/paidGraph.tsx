@@ -12,7 +12,7 @@ export interface YearData {
   totalSales: number
 }
 
-export default function Graph(props: { result: YearData[] }) {
+export default function Graph(props: { result: YearData[], graphId: string }) {
 
   // Prepare the data for the AreaChart
   const flattenedData = props.result.flatMap((yearData) =>
@@ -32,8 +32,8 @@ export default function Graph(props: { result: YearData[] }) {
       key={yearData.year} 
       type="monotone" 
       dataKey="totalAmount" 
-      stroke="#569e0a" 
-      fill={`url(#gradient-${yearData.year})`}
+      stroke="#01814b" 
+      fill={`url(#${props.graphId}-gradient-${yearData.year})`}      
       name={`${yearData.year}`}  // Use year as the name for the legend
     />
   ));
@@ -85,9 +85,9 @@ export default function Graph(props: { result: YearData[] }) {
         />
         <defs>
           {props.result.map((yearData) => (
-            <linearGradient id={`gradient-${yearData.year}`} key={yearData.year} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#61922e" stopOpacity={0.8} />
-              <stop offset="100%" stopColor="#d7eb9800" stopOpacity={0.5} />
+            <linearGradient id={`${props.graphId}-gradient-${yearData.year}`} key={yearData.year} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#01814b" stopOpacity={0.8} />
+              <stop offset="100%" stopColor="#bfbfbf" stopOpacity={0.4} />
             </linearGradient>
           ))}
         </defs>

@@ -37,12 +37,12 @@ export default function Page(){
     
     return<div className="bg-background p-8 rounded-lg mt-2">
         <div className="grid sm:grid-cols-3 gap-2">
-            <div className="p-6 bg-primary text-lime-200 rounded-lg">
+            <div className="p-6 bg-primary text-green-200 rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
                     {stock.length}
                 </div>
                 <span>Products</span>
-                <div className="text-sm leading-4 text-lime-200 p-3 rounded-md bg-lime-600 mt-4">Total products in stock</div>
+                <div className="text-sm leading-4 text-green-200 p-3 rounded-md bg-green-600 mt-4">Total products in stock</div>
             </div>
             {filterObjectsByDaysRemaining(stock).length >= 1 &&
             <div className="p-2 border border-red-600 text-red-600 rounded-lg col-span-2">
@@ -70,7 +70,7 @@ export default function Page(){
                 </Carousel>
             </div>}
             {filterObjectsByDaysRemaining(stock).length < 1 &&
-            <div className="p-6 bg-muted rounded-lg col-span-2 flex bg-primary text-lime-200 flex-col justify-center items-center">
+            <div className="p-6 bg-muted rounded-lg col-span-2 flex bg-primary text-green-200 flex-col justify-center items-center">
                 <ThumbsUp size={40}/>
                 <div className="mt-2">No items due to expire yet</div>
             </div>}

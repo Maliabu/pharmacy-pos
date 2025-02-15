@@ -88,7 +88,7 @@ export default function Login(){
             <div className="sm:p-16 p-2 sm:grid sm:grid-cols-2 bg-muted">
             <div className="p-10 sm:rounded-l-3xl sr:rounded-t-2xl flex flex-col justify-center items-center bg-primary text-muted sm:columns-1"> 
                 <Pill size={60}/>
-                <div className="sm:text-5xl text-2xl tracking-tight font-bold">Medic Pharm</div>                   
+                <div className="sm:text-5xl text-2xl tracking-tight font-bold">LIGHT MEDICARE</div>                   
             </div>
                 <div className="p-8 sm:p-12 sm:rounded-r-2xl rounded-b-2xl bg-background">
                   <div className="text-4xl tracking-tight font-bold sm:my-8 grid justify-center items-center">Login</div>

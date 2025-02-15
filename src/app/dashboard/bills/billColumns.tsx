@@ -46,7 +46,7 @@ export const columns: ColumnDef<Bill>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-      <div className={row.getValue("status") == "paid"?"text-lime-600 p-1 rounded-md border border-lime-600 flex justify-center":row.getValue("status")=="pending"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("status")}</div>
+      <div className={row.getValue("status") == "paid"?"text-green-600 p-1 rounded-md border border-green-600 flex justify-center":row.getValue("status")=="pending"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("status")}</div>
     ),
   },
   {
