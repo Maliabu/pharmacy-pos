@@ -48,9 +48,10 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     id: string
+    name: string
 }
 
-export function DataTableDemo<TData, TValue>({data, columns, id}: DataTableProps<TData, TValue>) {
+export function DataTableDemo<TData, TValue>({data, columns, id, name}: DataTableProps<TData, TValue>) {
   const { toast } = useToast()
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -126,9 +127,9 @@ export function DataTableDemo<TData, TValue>({data, columns, id}: DataTableProps
       <div className="flex items-center py-4">
         <Input
           placeholder={"search "+id+"s ..."}
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn(name)?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn(name)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -203,8 +204,8 @@ export function DataTableDemo<TData, TValue>({data, columns, id}: DataTableProps
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  Loading Table Data...
-                </TableCell>
+                  {table.getRowModel().rows?.length>0?"Loading data...":"Add some data to your tables"}
+                  </TableCell>
               </TableRow>
             )}
           </TableBody>

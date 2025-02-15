@@ -6,19 +6,18 @@ import * as React from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useForm } from "react-hook-form"
 import z from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { addSuppliers, addUsers } from "@/server/fetch.actions"
-import { addSupplier, addUserSchema } from '@/schema/formSchemas'
+import { addSuppliers } from "@/server/fetch.actions"
+import { addSupplierSchema } from '@/schema/formSchemas'
 import { tokenise } from "@/app/services/services"
 
 export default function AddSupplier() {
 
-    const form = useForm<z.infer<typeof addSupplier>>({
-      resolver: zodResolver(addSupplier),
+    const form = useForm<z.infer<typeof addSupplierSchema>>({
+      resolver: zodResolver(addSupplierSchema),
         defaultValues: {
           name: "",
           email: "",
@@ -29,7 +28,7 @@ export default function AddSupplier() {
         },
     })
      
-    async function onSubmit(values: z.infer<typeof addSupplier>) {  
+    async function onSubmit(values: z.infer<typeof addSupplierSchema>) {  
       
       const app = document.getElementById('submit');
       const text = 'processing';

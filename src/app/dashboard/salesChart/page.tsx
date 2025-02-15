@@ -7,13 +7,14 @@ import { Stock } from "../stock/dataColumns";
 import { Loader2, ThumbsUp } from "lucide-react";
 import { date, fetcher } from "@/app/services/services";
 import useSWR from "swr";
+import ActualSales from "./actualSales";
+import Projections from "./projections";
 
 export default function Page(){
 
     let stock: Stock[] = []
     const { data, error } = useSWR("/api/stock", fetcher);
     if(data){
-        console.log(data)
         stock = data
     }
     if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/></div>;
@@ -75,13 +76,15 @@ export default function Page(){
             </div>}
         </div>
         <div>
-            <div className="bg-muted p-6 mt-2 rounded-md">
+            <div className=" mt-8 rounded-md">
                 <div className="text-md tracking-tight">Actual Sales</div>
                 <div className="text-sm tracking-tight text-muted-foreground">Actual Sales made from products paid for in full</div>
+                <ActualSales/>
                 </div>
-            <div className="bg-muted mt-2 p-6 rounded-md">
+            <div className="">
                 <div className="text-md tracking-tight">Sales Projection</div>
                 <div className="text-sm tracking-tight text-muted-foreground">projections for Sales made from products paid for in full and those pending payment</div>
+                <Projections/>
                 </div>
         </div>
     </div>

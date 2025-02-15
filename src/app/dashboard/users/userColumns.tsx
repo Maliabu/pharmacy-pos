@@ -15,7 +15,7 @@ export type User = {
     phone: number
     createdAt: string
     lastLogin: string
-    isLoggedIn: string
+    isLoggedIn: boolean
     username: string
   }
 

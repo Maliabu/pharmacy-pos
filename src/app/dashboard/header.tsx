@@ -14,19 +14,24 @@ import { User } from "./users/userColumns";
 export default function Header(){
     const { setTheme } = useTheme()
     let user: User[] = []
+    const logged: User[] = []
     const { data, error } = useSWR("/api/users", fetcher);
     if(data){
-        console.log(data)
         user = data
+        user.forEach(user => {
+            if(user.isLoggedIn == true){
+                logged.push(user)
+            }
+        })
     }
-    if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/>Loading Users ...</div>;
+    if (!data) return <div className="flex bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/>Loading Users ...</div>;
     return <div className="">
         <div className="bg-background rounded-lg grid grid-cols-2 gap-2">
             <div className="col-span-1">
             {tokenise()[4]=="admin" && 
-            <div className=" bg-muted p-2 rounded-md flex justify-between items-center">
-                <div>Logged in users: {user.length}</div>
-                <div className="flex">{user.map(user => (
+            <div className=" bg-muted py-1 px-4 rounded-md flex justify-between items-center">
+                <div className="text-sm">Logged in users: {logged.length}</div>
+                <div className="flex">{logged.map(user => (
                     <div key={user.id} className="h-8 w-8 -ml-4 border border-2 border-muted bg-primary text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
                 ))}</div>
             </div>}

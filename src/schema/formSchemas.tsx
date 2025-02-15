@@ -89,16 +89,18 @@ export const addVendorSchema = z.object({
 
 export const addInvoiceSchema = z.object({
     invoiceStatus: z.string(),
-    address: z.string(),
+    address: z.string({required_error: "Please enter an address.",}).min(5, {
+        message: "provide an accurate address"
+    }),
     paymentMeans: z.string(),
     paymentID: z.string(),
     user: z.coerce.number({required_error: "Please provide a user.",}),
-    userId: z.string(),
 })
 
 export const addInvoiceItemsSchema = z.object({
     product: z.coerce.number({required_error: "Please provide a product.",}),
     invoice: z.coerce.number({required_error: "Please enter an invoice",}),
+    total: z.coerce.number()
 })
 
 export const addBillSchema = z.object({

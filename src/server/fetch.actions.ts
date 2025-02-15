@@ -96,6 +96,21 @@ export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>){
    return [token, encrPass, initVector, usertype, email, username, name, id.toString(), userType]
 }
 
+export async function logout(formData: FormData): Promise<{error: boolean}>{
+    const data = formData.get("email") as string || ""
+     // before logout, update isloggedin to false
+     const logout = await db.update(usersTable).set({
+         isLoggedIn: false,
+     }).where(
+         eq(usersTable.email, data)
+     )
+     if(logout){
+     return {error: false}
+    } else {
+        return {error: true}
+    }
+ }
+
 export async function addSuppliers(unsafeData: z.infer<typeof addSupplierSchema>) : 
 Promise<{error: boolean | undefined}> {
    const {success, data} = addSupplierSchema.safeParse(unsafeData)
@@ -214,15 +229,12 @@ Promise<{error: boolean | undefined}> {
 export async function addNewInvoice(unsafeData: z.infer<typeof addInvoiceSchema>) : 
 Promise<{error: boolean | undefined, id: number}> {
    const {success, data} = addInvoiceSchema.safeParse(unsafeData)
-
-   if (!success){
+    console.log(data, success)
+   if (data == undefined && success == false){
     return {error: true, id: 0}
    }
-   console.log("SERVER SIDE")
-  
    // upload invoice data
    await db.insert(invoiceTable).values({...data})
-   console.log("ADDED INVOICE DATA")
    // get last invoice id by this user
    const result = await db.query.invoiceTable.findMany({
     where: eq(invoiceTable.user, data.user),
@@ -233,7 +245,8 @@ Promise<{error: boolean | undefined, id: number}> {
     if (result.length > 0) {
         lastId = result[0].id; // return the last id
     }
-    console.log("GETTING INVOICE ID SERVER SIDE")
+    const userid = data.user.toString()
+    await logActivity("Added new "+data.invoiceStatus+" invoice", userid)   
     // update items data
    // update today of the invoice
    return {error: false, id: lastId}

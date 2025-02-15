@@ -27,13 +27,23 @@ CREATE TABLE "currency" (
 	"updated_at" timestamp
 );
 --> statement-breakpoint
+CREATE TABLE "invoice_items" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"invoice_id" integer NOT NULL,
+	"product_id" integer NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp
+);
+--> statement-breakpoint
 CREATE TABLE "invoice" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"product_id" integer NOT NULL,
 	"user" integer NOT NULL,
+	"address" text NOT NULL,
 	"status" text NOT NULL,
-	"invoice_products_id" text NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"payment_means" text,
+	"payment_means_id" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "packaging" (
@@ -46,6 +56,7 @@ CREATE TABLE "packaging" (
 	"recycle" varchar,
 	"leaching_absorption" varchar,
 	"barriers" varchar,
+	"packaging_unit" varchar,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp,
 	CONSTRAINT "packaging_seal_label_unique" UNIQUE("seal_label"),
@@ -124,7 +135,8 @@ CREATE TABLE "vendor" (
 --> statement-breakpoint
 ALTER TABLE "bills" ADD CONSTRAINT "bills_currency_id_currency_id_fk" FOREIGN KEY ("currency_id") REFERENCES "public"."currency"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "activity" ADD CONSTRAINT "activity_user_users_id_fk" FOREIGN KEY ("user") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "invoice" ADD CONSTRAINT "invoice_product_id_stock_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."stock"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "invoice_items" ADD CONSTRAINT "invoice_items_invoice_id_invoice_id_fk" FOREIGN KEY ("invoice_id") REFERENCES "public"."invoice"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "invoice_items" ADD CONSTRAINT "invoice_items_product_id_stock_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."stock"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "invoice" ADD CONSTRAINT "invoice_user_users_id_fk" FOREIGN KEY ("user") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "stock" ADD CONSTRAINT "stock_supplier_supplier_id_fk" FOREIGN KEY ("supplier") REFERENCES "public"."supplier"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "stock" ADD CONSTRAINT "stock_vendor_vendor_id_fk" FOREIGN KEY ("vendor") REFERENCES "public"."vendor"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

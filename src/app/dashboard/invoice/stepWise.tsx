@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { addInvoiceItemsSchema, addInvoiceSchema } from "@/schema/formSchemas"
 import React, { JSX } from "react"
@@ -37,6 +38,7 @@ export default function StepWise({selectedRows}: rowsSelected) {
           defaultValues: {
             invoice: 0,
             product: 0,
+            total: 0
         },
       })
 
@@ -74,55 +76,68 @@ export default function StepWise({selectedRows}: rowsSelected) {
       };
        
       async function onSubmit(values: z.infer<typeof addInvoiceSchema>) {  
-        
+        // const result = addInvoiceSchema.safeParse(values);
+        // if (!result.success) {
+        //   console.log(result.error.errors); // This will give you a clear insight into which fields are invalid
+        // }
+        if(values.paymentMeans!==""||values.paymentID!==""){
+          values.invoiceStatus="paid"
+        } else{
+          values.invoiceStatus="pending"
+        }
         const app = document.getElementById('submit');
         const text = 'processing';
         if(app !== null){
           app.innerHTML = text;
         }
-        console.log("GETTING INVOICE ID")
-          const data = await addNewInvoice(values)
-          if(data?.error){
-            form.setError("root", {
-              "message": "invoive not added"
-            })
-          } else {
-            console.log("GOT INVOICE ID")
-              const invoiceId = data.id
-              selectedRows.forEach(async row => {
-                itemsForm.setValue("product", parseInt(row.id))
-                itemsForm.setValue("invoice", invoiceId)
-                const itemForm = itemsForm.getValues()
-                console.log("UPLOADING INVOICE ITEM DATA")
-                //submit
-                const values = await addInvoiceItems(itemForm)
-                if(values.error == true){
-                    form.setError("root", {
-                        "message": "invoive not added"
-                      })
-                }
-              })
-              console.log("GENERATING PDF")
-              generatePdf()
-                if(app !== null){
-                app.innerHTML = "Successful";
-                }
-            }
+        const data = await addNewInvoice(values)
+        if(data.error == true || data.error == undefined){
+          form.setError("root", {
+            "message": "Invoive not generated"
+          })
+          if(app !== null){
+            app.innerHTML = "Generate PDF";
+          }
         }
+        if(data.error == false){
+          const invoiceId = data.id
+          console.log(invoiceId)
+          const uniqueOrders = Array.from(new Set(selectedRows.map(a => a.id)))
+          .map(id => selectedRows.find(a => a.id === id));
+
+          for( const row of selectedRows){
+            itemsForm.setValue("product", parseInt(row.id))
+            itemsForm.setValue("total", row.unitAmount*row.unitsPurchased)
+            itemsForm.setValue("invoice", invoiceId)
+                
+            const itemForm = itemsForm.getValues()
+            //submit
+            const values = await addInvoiceItems(itemForm)
+              console.log(values)
+              if(values.error == true){
+                  form.setError("root", {
+                    "message": "invoive not added"
+                  })
+                }
+          }
+          // After all items are added, generate the PDF
+          try {
+            await generatePdf(); // Ensure the PDF is generated after all items are added
+          } catch (error) {
+            console.error("Error generating PDF:", error);
+            form.setError("root", { "message": "Error generating PDF" });
+          }
+          if(app !== null){
+            app.innerHTML = "Successful";
+          }
+          window.location.reload()
+        }
+      }
 
     const _next = () => {
-        let currStep = currentStep
-        const address = form.getValues("address")
-        if(address == ""){
-            const app = document.getElementById('address');
-            const text = 'please provide an address';
-            if(app !== null){
-                app.style.display = 'block'
-                app.innerHTML = text;
-            }
-        } else {
-        currStep = currentStep + 1
-        setCurrentStep(currStep)}
+      let currStep = currentStep
+      currStep = currentStep + 1
+      setCurrentStep(currStep)
     }
     const _prev = () => {
         let currStep = currentStep
@@ -131,7 +146,7 @@ export default function StepWise({selectedRows}: rowsSelected) {
     }
     function nextButton() {
         const currStep = currentStep;
-        if (currStep === 1) {
+        if (currStep == 1) {
             return ( 
                 <div className="p-2 bg-primary text-lime-200 text-center rounded-md mt-4 w-full cursor-pointer"
                 onClick = { _next } >
@@ -150,11 +165,12 @@ export default function StepWise({selectedRows}: rowsSelected) {
     }
     function submitButton(){
         const currStep = currentStep
-        if(currStep === 2){
+        if(currStep == 2){
             return(
             <Button type="submit" id="submit" disabled={loading} className="mx-1">
             {loading ? 'Generating PDF...' : 'Generate PDF'}
             </Button>
+            
             )
         } else {
             return <></>
@@ -173,9 +189,16 @@ export default function StepWise({selectedRows}: rowsSelected) {
             selectedRows={selectedRows}
             form={form.getValues()}
             /> </div>
-            {currentStep===2 && <Button type="submit" onClick={() => onSubmit(form.getValues())} id="submit" disabled={loading} className="mx-1">
+            {currentStep==2 && <Button type="submit" id="submit" disabled={loading} className="mx-1">
             {loading ? 'Generating PDF...' : 'Generate PDF'}
-            </Button>}
+            </Button>
+            }
+            {form.formState.errors.root && (
+          <div className="bg-light p-2 rounded-md border border-primary text-center mt-1 text-primary w-[300px]">{form.formState.errors.root.message}</div>
+        )}
+        {form.formState.isSubmitSuccessful && (
+          <div className="border border-primary text-primary p-2 mt-1 text-center rounded-md"> Invoice generated successfully </div>
+        )}
       </form>
       </Form>
         )

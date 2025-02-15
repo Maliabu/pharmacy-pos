@@ -1,1 +1,0 @@
-ALTER TABLE "packaging" ADD COLUMN "packaging_unit" varchar;

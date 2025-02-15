@@ -125,7 +125,8 @@ export const columns: ColumnDef<Stock>[] = [
       // Custom render for nested address object
       const currency: {code: string} = row.getValue("currency");
       return `${currency.code}`;
-    },  },
+    },  
+  },
   {
     accessorKey: "unitAmount",
     header: () => <div className="text-right">Unit Amount</div>,

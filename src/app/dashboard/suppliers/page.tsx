@@ -21,7 +21,7 @@ export default function PageSupplier(){
         <div>
             <div className="text-3xl tracking-tight font-bold">Suppliers</div>
             <div>
-                <DataTableDemo data={supplier} columns={columns} id="supplier"/>
+                <DataTableDemo data={supplier} columns={columns} id="supplier" name="name"/>
             </div>
         </div>
     </div>

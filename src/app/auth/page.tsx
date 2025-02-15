@@ -47,7 +47,6 @@ export default function AddUser() {
       if(app !== null){
         app.innerHTML = text;
       }
-      console.log(typeof(values.encrPass))
 
       if(values.encrPass !== "" && values.encrPass === values.confirmPassword){
         // encrypt password

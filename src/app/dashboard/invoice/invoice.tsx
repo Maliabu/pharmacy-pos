@@ -2,8 +2,6 @@ import { Pill } from "lucide-react";
 import { Stock } from "../stock/dataColumns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { date } from "@/app/services/services";
-import { rowsSelected } from "./stepWise";
-
 
 export default function Invoice(props: {selectedRows: Stock[], form: {address: string,
     paymentMeans: string,

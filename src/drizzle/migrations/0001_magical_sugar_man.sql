@@ -1,0 +1,1 @@
+ALTER TABLE "invoice_items" ADD COLUMN "total_amount" integer;

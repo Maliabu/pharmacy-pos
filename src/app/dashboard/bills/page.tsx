@@ -21,7 +21,7 @@ export default function PageBill(){
         <div>
             <div className="text-3xl tracking-tight font-bold">Bills</div>
             <div>
-                <DataTableDemo data={bills} columns={columns} id="supplier"/>
+                <DataTableDemo data={bills} columns={columns} id="supplier" name="name"/>
             </div>
         </div>
     </div>

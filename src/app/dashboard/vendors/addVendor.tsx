@@ -11,14 +11,14 @@ import { useForm } from "react-hook-form"
 import z from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { addSuppliers, addUsers, addvendors } from "@/server/fetch.actions"
-import { addSupplier, addUserSchema, addVendor } from '@/schema/formSchemas'
+import { addvendors } from "@/server/fetch.actions"
+import { addVendorSchema } from '@/schema/formSchemas'
 import { tokenise } from "@/app/services/services"
 
 export default function AddVendor() {
 
-    const form = useForm<z.infer<typeof addVendor>>({
-      resolver: zodResolver(addVendor),
+    const form = useForm<z.infer<typeof addVendorSchema>>({
+      resolver: zodResolver(addVendorSchema),
         defaultValues: {
           name: "",
           email: "",
@@ -28,7 +28,7 @@ export default function AddVendor() {
       },
     })
      
-    async function onSubmit(values: z.infer<typeof addVendor>) {  
+    async function onSubmit(values: z.infer<typeof addVendorSchema>) {  
       
       const app = document.getElementById('submit');
       const text = 'processing';

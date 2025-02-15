@@ -1,5 +1,5 @@
 {
-  "id": "9ee59fc6-3b54-4379-a8c1-dc5d38c15825",
+  "id": "3d1f5ccf-49c8-4774-9d77-e0c955154f00",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -194,6 +194,77 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.invoice_items": {
+      "name": "invoice_items",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "invoice_id": {
+          "name": "invoice_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "invoice_items_invoice_id_invoice_id_fk": {
+          "name": "invoice_items_invoice_id_invoice_id_fk",
+          "tableFrom": "invoice_items",
+          "tableTo": "invoice",
+          "columnsFrom": [
+            "invoice_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "invoice_items_product_id_stock_id_fk": {
+          "name": "invoice_items_product_id_stock_id_fk",
+          "tableFrom": "invoice_items",
+          "tableTo": "stock",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.invoice": {
       "name": "invoice",
       "schema": "",
@@ -204,15 +275,15 @@
           "primaryKey": true,
           "notNull": true
         },
-        "product_id": {
-          "name": "product_id",
+        "user": {
+          "name": "user",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "user": {
-          "name": "user",
-          "type": "integer",
+        "address": {
+          "name": "address",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -222,11 +293,17 @@
           "primaryKey": false,
           "notNull": true
         },
-        "invoice_products_id": {
-          "name": "invoice_products_id",
+        "payment_means": {
+          "name": "payment_means",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "payment_means_id": {
+          "name": "payment_means_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -234,23 +311,16 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "invoice_product_id_stock_id_fk": {
-          "name": "invoice_product_id_stock_id_fk",
-          "tableFrom": "invoice",
-          "tableTo": "stock",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
         "invoice_user_users_id_fk": {
           "name": "invoice_user_users_id_fk",
           "tableFrom": "invoice",
@@ -325,6 +395,12 @@
         },
         "barriers": {
           "name": "barriers",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "packaging_unit": {
+          "name": "packaging_unit",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false

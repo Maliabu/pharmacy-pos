@@ -98,3 +98,6 @@ body {
 .text-3xl{
   @apply text-primary !important
 }
+.b{
+  background-color: #cccccb;
+}

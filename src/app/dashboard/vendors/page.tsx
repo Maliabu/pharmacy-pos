@@ -21,7 +21,7 @@ export default function PageVendor(){
         <div>
             <div className="text-3xl tracking-tight font-bold">Vendors</div>
             <div>
-                <DataTableDemo data={vendor} columns={columns} id="supplier"/>
+                <DataTableDemo data={vendor} columns={columns} id="supplier" name="name"/>
             </div>
         </div>
     </div>

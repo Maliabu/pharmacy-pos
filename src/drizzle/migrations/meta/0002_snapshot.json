@@ -1,6 +1,6 @@
 {
-  "id": "25058a8d-d22e-4e66-ab7d-f8eb4efd0a89",
-  "prevId": "dacc34aa-ec68-4060-b3f1-9103009d3a83",
+  "id": "e77623fe-1315-4eed-8c08-ff768eb0b774",
+  "prevId": "ef008c89-75dc-4c89-bd4e-9d6c4989bd6b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -216,6 +216,13 @@
           "primaryKey": false,
           "notNull": true
         },
+        "total_amount": {
+          "name": "total_amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -275,6 +282,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "user": {
+          "name": "user",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "address": {
           "name": "address",
           "type": "text",
@@ -289,6 +302,12 @@
         },
         "payment_means": {
           "name": "payment_means",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payment_means_id": {
+          "name": "payment_means_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -308,7 +327,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "invoice_user_users_id_fk": {
+          "name": "invoice_user_users_id_fk",
+          "tableFrom": "invoice",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

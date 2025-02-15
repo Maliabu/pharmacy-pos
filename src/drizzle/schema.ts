@@ -49,10 +49,16 @@ export const invoiceTable = pgTable('invoice', {
   updatedAt
 });
 
+export const invoiceRelations = relations(invoiceTable, ({one, many}) => ({
+  user: one(usersTable, {fields: [invoiceTable.user], references: [usersTable.id]}),
+  invoiceItems: many(invoiceItemsTable),
+}))
+
 export const invoiceItemsTable = pgTable('invoice_items', {
   id: serial('id').primaryKey(),
   invoice: integer("invoice_id").notNull().references(() => invoiceTable.id, {onDelete: 'cascade'}),
   product: integer("product_id").notNull().references(() => stockTable.id, {onDelete: 'cascade'}),
+  total: integer('total_amount').notNull().default(0),
   createdAt,
   updatedAt
 });

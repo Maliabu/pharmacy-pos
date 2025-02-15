@@ -1,37 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
+import { date } from "@/app/services/services"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, File, LucideIcon } from "lucide-react"
 
-type User = {
+export type Invoice = {
+    invoiceItems: [{
+      product: number
+      total: number
+      createdAt: string
+    }]
     id: string
     status: "paid" | "pending"
-    name: string
-    created: string
-    invoice: LucideIcon
-  }
-  
-export const data: User[] = [
-    {
-        id: "1",
-        status: "paid",
-        name: "Admin",
-        created: "25 jan 2025",
-        invoice: File
-    },
-    {
-        id: "2",
-        status: "pending",
-        name: "Admin",
-        created: "8 may 2024",
-        invoice: File
+    user: {
+      name: string
     }
-]
+    createdAt: string
+    invoice: LucideIcon
+    address: string
+  }
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<Invoice>[] = [
   {
     id: "select",
     // header: ({ table }) => (
@@ -55,31 +46,32 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: "status",
+    accessorKey: "invoiceStatus",
     header: "Status",
     cell: ({ row }) => (
-      <div className={row.getValue("status") == "paid"?"text-lime-600 p-1 rounded-md border border-lime-600 flex justify-center":row.getValue("status")=="pending"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("status")}</div>
+      <div className={row.getValue("invoiceStatus") == "paid"?"text-lime-600 p-1 rounded-md border border-lime-600 flex justify-center":row.getValue("invoiceStatus")=="pending"?"text-muted-foreground p-1 rounded-md border border-gray-600 flex justify-center":""}>{row.getValue("invoiceStatus")}</div>
     ),
   },
   {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Prepared By
-          <ArrowUpDown />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
+    accessorKey: "address",
+    header: "BilledTo",
+    cell: ({ row }) => (
+      <div>{row.getValue("address")}</div>
+    ),
   },
   {
-    accessorKey: "created",
-    header: "created",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("created")}</div>,
+    accessorKey: "user",
+    header: "user",
+    cell: ({row}) => {
+      // Custom render for nested address object
+      const user: {name: string} = row.getValue("user");
+      return `${user.name}`;
+    },  
+  },
+  {
+    accessorKey: "createdAt",
+    header: "createdAt",
+    cell: ({ row }) => <div className="lowercase">{date(row.getValue("createdAt"))}</div>,
   },
   {
     accessorKey: "invoice",
