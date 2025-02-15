@@ -17,6 +17,10 @@ import { handleEncryption, togglePasswordVisibility, togglePasswordVisibility2, 
 import { EyeOff } from "lucide-react"
 
 export default function AddUser() {
+  const [id, setId] = React.useState("")
+    React.useEffect(() => {
+        setId(tokenise()[3])
+    }, [])
 
     const form = useForm<z.infer<typeof addUserSchema>>({
       resolver: zodResolver(addUserSchema),
@@ -32,7 +36,7 @@ export default function AddUser() {
           confirmPassword: "",
           decInit: "",
           encrPass: "",
-          userId: tokenise()[3]
+          userId: id
       },
     })
 

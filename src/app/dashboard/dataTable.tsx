@@ -39,9 +39,7 @@ import {
 import Link from "next/link"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Stock } from "./stock/dataColumns"
-import Invoice from "./invoice/invoice"
 import { useToast } from "@/hooks/use-toast"
-import InvoiceDialog from "./invoice/dialog"
 import StepWise from "./invoice/stepWise"
 
 interface DataTableProps<TData, TValue> {
