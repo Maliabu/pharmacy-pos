@@ -2,6 +2,7 @@ import puppeteer from 'puppeteer';
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import chromium from 'chrome-aws-lambda'
 
 export async function POST(req: NextRequest) {
   try {
@@ -38,7 +39,11 @@ export async function POST(req: NextRequest) {
     //   headless: true,
     //   args: ['--no-sandbox', '--disable-setuid-sandbox']
     // });
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+    });
     const page = await browser.newPage();
 
     // Set the HTML content on the page
