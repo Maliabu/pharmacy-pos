@@ -38,7 +38,10 @@ export async function POST(req: NextRequest) {
     //   headless: true,
     //   args: ['--no-sandbox', '--disable-setuid-sandbox']
     // });
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: true, // Make sure it's true
+      args: ['--no-sandbox', '--disable-setuid-sandbox'], 
+    });
     const page = await browser.newPage();
 
     // Set the HTML content on the page
