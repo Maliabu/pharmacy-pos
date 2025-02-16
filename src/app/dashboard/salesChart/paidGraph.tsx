@@ -32,7 +32,7 @@ export default function Graph(props: { result: YearData[], graphId: string }) {
       key={yearData.year} 
       type="monotone" 
       dataKey="totalAmount" 
-      stroke="#01814b" 
+      stroke="#4caf50" 
       fill={`url(#${props.graphId}-gradient-${yearData.year})`}      
       name={`${yearData.year}`}  // Use year as the name for the legend
     />
@@ -86,7 +86,7 @@ export default function Graph(props: { result: YearData[], graphId: string }) {
         <defs>
           {props.result.map((yearData) => (
             <linearGradient id={`${props.graphId}-gradient-${yearData.year}`} key={yearData.year} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#01814b" stopOpacity={0.8} />
+              <stop offset="0%" stopColor="#4caf50" stopOpacity={0.8} />
               <stop offset="100%" stopColor="#bfbfbf" stopOpacity={0.4} />
             </linearGradient>
           ))}

@@ -5,6 +5,10 @@ import { date } from "@/app/services/services"
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, File, LucideIcon } from "lucide-react"
+import Invoice from "./invoice"
+import PreviewInvoice from "./previewInvoice"
+import { Dialog } from "@radix-ui/react-dialog"
+import { DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 export type Invoice = {
     invoiceItems: [{
@@ -76,7 +80,22 @@ export const columns: ColumnDef<Invoice>[] = [
   {
     accessorKey: "invoice",
     header: "invoice",
-    cell: () => <div><File/></div>,
+    cell: ({row}) => <div>
+      <Dialog>
+        <DialogTrigger>
+        <File/>
+        </DialogTrigger>
+        <DialogContent className="max-w-fit h-screen overflow-y-auto">
+        <DialogHeader className="hidden">
+          <DialogTitle>Invoice</DialogTitle>
+          <DialogDescription>
+            Invoice template
+          </DialogDescription>
+        </DialogHeader>
+        {/* <PreviewInvoice invoiceId={parseInt(row.getValue("id"))}/> */}
+        </DialogContent>
+      </Dialog>
+      </div>,
   },
 //   {
 //     id: "actions",

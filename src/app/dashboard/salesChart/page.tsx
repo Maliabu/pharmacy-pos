@@ -34,12 +34,19 @@ export default function Page(){
         });
         return result
     }
+    const totalStock = () => {
+        let total = 0
+        stock.forEach(item => {
+            total+=item.unitsPurchased
+        })
+        return total
+    }
     
     return<div className="bg-background p-8 rounded-lg mt-2">
         <div className="grid sm:grid-cols-3 gap-2">
             <div className="p-6 bg-primary text-green-200 rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
-                    {stock.length}
+                    {totalStock()}
                 </div>
                 <span>Products</span>
                 <div className="text-sm leading-4 text-green-200 p-3 rounded-md bg-green-600 mt-4">Total products in stock</div>

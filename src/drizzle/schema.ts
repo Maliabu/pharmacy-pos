@@ -58,6 +58,7 @@ export const invoiceItemsTable = pgTable('invoice_items', {
   id: serial('id').primaryKey(),
   invoice: integer("invoice_id").notNull().references(() => invoiceTable.id, {onDelete: 'cascade'}),
   product: integer("product_id").notNull().references(() => stockTable.id, {onDelete: 'cascade'}),
+  quantity: integer('quantity').notNull().default(1),
   total: integer('total_amount').notNull().default(0),
   createdAt,
   updatedAt

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { addInvoiceItemsSchema, addInvoiceSchema } from "@/schema/formSchemas"
-import React, { JSX } from "react"
+import React, { JSX, useEffect } from "react"
 import { useState } from "react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -38,7 +38,8 @@ export default function StepWise({selectedRows}: rowsSelected) {
           defaultValues: {
             invoice: 0,
             product: 0,
-            total: 0
+            total: 0,
+            quantity: 1,
         },
       })
 
@@ -46,7 +47,7 @@ export default function StepWise({selectedRows}: rowsSelected) {
         setLoading(true);
         // const htmlContent = '<h1>Hello, this is a PDF!</h1><p>This is the content of the PDF document.</p>';
         const htmlContent = ReactDOMServer.renderToStaticMarkup(
-            <Invoice selectedRows={selectedRows} form={form.getValues()} />
+            <Invoice selectedRows={selectedRows} form={form.getValues()} itemsForm={itemsForm.getValues()} />
           );
     
         try {
@@ -101,15 +102,13 @@ export default function StepWise({selectedRows}: rowsSelected) {
         }
         if(data.error == false){
           const invoiceId = data.id
-          console.log(invoiceId)
-          const uniqueOrders = Array.from(new Set(selectedRows.map(a => a.id)))
-          .map(id => selectedRows.find(a => a.id === id));
 
           for( const row of selectedRows){
+            const quantity = itemsForm.getValues("quantity")
             itemsForm.setValue("product", parseInt(row.id))
-            itemsForm.setValue("total", row.unitAmount*row.unitsPurchased)
+            itemsForm.setValue("total", row.unitAmount*quantity)
             itemsForm.setValue("invoice", invoiceId)
-                
+
             const itemForm = itemsForm.getValues()
             //submit
             const values = await addInvoiceItems(itemForm)
@@ -177,17 +176,20 @@ export default function StepWise({selectedRows}: rowsSelected) {
         }
     }
     return ( 
+      <div>
         <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="bg-background sm:p-8 p-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="bg-background sm:p-8 p-6">
             <div className = 'row py-4 justify-content-center' >
             <Step1 currentStep = { currentStep }
             button = { nextButton() }
             form={form}
+            itemsForm={itemsForm}
             /> 
             <Step2 currentStep = { currentStep }
             prev = { nextButton() }
             selectedRows={selectedRows}
             form={form.getValues()}
+            itemsForm={itemsForm.getValues()}
             /> </div>
             {currentStep==2 && <Button type="submit" id="submit" disabled={loading} className="mx-1">
             {loading ? 'Generating PDF...' : 'Generate PDF'}
@@ -199,14 +201,16 @@ export default function StepWise({selectedRows}: rowsSelected) {
         {form.formState.isSubmitSuccessful && (
           <div className="border border-primary text-primary p-2 mt-1 text-center rounded-md"> Invoice generated successfully </div>
         )}
-      </form>
-      </Form>
+        </form>
+        </Form>
+      </div>
         )
 }
 
 function Step1(props:
     {
-        currentStep: number, 
+        currentStep: number,
+        itemsForm: any,
         form: any, 
         button:JSX.Element | null}) {
     if (props.currentStep !== 1) {
@@ -215,9 +219,28 @@ function Step1(props:
     return ( 
         <div>
         <div className="text-2xl font-bold tracking-tight">Add Invoice Details</div>
-        <div className="text-sm text-muted-foreground">Atleast an address is required to generate the invoice</div>
+        <div className="text-sm text-muted-foreground mt-4">How many of this item?</div>
+        <div className="flex flex-col space-y-1.5">
+              <FormField
+                  control={props.itemsForm.control}
+                  name="quantity"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Quantity</FormLabel>
+                      <FormControl>
+                          <Input
+                          type="number" 
+                          placeholder="0" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                  />
+              </div>
         <div className="grid items-center gap-2 mt-4">
-          <div className="grid gap-2">
+        <div className="text-sm text-muted-foreground">Atleast an address is required to generate the invoice</div>
+
+        <div className="grid gap-2">
               <div className="flex flex-col space-y-1.5">
               <FormField
                   control={props.form.control}
@@ -303,12 +326,14 @@ function Step2(props:{currentStep: number, prev: JSX.Element, form: {address: st
     user: number,
     invoiceStatus: string,
     paymentID: string,
-    }, selectedRows: Stock[]}) {
+    },
+    itemsForm: {quantity: number},
+    selectedRows: Stock[]}) {
     if (props.currentStep !== 2) {
         return null
     }
     return (<div className="flex">
-        <Invoice selectedRows={props.selectedRows} form={props.form}/>
+        <Invoice selectedRows={props.selectedRows} form={props.form} itemsForm={props.itemsForm}/>
         <div>
         <div>{props.prev}</div>
         </div>

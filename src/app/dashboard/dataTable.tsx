@@ -101,7 +101,7 @@ export function DataTableDemo<TData, TValue>({data, columns, id, name}: DataTabl
         <Dialog>
         <DialogTrigger>
         <div 
-        className={table.getIsSomeRowsSelected()==true || table.getIsAllRowsSelected()==true?"bg-primary text-sm rounded-md p-2 text-green-100 hover:bg-green-600":"bg-muted-foreground hover:bg-muted-foreground hidden p-2 rounded-md"}>New Invoice</div>
+        className={table.getIsSomeRowsSelected()==true && table.getSelectedRowModel().rows.length<2?"bg-primary text-sm rounded-md p-2 text-green-100 hover:bg-green-600":"bg-muted-foreground hover:bg-muted-foreground hidden p-2 rounded-md"}>New Invoice</div>
         </DialogTrigger>
         <DialogContent className="max-w-fit h-screen overflow-y-auto">
         <DialogHeader className="hidden">
@@ -254,8 +254,8 @@ export function DataTableDemo<TData, TValue>({data, columns, id, name}: DataTabl
       <div className="text-sm p-2 bg-muted rounded-md text-muted-foreground">Display: 10 rows per page</div>
       {
         (id=="stock" || id=="product") && <div className="flex">
-          <div className=" flex text-sm items-center text-red-300"><Dot size={40} className="text-red-600"/> Product due for expiry in 2 weeks</div>
-          <div className=" flex text-sm items-center text-green-500 ml-12"><Dot size={40} className="text-primary"/> Product still okay</div>
+          <div className=" flex text-sm items-center text-red-600"><Dot size={40} className="text-red-600"/> Product batch due for expiry in 2 weeks</div>
+          <div className=" flex text-sm items-center text-green-500 ml-12"><Dot size={40} className="text-primary"/> Product batch still okay</div>
           </div>
       }
       </div>

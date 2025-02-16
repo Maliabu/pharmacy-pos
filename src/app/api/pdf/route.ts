@@ -33,12 +33,12 @@ export async function POST(req: NextRequest) {
     `;
 
     // Launch a headless browser instance using Puppeteer
-    // const browser = await puppeteer.launch({
-    //   executablePath: process.env.CHROMIUM_PATH, // Use the path from environment variable if available
-    //   headless: true,
-    //   args: ['--no-sandbox', '--disable-setuid-sandbox']
-    // });
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      executablePath: process.env.CHROMIUM_PATH, // Use the path from environment variable if available
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    // const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
     // Set the HTML content on the page

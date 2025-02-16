@@ -100,6 +100,7 @@ export const addInvoiceSchema = z.object({
 export const addInvoiceItemsSchema = z.object({
     product: z.coerce.number({required_error: "Please provide a product.",}),
     invoice: z.coerce.number({required_error: "Please enter an invoice",}),
+    quantity: z.coerce.number({required_error: "Please enter a quantity",}),
     total: z.coerce.number()
 })
 

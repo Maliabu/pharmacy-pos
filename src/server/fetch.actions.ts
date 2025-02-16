@@ -260,12 +260,19 @@ Promise<{error: boolean | undefined}> {
    if (!success){
     return {error: true}
    }
-   // upload invoice data
-   // get last invoice id by this user
    // update items data
-   // update today of the invoice
 
    await db.insert(invoiceItemsTable).values({...data})
+   // get units purchased for product
+   const product = await db.query.stockTable.findMany({
+    where: eq(stockTable.id, data.product)
+   })
+   const units = product[0].unitsPurchased
+   const diff = units - data.quantity
+   console.log(product, data.quantity)
+
+   // update number of items left
+   await db.update(stockTable).set({unitsPurchased: diff}).where(eq(stockTable.id, data.product))
 
    return {error: false}
 //    redirect("/admin/dashboard")
