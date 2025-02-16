@@ -12,6 +12,15 @@ typescript: {
   // !! WARN !!
   ignoreBuildErrors: true,
 },
+webpack(config) {
+  // Exclude chrome-aws-lambda from webpack processing
+  config.externals = [
+    ...(config.externals || []),
+    'chrome-aws-lambda',
+  ];
+
+  return config;
+},
 };
 
 export default nextConfig;
