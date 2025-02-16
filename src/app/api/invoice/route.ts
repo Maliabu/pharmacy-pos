@@ -7,7 +7,8 @@ export async function GET() {
     // Query the database
     const invoice = await db.query.invoiceTable.findMany({
         with: {
-            user: true
+            user: true,
+            invoiceItems: true
         }
     });
     

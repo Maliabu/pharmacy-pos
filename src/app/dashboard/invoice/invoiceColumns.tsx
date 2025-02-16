@@ -17,10 +17,12 @@ export type Invoice = {
       createdAt: string
     }]
     id: string
-    status: "paid" | "pending"
+    invoiceStatus: "paid" | "pending"
     user: {
       name: string
     }
+    paymentMeans: string
+    paymentID: string
     createdAt: string
     invoice: LucideIcon
     address: string
@@ -48,6 +50,13 @@ export const columns: ColumnDef<Invoice>[] = [
     // ),
     enableSorting: true,
     enableHiding: true,
+  },
+  {
+    accessorKey: "id",
+    header: "No.",
+    cell: ({ row }) => (
+      <div>{row.getValue("id")}</div>
+    ),
   },
   {
     accessorKey: "invoiceStatus",
@@ -92,7 +101,7 @@ export const columns: ColumnDef<Invoice>[] = [
             Invoice template
           </DialogDescription>
         </DialogHeader>
-        {/* <PreviewInvoice invoiceId={parseInt(row.getValue("id"))}/> */}
+        <PreviewInvoice invoiceId={parseInt(row.getValue("id"))}/>
         </DialogContent>
       </Dialog>
       </div>,

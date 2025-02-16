@@ -42,7 +42,7 @@ export default function Page(){
         <div className="mt-4 sm:p-8 p-4 bg-muted rounded-lg">
             <div className="text-2xl font-bold tracking-tight">User Activity / Timeline (Logging)</div>
             <div className="text-sm font-medium text-muted-foreground">Logging user activities on the platform, visible only to the administrator</div>
-            <div className="bg-background p-6 mt-6 rounded-md">
+            <div className="bg-background p-6 mt-6 rounded-md overflow-auto h-[300px]">
                 <div className="text-sm flex justify-between text-muted-foreground my-4 p-2 bg-muted rounded-md">
                     <p>User</p>
                     <p>Activities</p>

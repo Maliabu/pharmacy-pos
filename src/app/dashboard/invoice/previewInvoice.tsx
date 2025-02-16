@@ -1,20 +1,70 @@
+"use client"
+
 import { Pill } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { date } from "@/app/services/services";
-import { db } from "@/drizzle/db";
-import { eq } from "drizzle-orm";
-import { invoiceItemsTable, invoiceTable } from "@/drizzle/schema";
+import { date, fetcher, tokenise } from "@/app/services/services";
+import useSWR from "swr";
+import { Invoice } from "./invoiceColumns";
+import { Button } from "@/components/ui/button";
+import { pendingToPaid } from "@/server/fetch.actions";
+import { useEffect, useState } from "react";
 
-export default async function PreviewInvoice(props: {invoiceId: number}){
-    const invoices = await db.query.invoiceItemsTable.findMany({
-        where: eq(invoiceItemsTable.invoice, props.invoiceId),
-        with:{
-            product: true
+
+interface InvoiceItems{
+    id: number
+    product: {
+        name: string
+        description: string
+        unitAmount: number
+        orderDate: Date
+    },
+    invoice: number
+    total: number
+    quantity: number
+}
+
+export default function PreviewInvoice(props: {invoiceId: number}){
+    const [userid, setUserId] = useState('')
+    useEffect(() => {
+        setUserId(tokenise()[3])
+    }, [])
+    const { data: data1, error: error1 } = useSWR(
+        props.invoiceId ? `/api/invoiceItems/${props.invoiceId}` : null, // Conditional key
+        fetcher
+    );
+    const { data: data2, error: error2 } = useSWR(
+        props.invoiceId ? `/api/invoice/${props.invoiceId}` : null, // Conditional key
+        fetcher
+    );
+
+    let invoices: InvoiceItems[] = []
+    if (error1) return <div className="sm:w-[800px]">Error loading invoice items data</div>;
+    if (!data1) return <div className="sm:w-[800px]">Loading items...</div>;
+    if(data1){invoices = data1}
+
+    let invoice: Invoice[] = []
+    if (error2) return <div className="sm:w-[800px]">Error loading invoice items data</div>;
+    if (!data2) return <div className="sm:w-[800px]">Loading the invoice...</div>;
+    if(data2){invoice = data2}
+
+    async function paid(){
+        const app = document.getElementById('paid');
+        const text = 'processing';
+        if(app !== null){
+          app.innerHTML = text;
         }
-    })
-    const address = await db.query.invoiceTable.findMany({
-        where:eq(invoiceTable.id, props.invoiceId)
-    })
+        const data = await pendingToPaid(props.invoiceId, userid)
+        if(data.error == false){
+            const app = document.getElementById('submit');
+            const text = 'successful';
+            if(app !== null){
+          app.innerHTML = text;
+        }
+            window.location.reload()
+        } else {
+            console.log(data.error)
+        }
+    }
 
     // Calculate the overall total for the table
     const calculateOverallTotal = () => {
@@ -26,7 +76,7 @@ export default async function PreviewInvoice(props: {invoiceId: number}){
     };
 
     return(
-        <div className="sm:p-12 rounded-md border">
+        <div className="sm:p-12 rounded-md sm:w-[800px]">
             <div className="flex justify-between border-b pb-6">
                 <Pill size={40} className="text-primary"/>
                 <div className="text-3xl font-bold tracking-tight">INVOICE</div>
@@ -34,9 +84,10 @@ export default async function PreviewInvoice(props: {invoiceId: number}){
             <div className="flex justify-between">
                 <div className="flex flex-col text-sm mt-8">
                     <p className="font-bold">Billed To:</p>
-                    <p>{address[0].address}</p>
+                    <p>{invoice[0].address}</p>
                 </div>
                 <div className="flex flex-col text-sm mt-8 w-[100px]">
+                    <p>Invoice No. <span className="text-red-600">{props.invoiceId}</span></p>
                     <p>{date(Date())}</p>
                 </div>
             </div>
@@ -58,7 +109,7 @@ export default async function PreviewInvoice(props: {invoiceId: number}){
                     {invoices.map((row, index) => (
                     <TableRow key={row.id}>
                         <TableCell>{index+1}</TableCell>
-                        <TableCell>{row.product.orderDate.toDateString()}</TableCell>
+                        <TableCell>{date(row.product.orderDate.toString())}</TableCell>
                         <TableCell className="font-medium">{row.product.name}</TableCell>
                         <TableCell>{row.product.description}</TableCell>
                         <TableCell className="text-right">{row.product.unitAmount.toLocaleString()}</TableCell>
@@ -77,9 +128,10 @@ export default async function PreviewInvoice(props: {invoiceId: number}){
                 </div>
                 <div className="flex flex-col py-4 text-sm border-t mt-12">
                     <p className="font-bold">Payment Details</p>
-                    <p>{address[0].paymentID}</p>
-                    <p>{address[0].paymentMeans}</p>
+                    <p>{invoice[0].paymentID}</p>
+                    <p>{invoice[0].paymentMeans}</p>
                 </div>
+                {invoice[0].invoiceStatus == "pending" && <Button id="paid" onClick={() => paid()} className="mt-6">Mark this invoice as paid</Button>}
         </div>
     )
 }

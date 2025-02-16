@@ -92,6 +92,7 @@ export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>){
         eq(usersTable.email, data.email)
     )
    }
+   await logActivity(name+" Logged in", id.toString())
    
    return [token, encrPass, initVector, usertype, email, username, name, id.toString(), userType]
 }
@@ -292,4 +293,13 @@ export async function logActivity(activity: string, userId: string): Promise<{er
         await db.insert(activityTable).values({...data})
         return {error: false, message: "ok"}
     }
+}
+
+export async function pendingToPaid(invoiceId: number, userId: string){
+    const paid = await db.update(invoiceTable).set({invoiceStatus: "paid"}).where(eq(invoiceTable.id, invoiceId))
+    if(paid){
+        await logActivity("Marked invoice "+invoiceId+" as paid", userId)
+        return {error: false}
+    }
+    return {error: true}
 }
