@@ -1,7 +1,10 @@
-import puppeteer from 'puppeteer';
+import puppeteer, {type Browser} from 'puppeteer';
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import chromium from '@sparticuz/chromium-min';
+import puppeteerCore, { type Browser as BrowserCore } from 'puppeteer-core';
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -38,10 +41,45 @@ export async function POST(req: NextRequest) {
     //   headless: true,
     //   args: ['--no-sandbox', '--disable-setuid-sandbox']
     // });
-    const browser = await puppeteer.launch({
-      headless: true, // Make sure it's true
-      args: ['--no-sandbox', '--disable-setuid-sandbox'], 
-    });
+    let browser: Browser | BrowserCore;
+        if (process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production') {
+            // Configure the version based on your package.json (for your future usage).
+            const executablePath = await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar')
+            browser = await puppeteerCore.launch({
+                executablePath,
+                // You can pass other configs as required
+                args: chromium.args,
+                headless: (() => {
+                  const headlessValue = chromium.headless;
+      
+                  // Check if headlessValue is a string or boolean and act accordingly
+                  if (typeof headlessValue === 'boolean') {
+                      return headlessValue;
+                  }
+      
+                  if (typeof headlessValue === 'string') {
+                      // If it's a string, handle different possible string values
+                      if (headlessValue === 'true') {
+                          return true;
+                      } else if (headlessValue === 'false') {
+                          return false;
+                      } else if (headlessValue === 'shell') {
+                          return 'shell';  // If you want to handle the "shell" case explicitly
+                      }
+                  }
+      
+                  // Default to undefined or headless mode as desired
+                  return undefined;
+              })(),
+                defaultViewport: chromium.defaultViewport
+            })
+        } else {
+            browser = await puppeteer.launch({
+                executablePath: process.env.CHROMIUM_PATH, // Use the path from environment variable if available
+                headless: true,
+                args: ['--no-sandbox', '--disable-setuid-sandbox']
+            })
+        }
     const page = await browser.newPage();
 
     // Set the HTML content on the page
