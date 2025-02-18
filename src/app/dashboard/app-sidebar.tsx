@@ -28,6 +28,11 @@ const data = {
           url: "/dashboard/salesChart",
         },
         {
+          title: "New Order",
+          icon: Plus,
+          url: "/dashboard/order",
+        },
+        {
           title: "Invoices",
           icon: File,
           url: "/dashboard/invoice",

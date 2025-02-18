@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/drizzle/db";
-import { Bills, activityTable, currencyTable, invoiceItemsTable, invoiceTable, packagingTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
+import { Bills, activityTable, currencyTable, invoiceItemsTable, invoiceTable, packagingTable, receipt, receiptTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
 // import "use-server"
 import { z } from "zod";
 import { loginUserSchema, addUserSchema, addSupplierSchema, addVendorSchema, addStockSchema, addBillSchema, addPackagingSchema, addInvoiceSchema, addInvoiceItemsSchema } from '@/schema/formSchemas'
@@ -270,7 +270,6 @@ Promise<{error: boolean | undefined}> {
    })
    const units = product[0].unitsPurchased
    const diff = units - data.quantity
-   console.log(product, data.quantity)
 
    // update number of items left
    await db.update(stockTable).set({unitsPurchased: diff}).where(eq(stockTable.id, data.product))
@@ -302,4 +301,43 @@ export async function pendingToPaid(invoiceId: number, userId: string){
         return {error: false}
     }
     return {error: true}
+}
+
+export async function newReceipt(userId: string){
+    const newReceipt = await db.insert(receipt).values({user: parseInt(userId)})
+
+    if(newReceipt){
+        // get last invoice id by this user
+        const result = await db.query.receipt.findMany({
+            where: eq(receipt.user, parseInt(userId)),
+            orderBy: [desc(receipt.id)],
+            limit: 1,
+        })
+        let lastId = 0
+        if (result.length > 0) {
+            lastId = result[0].id; // return the last id
+            return lastId
+        } else return 0
+    } else{
+        return 0
+    }
+
+}
+
+export async function addReceiptData(row: {product: string, quantity:number, receipt: number}, userId: string, receipt: number){
+    await db.insert(receiptTable).values(
+            {receipt: receipt,
+            product: parseInt(row.product),
+            quantity: row.quantity}
+        )
+    const product = await db.query.stockTable.findMany({
+            where: eq(stockTable.id, parseInt(row.product))
+           })
+           const units = product[0].unitsPurchased
+           const diff = units - row.quantity
+        //decrement product units purchased
+        await db.update(stockTable).set({unitsPurchased: diff})
+    await logActivity("Generated a Receipt "+row.receipt, userId)
+
+    return{error: false}
 }

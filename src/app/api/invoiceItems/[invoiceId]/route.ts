@@ -14,7 +14,7 @@ export async function GET(request: Request, { params }: { params: { invoiceId: s
     .invoiceItemsTable
     .findMany({
       where: eq(invoiceItemsTable.invoice, parseInt(invoiceId)),
-      with: {
+      with:{
         product: true
       }
     })

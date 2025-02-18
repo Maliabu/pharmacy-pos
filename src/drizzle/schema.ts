@@ -65,8 +65,34 @@ export const invoiceItemsTable = pgTable('invoice_items', {
 });
 
 export const invoiceItemsRelations = relations(invoiceItemsTable, ({one}) => ({
-  product: one(stockTable, {fields: [invoiceItemsTable.product], references: [stockTable.id]}),
   invoice: one(invoiceTable, {fields: [invoiceItemsTable.invoice], references: [invoiceTable.id]}),
+  product: one(stockTable, {fields: [invoiceItemsTable.product], references: [stockTable.id]}),
+}))
+
+export const receipt = pgTable('receipt', {
+  id: serial('id').primaryKey(),
+  user: integer("user").notNull().references(() => usersTable.id, {onDelete: 'cascade'}),
+  createdAt,
+  updatedAt
+})
+
+export const receiptTable = pgTable('receipt_details', {
+  id: serial('id').primaryKey(),
+  receipt: integer('receipt_id').notNull().references(() => receipt.id, {onDelete: 'cascade'}),
+  product: integer("product_id").notNull().references(() => stockTable.id, {onDelete: 'cascade'}),
+  quantity: integer('quantity').notNull().default(1),
+  createdAt,
+  updatedAt
+});
+
+export const receiptRelations = relations(receipt, ({one, many}) => ({
+  receipts: many(receiptTable),
+  user: one(usersTable, {fields: [receipt.user], references: [usersTable.id]}),
+}))
+
+export const receiptItemsRelations = relations(receiptTable, ({one}) => ({
+  receipt: one(receipt, {fields: [receiptTable.receipt], references: [receipt.id]}),
+  product: one(stockTable, {fields: [receiptTable.product], references: [stockTable.id]}),
 }))
 
 export const stockTable = pgTable('stock', {

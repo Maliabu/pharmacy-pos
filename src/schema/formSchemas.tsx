@@ -104,6 +104,12 @@ export const addInvoiceItemsSchema = z.object({
     total: z.coerce.number()
 })
 
+export const addReceipt = z.object({
+    product: z.string(),
+    quantity: z.coerce.number({required_error: "Please enter a quantity",}),
+    receipt: z.coerce.number({required_error: "Please enter a receipt number",}),
+})
+
 export const addBillSchema = z.object({
     name: z.string({required_error: "Please enter your purchase.",}).min(2, {
         message: "name should be atleast a character"

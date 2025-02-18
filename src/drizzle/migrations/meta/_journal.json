@@ -29,6 +29,34 @@
       "when": 1739699908376,
       "tag": "0003_simple_whirlwind",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1739817607420,
+      "tag": "0004_low_meltdown",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1739821132739,
+      "tag": "0005_foamy_unicorn",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1739821322621,
+      "tag": "0006_aromatic_stranger",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1739890219148,
+      "tag": "0007_salty_the_anarchist",
+      "breakpoints": true
     }
   ]
 }

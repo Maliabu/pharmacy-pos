@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
@@ -92,8 +93,7 @@ export const columns: ColumnDef<Invoice>[] = [
     cell: ({row}) => <div>
       <Dialog>
         <DialogTrigger>
-        <File/>
-        </DialogTrigger>
+        <img src="/pdf.png" alt="pdf image" width={25} height={30}/></DialogTrigger>
         <DialogContent className="max-w-fit h-screen overflow-y-auto">
         <DialogHeader className="hidden">
           <DialogTitle>Invoice</DialogTitle>

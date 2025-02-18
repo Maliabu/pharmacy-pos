@@ -101,3 +101,6 @@ body {
 .b{
   background-color: #01814b;
 }
+.small-receipt{
+  font-size: 10px !important;
+}
