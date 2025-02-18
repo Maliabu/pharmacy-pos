@@ -134,7 +134,7 @@ export default function StepWise() {
           if(app !== null){
             app.innerHTML = "Successful";
           }
-          // window.location.reload()
+          window.location.reload()
     }
 
     const _next = () => {

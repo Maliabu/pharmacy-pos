@@ -18,7 +18,7 @@ export default function Receipt(props: {rows: {product: string,
         }
 
     return(
-        <div className="p-4 rounded-md border">
+        <div className="p-4 rounded-md">
             <div className="pb-6 flex flex-col items-center justify-center text-center">
                 <Pill size={30}/>
                 <div className="text-2xl font-bold tracking-tight">Light Medicare</div>

@@ -30,7 +30,7 @@ export default function Invoice(props: {selectedRows: Stock[], form: {address: s
     const total = overallTotal + (tax/100 * overallTotal)
 
     return(
-        <div className="sm:p-12 rounded-md border">
+        <div className="sm:p-12 rounded-md">
             <div className="flex justify-between border-b pb-6">
                 <Pill size={40} className="text-primary"/>
                 <div className="text-3xl font-bold tracking-tight">INVOICE</div>
