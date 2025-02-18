@@ -14,6 +14,7 @@ const DonutChart = (props:{data:{name: string, value: number}[], name: string}) 
           innerRadius={60} // Radius of the hole (donut size)
           outerRadius={80} // Outer radius of the donut
           fill="#8884d8"
+          stroke='#4caf5000'
           paddingAngle={5}
           dataKey="value"
         >
@@ -26,7 +27,7 @@ const DonutChart = (props:{data:{name: string, value: number}[], name: string}) 
             style={{
               fontSize: '13px',
               fontWeight: 'bold',
-              fill: '#333' // Text color for the percentage
+              fill: '#555' // Text color for the percentage
             }}
           />
         </Pie>

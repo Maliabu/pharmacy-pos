@@ -2,13 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { Loader2, ThumbsUp } from "lucide-react";
-import { date, fetcher, getMyMonth } from "@/app/services/services";
+import { Loader2 } from "lucide-react";
+import { fetcher, getMyMonth } from "@/app/services/services";
 import useSWR from "swr";
 import { Invoice } from "../invoice/invoiceColumns";
-import { json } from "stream/consumers";
-import Stock from "../stock/stock";
 import Graph, { YearData } from "./paidGraph";
+import { Receipt } from "../order/page";
 
 export default function ActualSales(){
 
@@ -17,31 +16,62 @@ export default function ActualSales(){
     if(data){
         invoices = data
     }
+
+    let receipts: Receipt[] = []
+    const { data: data1, error: error1 } = useSWR("/api/receipt/receipt", fetcher);
+    if(data1){
+        receipts = data1
+    }
     
     // Step 1: Grouping by year and month
-const groupByYearMonth = (data1: Invoice[]) => {
-    return data1.reduce((acc, invoice) => {
-      invoice.invoiceItems.forEach((item: { createdAt: string; total: number; product:number }) => {
-        // Get the year and month from createdAt
-        const createdAt = new Date(item.createdAt);
-        const year = createdAt.getFullYear();
-        const month = createdAt.getMonth() + 1; // Get month (1-12)
+  const groupByYearMonth = (data1: Invoice[]) => {
+      return data1.reduce((acc, invoice) => {
+        invoice.invoiceItems.forEach((item: { createdAt: string; total: number; product:number }) => {
+          // Get the year and month from createdAt
+          const createdAt = new Date(item.createdAt);
+          const year = createdAt.getFullYear();
+          const month = createdAt.getMonth() + 1; // Get month (1-12)
+    
+          // Initialize the structure if it's not already present
+          if (!acc[year]) {
+            acc[year] = {};
+          }
+    
+          if (!acc[year][month]) {
+            acc[year][month] = 0;
+          }
+    
+          // Accumulate the amount for the respective year and month
+          acc[year][month] += item.total;
+        });
+        return acc;
+      }, {} as Record<number, Record<number, number>>);
+    };
   
-        // Initialize the structure if it's not already present
-        if (!acc[year]) {
-          acc[year] = {};
-        }
-  
-        if (!acc[year][month]) {
-          acc[year][month] = 0;
-        }
-  
-        // Accumulate the amount for the respective year and month
-        acc[year][month] += item.total;
-      });
-      return acc;
-    }, {} as Record<number, Record<number, number>>);
-  };
+    const groupByYearMonth1 = (data1: Receipt[]) => {
+      return data1.reduce((acc, receipt) => {
+        receipt.receipts.forEach((item: { createdAt: string; quantity: number; product:{name:string, unitAmount:number,unitsPurchased:number} }) => {
+          // Get the year and month from createdAt
+          const createdAt = new Date(item.createdAt);
+          const year = createdAt.getFullYear();
+          const month = createdAt.getMonth() + 1; // Get month (1-12)
+    
+          // Initialize the structure if it's not already present
+          if (!acc[year]) {
+            acc[year] = {};
+          }
+    
+          if (!acc[year][month]) {
+            acc[year][month] = 0;
+          }
+          const unitAmount = item.product.unitAmount
+    
+          // Accumulate the amount for the respective year and month
+          acc[year][month] += item.quantity * unitAmount
+        });
+        return acc;
+      }, {} as Record<number, Record<number, number>>);
+    };
   
   // Step 2: Structure the data for the graph
   const prepareForGraph = (groupedData: Record<number, Record<number, number>>) => {
@@ -78,10 +108,13 @@ const groupByYearMonth = (data1: Invoice[]) => {
   // Step 3: Prepare the data for graph
   const groupedData = groupByYearMonth(invoices);
   const dataForGraph = prepareForGraph(groupedData);
+
+  const groupedData1 = groupByYearMonth1(receipts);
+  const dataForGraph1 = prepareForGraph(groupedData1);
     
     if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/></div>;
     
     return<div className="bg-background py-16 rounded-lg mt-2">
-        <Graph result={dataForGraph} graphId="actual"/>
+        <Graph invoices={dataForGraph} graphId="actual" receipts={dataForGraph1}/>
     </div>
 }

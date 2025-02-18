@@ -22,7 +22,6 @@ export default function Graph(props: { result: YearData[], graphId: string }) {
       totalAmount: monthData.totalAmount,
     }))
   );
-  console.log(flattenedData)
   const totalSalesPerYear = props.result.map((yearData) => ({
     year: yearData.year,
     totalSales: yearData.totalSales,
@@ -87,7 +86,7 @@ export default function Graph(props: { result: YearData[], graphId: string }) {
           {props.result.map((yearData) => (
             <linearGradient id={`${props.graphId}-gradient-${yearData.year}`} key={yearData.year} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#4d4d4d" stopOpacity={0.8} />
-              <stop offset="100%" stopColor="#bfbfbf" stopOpacity={0.4} />
+              <stop offset="100%" stopColor="#ffffff00" stopOpacity={0.4} />
             </linearGradient>
           ))}
         </defs>

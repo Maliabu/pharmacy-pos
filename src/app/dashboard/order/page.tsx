@@ -9,15 +9,19 @@ import useSWR from "swr";
 import { date, fetcher } from "@/app/services/services";
 import PreviewReceipt from "./previewReceipt";
 
-export interface Receipt{
+export type Receipt = {
   id: number
   user: number
-  receiptItems: {
-    product: number
+  receipts: [{
+    product: {
+      name: string
+      unitAmount: number
+      unitsPurchased: number
+    }
     quantity: number
-    createdAt: Date
-  }
-  createdAt: Date
+    createdAt: string
+  }];
+  createdAt: string
 }
 export default function Page(){
   let receipt: Receipt[] = []

@@ -336,8 +336,7 @@ export async function addReceiptData(row: {product: string, quantity:number, rec
            const units = product[0].unitsPurchased
            const diff = units - row.quantity
         //decrement product units purchased
-        await db.update(stockTable).set({unitsPurchased: diff})
-    await logActivity("Generated a Receipt "+row.receipt, userId)
+        await db.update(stockTable).set({unitsPurchased: diff}).where(eq(stockTable.id, parseInt(row.product)))
 
     return{error: false}
 }

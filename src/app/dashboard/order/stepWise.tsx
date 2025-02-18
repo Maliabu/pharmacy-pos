@@ -17,7 +17,7 @@ import Invoice from "../invoice/invoice"
 import { Button } from "@/components/ui/button"
 import { Stock } from "../stock/dataColumns"
 import ReactDOMServer from "react-dom/server"
-import { addInvoiceItems, addNewInvoice, addReceiptData, newReceipt } from "@/server/fetch.actions"
+import { addInvoiceItems, addNewInvoice, addReceiptData, logActivity, newReceipt } from "@/server/fetch.actions"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import useSWR from "swr"
 import Receipt from "./receipt"
@@ -119,12 +119,12 @@ export default function StepWise() {
         const userId = tokenise()[3]
 
         const receipt = await newReceipt(userId)
-        console.log(receipt)
         if(receipt != 0){
-            rows.forEach(async row => {
+            for(const row of rows){
                 await addReceiptData(row, userId, receipt)
-            }) 
+            }
         }
+        await logActivity("Generated a Receipt "+receipt, userId)
         try {
             await generatePdf(); // Ensure the PDF is generated after all items are added
           } catch (error) {
@@ -134,7 +134,7 @@ export default function StepWise() {
           if(app !== null){
             app.innerHTML = "Successful";
           }
-          window.location.reload()
+          // window.location.reload()
     }
 
     const _next = () => {

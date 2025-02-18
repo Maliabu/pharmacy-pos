@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import puppeteer, {Page, type Browser} from 'puppeteer';
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
@@ -111,7 +112,7 @@ export async function POST(req: NextRequest) {
     //   format: 'A4',
       printBackground: true,
       width: '80mm',
-      height: `${contentHeight}px`, // Let Puppeteer calculate the height based on content
+      height: `150mm`, // Let Puppeteer calculate the height based on content
     });
 
     // Close the browser instance

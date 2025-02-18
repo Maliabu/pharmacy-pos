@@ -8,7 +8,11 @@ export async function GET() {
     const receipt = await db.query.receipt.findMany({
         with: {
             user: true,
-            receipts: true
+            receipts: {
+                with: {
+                    product: true
+                }
+            }
         }
     });
     
