@@ -1,9 +1,10 @@
-import { Pill } from "lucide-react";
+/* eslint-disable @next/next/no-img-element */
 import { Stock } from "../stock/dataColumns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { date } from "@/app/services/services";
+import Image from "next/image";
 
-export default function Invoice(props: {selectedRows: Stock[], form: {address: string,
+export default function Invoice(props: {selectedRows: Stock[], classname: string, form: {address: string,
     paymentMeans: string,
     user: number,
     invoiceStatus: string,
@@ -31,8 +32,8 @@ export default function Invoice(props: {selectedRows: Stock[], form: {address: s
 
     return(
         <div className="sm:p-12 rounded-md">
-            <div className="flex justify-between border-b pb-6">
-                <Pill size={40} className="text-primary"/>
+            <div className={props.classname}>
+            <Image src="https://newfeelventures.com/logo.png" alt="logo" width={200} height={100} unoptimized />
                 <div className="text-3xl font-bold tracking-tight">INVOICE</div>
             </div>
             <div className="flex justify-between">

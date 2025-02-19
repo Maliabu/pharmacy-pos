@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pharmacy POS",
+  title: "Light Medicare",
   description: "point of sale",
 };
 

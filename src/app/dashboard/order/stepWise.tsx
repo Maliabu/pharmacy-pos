@@ -44,6 +44,8 @@ export default function StepWise() {
       if(data){
           products = data
       }
+
+      let classname = 'visible'
   
   
     // Handle row deletion
@@ -79,9 +81,10 @@ export default function StepWise() {
 
     const generatePdf = async () => {
         setLoading(true);
+        classname = 'hidden'
         // const htmlContent = '<h1>Hello, this is a PDF!</h1><p>This is the content of the PDF document.</p>';
         const htmlContent = ReactDOMServer.renderToStaticMarkup(
-            <Receipt rows={rows} getProductNameById={getProductNameById}/>
+            <Receipt rows={rows} getProductNameById={getProductNameById} classname={classname}/>
         );
     
         try {
@@ -184,6 +187,7 @@ export default function StepWise() {
             getProductNameById={getProductNameById}
             prev = { nextButton() }
             rows={rows}
+            classname={classname}
             /> </div>
             {currentStep==2 && <Button type="submit" id="submit" disabled={loading} className="mx-1">
             {loading ? 'Generating PDF...' : 'Generate PDF'}
@@ -302,13 +306,14 @@ function Step2(props:{
     prev: JSX.Element,
     getProductNameById: (productId: string) => string[]
     rows: {product: string, quantity: number}[]
+    classname: string
     }) {
     if (props.currentStep !== 2) {
         return null
     }
     return (<div className="flex">
         <div>
-            <Receipt rows={props.rows} getProductNameById={props.getProductNameById}/>
+            <Receipt rows={props.rows} getProductNameById={props.getProductNameById} classname={props.classname}/>
         <div>{props.prev}</div>
         </div>
     </div>);

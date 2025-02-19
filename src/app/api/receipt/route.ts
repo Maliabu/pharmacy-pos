@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
           <script src="https://cdn.jsdelivr.net/npm/tailwind-merge@1.0.0/dist/index.umd.min.js"></script>
           </head>
           <body>
+          <img src="https://newfeelventures.com/logo.png" alt="logo" width={100} height={50} class="p-6"/>
           ${htmlContent}
           </body>
       </html>
@@ -97,7 +98,6 @@ export async function POST(req: NextRequest) {
       }
       return 0;  // Return 0 if the element is not found
     });
-    console.log(fullHtmlContent)
 
     // Inject the global.css content directly as a style tag into the page
     await page.addStyleTag({ content: globalCssContent });

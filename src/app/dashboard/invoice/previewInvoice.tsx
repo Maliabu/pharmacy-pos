@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
-import { Pill } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { date, fetcher, tokenise } from "@/app/services/services";
 import useSWR from "swr";
@@ -78,8 +78,8 @@ export default function PreviewInvoice(props: {invoiceId: number}){
     return(
         <div className="sm:p-12 rounded-md sm:w-[800px]">
             <div className="flex justify-between border-b pb-6">
-                <Pill size={40} className="text-primary"/>
-                <div className="text-3xl font-bold tracking-tight">INVOICE</div>
+            <img src="https://newfeelventures.com/logo.png" alt="logo" width={200} height={100}/>
+            <div className="text-3xl font-bold tracking-tight">INVOICE</div>
             </div>
             <div className="flex justify-between">
                 <div className="flex flex-col text-sm mt-8">

@@ -33,7 +33,7 @@ export default function Page(){
     return<div className="bg-background p-8 rounded-lg mt-2">
         <Dialog>
         <DialogTrigger>
-        <div className="p-2 bg-primary rounded-md text-sm text-green-100">New Order</div>
+        <div className="p-2 bg-primary rounded-md text-sm text-green-100">New Purchase</div>
         </DialogTrigger>
         <DialogContent className="sm:w-[800px] h-screen overflow-y-auto">
         <DialogHeader className="hidden">
@@ -46,7 +46,7 @@ export default function Page(){
         </DialogContent>
       </Dialog>
       <div className="text-2xl font-bold tracking-tight mt-8">Receipts</div>
-      <div className="grid grid-cols-3 gap-2 bg-muted rounded-md p-4 mt-4">
+      <div className="grid grid-cols-3 gap-2 bg-muted rounded-md p-4 mt-4 admin-scroll">
       {
         receipt.map(receipt => (
           <div key={receipt.id} className="p-4 bg-background rounded-md mt-1 flex justify-between">

@@ -1,10 +1,10 @@
 "use server"
 
 import { db } from "@/drizzle/db";
-import { Bills, activityTable, currencyTable, invoiceItemsTable, invoiceTable, packagingTable, receipt, receiptTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
+import { Bills, activityTable, currencyTable, invoiceItemsTable, invoiceTable, packagingTable, prescriptionsTable, receipt, receiptTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
 // import "use-server"
 import { z } from "zod";
-import { loginUserSchema, addUserSchema, addSupplierSchema, addVendorSchema, addStockSchema, addBillSchema, addPackagingSchema, addInvoiceSchema, addInvoiceItemsSchema } from '@/schema/formSchemas'
+import { loginUserSchema, addUserSchema, addSupplierSchema, addVendorSchema, addStockSchema, addBillSchema, addPackagingSchema, addInvoiceSchema, addInvoiceItemsSchema, addPrescription } from '@/schema/formSchemas'
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { File } from "node:buffer";
@@ -273,6 +273,23 @@ Promise<{error: boolean | undefined}> {
 
    // update number of items left
    await db.update(stockTable).set({unitsPurchased: diff}).where(eq(stockTable.id, data.product))
+
+   return {error: false}
+//    redirect("/admin/dashboard")
+}
+
+export async function addNewPrescription(unsafeData: z.infer<typeof addPrescription>) : 
+Promise<{error: boolean | undefined}> {
+   const {success, data} = addPrescription.safeParse(unsafeData)
+
+   if (!success){
+    return {error: true}
+   }
+
+   await db.insert(prescriptionsTable).values({...data})
+
+   await logActivity("Added a prescription for "+data.name, data.userId)
+
 
    return {error: false}
 //    redirect("/admin/dashboard")

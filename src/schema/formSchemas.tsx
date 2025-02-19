@@ -141,6 +141,34 @@ export const addPackagingSchema = z.object({
     userId: z.string(),
 })
 
+export const addPrescription = z.object({  
+    name: z.string({required_error: "Please enter name of patient.",}).min(2, {
+    message: "name should be atleast a character"
+    }).max(50) ,
+    sex: z.string({required_error: "Please enter a sex.",}).min(1, {
+        message: "male or female patient?"
+    }).max(50),
+    age: z.string({required_error: "Please enter a the age.",}).min(2, {
+        message: "age is required"
+    }).max(50),
+    physicalAddress: z.string({required_error: "Please enter an address.",}).min(2, {
+        message: "provide patient address"
+    }).max(200),
+    phone: z.string({required_error: "Please enter a contact.",}).min(2, {
+        message: "enter a phone number"
+    }).max(50),
+    testsDone: z.string({required_error: "Please provide tests done.",}).min(2, {
+        message: "what tests were run"
+    }).max(200),
+    diagnosis: z.string({required_error: "Please enter a diagnosis.",}).min(2, {
+        message: "tests done need a diagnosis"
+    }).max(200),
+    prescription: z.string({required_error: "Please enter a prescription.",}).min(2, {
+        message: "you need a prescription for your diagnosis"
+    }).max(200),
+    userId: z.string(),
+})
+
 export const deleteSchema = z.object({
     courseId: z.coerce.number({required_error: "Please provide a course to delete.",}),
 })

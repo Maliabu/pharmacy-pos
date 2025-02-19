@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { BarChart, ChartBar, ChartBarIcon, File, LineChart, ListChecks, PenToolIcon, Pill, Plus, Receipt, Settings2, ShoppingBasket, Store, StoreIcon, Sun, Tag, TruckIcon, User, View, Wallet } from "lucide-react"
+import { BarChart, ChartBar, ChartBarIcon, File, FileEdit, LineChart, ListChecks, PenToolIcon, Pill, Plus, Receipt, Settings2, ShoppingBasket, Store, StoreIcon, Sun, Tag, TruckIcon, User, View, Wallet } from "lucide-react"
 
 import {
   Sidebar,
@@ -42,6 +42,11 @@ const data = {
           title: "Products List",
           icon: ListChecks,
           url: "/dashboard/products",
+        },
+        {
+          title: "Prescriptions",
+          icon: FileEdit,
+          url: "/dashboard/prescription",
         },
       ],
     },

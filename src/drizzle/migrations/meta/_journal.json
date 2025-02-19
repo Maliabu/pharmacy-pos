@@ -57,6 +57,20 @@
       "when": 1739890219148,
       "tag": "0007_salty_the_anarchist",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1739960345002,
+      "tag": "0008_loving_jetstream",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1739970862635,
+      "tag": "0009_narrow_ultragirl",
+      "breakpoints": true
     }
   ]
 }

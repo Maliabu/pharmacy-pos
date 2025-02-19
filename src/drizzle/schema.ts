@@ -190,8 +190,25 @@ export const activityRelations = relations(activityTable, ({ one }) => ({
 	users: one(usersTable, { fields: [activityTable.user], references: [usersTable.id] }),
 }));
 
+export const prescriptionsTable = pgTable('prescriptions', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  age: text('age'),
+  phone: text('phone'),
+  sex: text('male_female'),
+  physicalAddress: text('address'),
+  testsDone: text('tests_done'),
+  diagnosis: text('diagnosis'),
+  prescription: text('prescription'),
+  createdAt,
+  updatedAt,
+});
+
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
+
+export type InsertPrescription = typeof prescriptionsTable.$inferInsert;
+export type SelectPrescription = typeof prescriptionsTable.$inferSelect;
 
 export type InsertInvoiceItem = typeof invoiceItemsTable.$inferInsert;
 export type SelectInvoiceItem = typeof invoiceItemsTable.$inferSelect;

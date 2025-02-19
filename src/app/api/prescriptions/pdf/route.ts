@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
           <div class="px-12 pt-12">
           <div class="flex justify-between items-center border-b pb-6">
           <img src="https://newfeelventures.com/logo.png" alt="logo" style="width: 200px; height: auto;" />
-          <div class="text-3xl font-bold tracking-tight">INVOICE</div>
+          <div class="text-3xl font-bold tracking-tight"></div>
           </div></div>
           ${htmlContent}
           </body>

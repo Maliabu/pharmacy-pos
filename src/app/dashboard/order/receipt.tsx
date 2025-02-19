@@ -6,7 +6,8 @@ import Image from "next/image";
 export default function Receipt(props: {rows: {product: string,
     quantity: number,
     }[],
-    getProductNameById: (id: string) => string[]
+    getProductNameById: (id: string) => string[],
+    classname: string
     }){
         function total(){
             let total = 0
@@ -20,11 +21,11 @@ export default function Receipt(props: {rows: {product: string,
 
     return(
         <div className="p-4 rounded-md">
-            <div className="pb-6 flex flex-col items-center justify-center text-center">
-                <Image src="https://res.cloudinary.com/dwklt6k9c/image/upload/v1739947271/logo_filskw.png" alt="logo" width={200} height={100} unoptimized/>
+            <div className=" flex flex-col items-center justify-center text-center">
+                <Image src="https://newfeelventures.com/logo.png" alt="logo" width={200} height={100} unoptimized className={props.classname}/>
             </div>
             <div className="flex justify-end">
-                <div className="flex flex-col text-sm mt-2 w-[100px]">
+                <div className="flex flex-col text-sm w-[100px]">
                     <p><span className="font-bold">Date: </span>{date(Date())}</p>
                 </div>                
             </div>

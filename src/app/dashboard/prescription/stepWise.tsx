@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { addInvoiceItemsSchema, addInvoiceSchema } from "@/schema/formSchemas"
+import { addInvoiceItemsSchema, addInvoiceSchema, addPrescription } from "@/schema/formSchemas"
 import React, { JSX, useEffect } from "react"
 import { useState } from "react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -10,39 +10,29 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { tokenise } from "@/app/services/services"
 import { z } from "zod"
-import Invoice from "./invoice"
 import { Button } from "@/components/ui/button"
-import { Stock } from "../stock/dataColumns"
 import ReactDOMServer from "react-dom/server"
-import { addInvoiceItems, addNewInvoice } from "@/server/fetch.actions"
+import { addNewPrescription } from "@/server/fetch.actions"
+import Prescription from "./prescription"
+import { Textarea } from "@/components/ui/textarea"
 
-export interface rowsSelected{
-    selectedRows: Stock[]
-}
 
-export default function StepWise({selectedRows}: rowsSelected) {
+export default function StepWise() {
     const [currentStep, setCurrentStep] = useState(1)
     const [loading, setLoading] = useState(false);
-    const form = useForm<z.infer<typeof addInvoiceSchema>>({
-        resolver: zodResolver(addInvoiceSchema),
+    const form = useForm<z.infer<typeof addPrescription>>({
+        resolver: zodResolver(addPrescription),
           defaultValues: {
-            address: "",
-            paymentMeans: "",
-            paymentID: "",
-            invoiceStatus: "",
-            user: parseInt(tokenise()[3])
+            name: "",
+            age: "",
+            sex: "",
+            phone: "",
+            physicalAddress: "",
+            testsDone: "",
+            diagnosis: "",
+            userId: tokenise()[3]
         },
       })
-      const itemsForm = useForm<z.infer<typeof addInvoiceItemsSchema>>({
-        resolver: zodResolver(addInvoiceItemsSchema),
-          defaultValues: {
-            invoice: 0,
-            product: 0,
-            total: 0,
-            quantity: 1,
-        },
-      })
-
     let classname = 'visible'
 
     const generatePdf = async () => {
@@ -50,11 +40,11 @@ export default function StepWise({selectedRows}: rowsSelected) {
         classname = 'hidden'
         // const htmlContent = '<h1>Hello, this is a PDF!</h1><p>This is the content of the PDF document.</p>';
         const htmlContent = ReactDOMServer.renderToStaticMarkup(
-            <Invoice selectedRows={selectedRows} form={form.getValues()} itemsForm={itemsForm.getValues()} classname={classname} />
+            <Prescription form={form.getValues()} classname={classname} />
           );
     
         try {
-          const response = await fetch('/api/pdf', {
+          const response = await fetch('/api/prescriptions/pdf', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -67,7 +57,7 @@ export default function StepWise({selectedRows}: rowsSelected) {
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'invoice.pdf';
+            link.download = 'prescription.pdf';
             link.click();
           } else {
             console.error('Error generating PDF:', response.statusText);
@@ -79,49 +69,22 @@ export default function StepWise({selectedRows}: rowsSelected) {
         }
       };
        
-      async function onSubmit(values: z.infer<typeof addInvoiceSchema>) {  
-        // const result = addInvoiceSchema.safeParse(values);
-        // if (!result.success) {
-        //   console.log(result.error.errors); // This will give you a clear insight into which fields are invalid
-        // }
-        if(values.paymentMeans!==""||values.paymentID!==""){
-          values.invoiceStatus="paid"
-        } else{
-          values.invoiceStatus="pending"
-        }
+      async function onSubmit(values: z.infer<typeof addPrescription>) {
         const app = document.getElementById('submit');
         const text = 'processing';
         if(app !== null){
           app.innerHTML = text;
         }
-        const data = await addNewInvoice(values)
+        const data = await addNewPrescription(values)
         if(data.error == true || data.error == undefined){
           form.setError("root", {
-            "message": "Invoive not generated"
+            "message": "prescription not generated"
           })
           if(app !== null){
             app.innerHTML = "Generate PDF";
           }
         }
         if(data.error == false){
-          const invoiceId = data.id
-
-          for( const row of selectedRows){
-            const quantity = itemsForm.getValues("quantity")
-            itemsForm.setValue("product", parseInt(row.id))
-            itemsForm.setValue("total", row.unitAmount*quantity)
-            itemsForm.setValue("invoice", invoiceId)
-
-            const itemForm = itemsForm.getValues()
-            //submit
-            const values = await addInvoiceItems(itemForm)
-              console.log(values)
-              if(values.error == true){
-                  form.setError("root", {
-                    "message": "invoive not added"
-                  })
-                }
-          }
           // After all items are added, generate the PDF
           try {
             await generatePdf(); // Ensure the PDF is generated after all items are added
@@ -181,18 +144,15 @@ export default function StepWise({selectedRows}: rowsSelected) {
     return ( 
       <div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="bg-background sm:p-8 p-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="bg-background sm:p-6 p-4">
             <div className = 'row py-4 justify-content-center' >
             <Step1 currentStep = { currentStep }
             button = { nextButton() }
             form={form}
-            itemsForm={itemsForm}
             /> 
             <Step2 currentStep = { currentStep }
             prev = { nextButton() }
-            selectedRows={selectedRows}
             form={form.getValues()}
-            itemsForm={itemsForm.getValues()}
             classname={classname}
             /> </div>
             {currentStep==2 && <Button type="submit" id="submit" disabled={loading} className="mx-1">
@@ -203,7 +163,7 @@ export default function StepWise({selectedRows}: rowsSelected) {
           <div className="bg-light p-2 rounded-md border border-primary text-center mt-1 text-primary w-[300px]">{form.formState.errors.root.message}</div>
         )}
         {form.formState.isSubmitSuccessful && (
-          <div className="border border-primary text-primary p-2 mt-1 text-center rounded-md"> Invoice generated successfully </div>
+          <div className="border border-primary text-primary p-2 mt-1 text-center rounded-md"> prescription generated successfully </div>
         )}
         </form>
         </Form>
@@ -214,7 +174,6 @@ export default function StepWise({selectedRows}: rowsSelected) {
 function Step1(props:
     {
         currentStep: number,
-        itemsForm: any,
         form: any, 
         button:JSX.Element | null}) {
     if (props.currentStep !== 1) {
@@ -222,36 +181,17 @@ function Step1(props:
     }
     return ( 
         <div>
-        <div className="text-2xl font-bold tracking-tight">Add Invoice Details</div>
-        <div className="text-sm text-muted-foreground mt-4">How many of this item?</div>
-        <div className="flex flex-col space-y-1.5">
-              <FormField
-                  control={props.itemsForm.control}
-                  name="quantity"
-                  render={({ field }) => (
-                      <FormItem>
-                      <FormLabel>Quantity</FormLabel>
-                      <FormControl>
-                          <Input
-                          type="number" 
-                          placeholder="0" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                      </FormItem>
-                  )}
-                  />
-              </div>
+        <div className="text-2xl font-bold tracking-tight">Add Prescription Details</div>
         <div className="grid items-center gap-2 mt-4">
-        <div className="text-sm text-muted-foreground">Atleast an address is required to generate the invoice</div>
-
-        <div className="grid gap-2">
+        <div className="text-sm text-muted-foreground">All Patient Details Required</div>
+        <div className="grid gap-2 sm:grid-cols-2">
               <div className="flex flex-col space-y-1.5">
               <FormField
                   control={props.form.control}
-                  name="address"
+                  name="name"
                   render={({ field }) => (
                       <FormItem>
-                      <FormLabel>Address</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
                           <Input
                           type="text" 
@@ -265,12 +205,12 @@ function Step1(props:
               <div className="flex flex-col space-y-1.5">
               <FormField
                   control={props.form.control}
-                  name="paymentMeans"
+                  name="age"
                   render={({ field }) => (
                       <FormItem>
-                      <FormLabel>Payment means</FormLabel>
+                      <FormLabel>Age</FormLabel>
                       <FormControl>
-                          <Input type="text" placeholder="cash, transfer" {...field} />
+                          <Input type="text" placeholder="age..." {...field} />
                       </FormControl>
                       <FormMessage />
                       </FormItem>
@@ -280,35 +220,33 @@ function Step1(props:
               <div className="flex flex-col space-y-1.5">
               <FormField
                   control={props.form.control}
-                  name="paymentID"
+                  name="phone"
                   render={({ field }) => (
                       <FormItem>
-                      <FormLabel>Payment Unique ID</FormLabel>
+                      <FormLabel>Phone number</FormLabel>
                       <FormControl>
-                          <Input type="text" placeholder="payment id" {...field} />
+                          <Input type="text" placeholder="+256..." {...field} />
                       </FormControl>
                       <FormMessage />
                       </FormItem>
                   )}
                   />
               </div>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-2 hidden">
               <div className="flex flex-col space-y-1.5">
               <FormField
                   control={props.form.control}
-                  name="invoiceStatus"
+                  name="sex"
                   render={({ field }) => (
                       <FormItem>
-                      <FormLabel>Paid or Pending payment</FormLabel>
+                      <FormLabel>Sex</FormLabel>
                       <FormControl>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <SelectTrigger id="status">
-                              <SelectValue placeholder="Status"/>
+                              <SelectTrigger id="sex">
+                              <SelectValue placeholder="Sex"/>
                               </SelectTrigger>
-                              <SelectContent position="popper" className=" font-[family-name:var(--font-futura)]">
-                              <SelectItem value="paid">Paid</SelectItem>
-                              <SelectItem value="pending">Pending</SelectItem>
+                              <SelectContent>
+                              <SelectItem value="M">Male</SelectItem>
+                              <SelectItem value="F">Female</SelectItem>
                               </SelectContent>
                           </Select>
                       </FormControl>
@@ -318,27 +256,92 @@ function Step1(props:
                   />
               </div>
           </div>
+          <div className="flex flex-col space-y-1.5">
+              <FormField
+                  control={props.form.control}
+                  name="physicalAddress"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Physical Address</FormLabel>
+                      <FormControl>
+                          <Input type="text" placeholder="plot and street, city, zone..." {...field} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                  />
+              </div>
         </div>
+        <div className="text-sm text-muted-foreground mt-4">Test and prescription details required</div>
+        <div>
+            <div className="flex flex-col space-y-1.5">
+              <FormField
+                  control={props.form.control}
+                  name="testsDone"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Tests Done</FormLabel>
+                      <FormControl>
+                          <Textarea placeholder="Tests done" {...field} />                      
+                          </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                  />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+              <FormField
+                  control={props.form.control}
+                  name="diagnosis"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Diagnosis</FormLabel>
+                      <FormControl>
+                      <Textarea placeholder="Diagnosis" {...field} />                      
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                  />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+              <FormField
+                  control={props.form.control}
+                  name="prescription"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Prescription</FormLabel>
+                      <FormControl>
+                      <Textarea placeholder="prescription" {...field} />                      
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                  />
+              </div>
+        </div>
+
             <div>{props.button}</div>
             <div id="address" style={{"display": 'none'}} className="border border-primary text-primary p-2 text-center rounded-md mt-2">hey</div>
         </div>
     );
 }
 
-function Step2(props:{currentStep: number, prev: JSX.Element, form: {address: string,
-    paymentMeans: string,
-    user: number,
-    invoiceStatus: string,
-    paymentID: string,
+function Step2(props:{currentStep: number, prev: JSX.Element, form: {physicalAddress: string,
+    age: string,
+    userId: string,
+    sex: string,
+    name: string,
+    testsDone: string,
+    diagnosis: string,
+    prescription: string,
     },
-    itemsForm: {quantity: number},
-    classname: string
-    selectedRows: Stock[]}) {
+    classname: string}) {
     if (props.currentStep !== 2) {
         return null
     }
-    return (<div className="flex">
-        <Invoice selectedRows={props.selectedRows} form={props.form} itemsForm={props.itemsForm} classname={props.classname}/>
+    return (<div className="">
+        <Prescription form={props.form} classname={props.classname}/>
         <div>
         <div>{props.prev}</div>
         </div>
