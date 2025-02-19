@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
@@ -123,9 +124,8 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex justify-between text-primary font-bold items-center p-3 rounded-lg bg-muted">
-          <Pill/>
-          <div className="text-xl tracking-tight leading-6">LIGHT<br/> MEDICARE</div>
+        <div className="flex justify-between text-primary font-bold items-center p-3 rounded-lg bg-background">
+          <img src="/logo.png" alt="logo"/>
         </div>
       </SidebarHeader>
       <SidebarContent>

@@ -1,4 +1,4 @@
-import { Pill } from "lucide-react";
+/* eslint-disable @next/next/no-img-element */
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { date } from "@/app/services/services";
 
@@ -20,14 +20,14 @@ export default function Receipt(props: {rows: {product: string,
     return(
         <div className="p-4 rounded-md">
             <div className="pb-6 flex flex-col items-center justify-center text-center">
-                <Pill size={30}/>
-                <div className="text-2xl font-bold tracking-tight">Light Medicare</div>
+                <img src="/logo.png" alt="logo" width={200}/>
             </div>
             <div className="flex justify-end">
-                <div className="flex flex-col text-sm mt-8 w-[100px]">
+                <div className="flex flex-col text-sm mt-2 w-[100px]">
                     <p><span className="font-bold">Date: </span>{date(Date())}</p>
-                </div>
+                </div>                
             </div>
+            <p className="text-sm text-center mt-2 italic"><span className="font-bold">Hospital Tel:</span> 0769209573 / 0706750021 <br/><span className="font-bold">Dr Joseph Tel:</span> 0779011362 / 0702812100</p>
             <div>
                 <div className="mt-8 text-sm font-bold">Purchase</div>
                 <Table className="text-xs small-receipt">
@@ -60,7 +60,7 @@ export default function Receipt(props: {rows: {product: string,
                 </div>
                 </div>
                 <div className="text-center py-4 text-sm border-t mt-12">
-                    <p className="font-bold">Thank you, come again</p>
+                    <p className="font-bold italic">Thank you, come again</p>
                 </div>
         </div>
     )

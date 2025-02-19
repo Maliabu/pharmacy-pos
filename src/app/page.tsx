@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { z } from "zod"
 import { redirect } from "next/navigation"
 import { handleDecryption, togglePasswordVisibility } from "./services/services"
-import { EyeOff, Pill } from "lucide-react"
+import { EyeOff} from "lucide-react"
 import { loginUserSchema } from "@/schema/formSchemas"
 // import logo from '@/app/assets/next.svg'
 
@@ -86,11 +86,10 @@ export default function Login(){
         }
     return(
             <div className="sm:p-16 p-2 sm:grid sm:grid-cols-2 bg-muted">
-            <div className="p-10 sm:rounded-l-3xl sr:rounded-t-2xl flex flex-col justify-center items-center bg-primary text-muted sm:columns-1"> 
-                <Pill size={60}/>
-                <div className="sm:text-5xl text-2xl tracking-tight font-bold">LIGHT MEDICARE</div>                   
+            <div className="p-10 sm:rounded-l-3xl sr:rounded-t-2xl flex flex-col justify-center items-center bg-background text-muted sm:columns-1"> 
+               <img src="/logo.png" alt="logo"/>                  
             </div>
-                <div className="p-8 sm:p-12 sm:rounded-r-2xl rounded-b-2xl bg-background">
+                <div className="p-8 sm:p-12 sm:rounded-r-2xl sr:rounded-b-2xl bg-background dark:bg-muted">
                   <div className="text-4xl tracking-tight font-bold sm:my-8 grid justify-center items-center">Login</div>
                     <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>

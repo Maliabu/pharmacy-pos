@@ -104,3 +104,6 @@ body {
 .small-receipt{
   font-size: 10px !important;
 }
+.log{
+  background-color: rgb(19, 19, 19);
+}
