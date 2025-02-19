@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
     await page.addStyleTag({ content: globalCssContent });
 
     // Wait for the body to be rendered and styles to be applied
-    await page.waitForSelector('div'); // Ensure body is rendered
+    await page.waitForSelector('img'); // Ensure body is rendered
 
     // Check the content of the page to see if the styles have been applied
     await page.content();

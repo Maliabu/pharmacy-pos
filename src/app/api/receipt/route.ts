@@ -97,15 +97,28 @@ export async function POST(req: NextRequest) {
       }
       return 0;  // Return 0 if the element is not found
     });
+    console.log(fullHtmlContent)
 
     // Inject the global.css content directly as a style tag into the page
     await page.addStyleTag({ content: globalCssContent });
+    await page.setRequestInterception(true);
+      page.on('request', (req) => {
+        if (req.resourceType() === 'image') {
+          req.continue();  // Allow image requests to load
+        } else {
+          req.continue();
+        }
+      });
+    
+      // await page.goto("http://localhost:3000/dashboard/order")
 
     // Wait for the body to be rendered and styles to be applied
-    await page.waitForSelector('div'); // Ensure body is rendered
+    await page.waitForSelector('img', { visible: true }); // Ensure body is rendered
 
     // Check the content of the page to see if the styles have been applied
     await page.content();
+
+    // Optionally, take a screenshot for debugging
 
     // Generate the PDF
     const pdfBuffer = await page.pdf({

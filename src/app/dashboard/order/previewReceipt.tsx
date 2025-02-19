@@ -1,9 +1,9 @@
 "use client"
 
-import { Pill } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { date, fetcher } from "@/app/services/services";
 import useSWR from "swr";
+import Image from "next/image";
 
 
 export interface ReceiptItems{
@@ -68,8 +68,7 @@ export default function PreviewReceipt(props: {receiptId: number}){
     return(
         <div className="sm:p-4 rounded-md sm:w-[400px]">
             <div className="pb-6 flex flex-col items-center justify-center text-center">
-                <Pill size={30}/>
-                <div className="text-2xl font-bold tracking-tight">Light Medicare</div>
+            <Image src="https://res.cloudinary.com/dwklt6k9c/image/upload/v1739947271/logo_filskw.png" alt="logo" width={200} height={100} unoptimized/>
             </div>
             <div className="flex justify-end">
                 <div className="flex flex-col text-sm mt-8 w-[100px]">

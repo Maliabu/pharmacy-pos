@@ -21,6 +21,11 @@ webpack(config) {
 
   return config;
 },
+images: {
+  loader: "cloudinary",
+  path: "https://res.cloudinary.com/dwklt6k9c/image/upload",
+  domains: ["res.cloudinary.com"], // Ensure the domain is allowed
+},
 };
 
 export default nextConfig;

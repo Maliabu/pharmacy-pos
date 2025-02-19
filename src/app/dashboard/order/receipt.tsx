@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { date } from "@/app/services/services";
+import Image from "next/image";
 
 export default function Receipt(props: {rows: {product: string,
     quantity: number,
@@ -20,7 +21,7 @@ export default function Receipt(props: {rows: {product: string,
     return(
         <div className="p-4 rounded-md">
             <div className="pb-6 flex flex-col items-center justify-center text-center">
-                <img src="/logo.png" alt="logo" width={200}/>
+                <Image src="https://res.cloudinary.com/dwklt6k9c/image/upload/v1739947271/logo_filskw.png" alt="logo" width={200} height={100} unoptimized/>
             </div>
             <div className="flex justify-end">
                 <div className="flex flex-col text-sm mt-2 w-[100px]">
