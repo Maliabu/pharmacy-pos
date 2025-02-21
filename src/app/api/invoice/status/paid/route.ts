@@ -10,7 +10,7 @@ export async function GET() {
     const stock = await db.query.invoiceTable.findMany({
         where: eq(invoiceTable.invoiceStatus, "paid"),
         with: {
-            invoiceItems: true
+          invoiceItems: true
         }
     });
     

@@ -21,7 +21,7 @@ export default function UserPage(){
         <div>
             <div className="text-3xl tracking-tight font-bold">Users</div>
             <div>
-                <DataTableDemo data={user} columns={columns} id="supplier"/>
+                <DataTableDemo data={user} columns={columns} id="supplier" name="name"/>
             </div>
         </div>
     </div>
