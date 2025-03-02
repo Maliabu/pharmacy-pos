@@ -39,7 +39,8 @@ export default function Page(){
     const totalStock = () => {
         let total = 0
         stock.forEach(item => {
-            total+=item.unitsPurchased
+            if(item.unitsPurchased > 0){
+            total+=item.unitsPurchased}
         })
         return total
     }

@@ -29,10 +29,10 @@ export default function Receipt(props: {rows: {product: string,
                     <p><span className="font-bold">Date: </span>{date(Date())}</p>
                 </div>                
             </div>
-            <p className="text-sm text-center mt-2 italic"><span className="font-bold">Hospital Tel:</span> 0769209573 / 0706750021 <br/><span className="font-bold">Dr Joseph Tel:</span> 0779011362 / 0702812100</p>
+            <p className="text-sm text-center mt-2"><span className="font-bold">Hospital Tel:</span> 0769209573 / 0706750021 <br/><span className="font-bold">Dr Joseph Tel:</span> 0779011362 / 0702812100</p>
             <div>
                 <div className="mt-8 text-sm font-bold">Purchase</div>
-                <Table className="text-xs small-receipt">
+                <Table className="small-receipt">
                 <TableHeader>
                     <TableRow >
                     <TableHead >No.</TableHead>
@@ -61,8 +61,8 @@ export default function Receipt(props: {rows: {product: string,
                     </div>
                 </div>
                 </div>
-                <div className="text-center py-4 text-sm border-t mt-12">
-                    <p className="font-bold italic">Thank you, come again</p>
+                <div className="text-center mt-12 text-sm">
+                    <p className="font-bold ">Thank you, come again</p>
                 </div>
         </div>
     )

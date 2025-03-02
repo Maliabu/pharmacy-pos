@@ -1,10 +1,10 @@
 "use server"
 
 import { db } from "@/drizzle/db";
-import { Bills, activityTable, currencyTable, invoiceItemsTable, invoiceTable, packagingTable, prescriptionsTable, receipt, receiptTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
+import { Bills, activityTable, currencyTable, invoiceItemsTable, invoiceTable, monthlyReport, packagingTable, prescriptionsTable, receipt, receiptTable, reportTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
 // import "use-server"
 import { z } from "zod";
-import { loginUserSchema, addUserSchema, addSupplierSchema, addVendorSchema, addStockSchema, addBillSchema, addPackagingSchema, addInvoiceSchema, addInvoiceItemsSchema, addPrescription } from '@/schema/formSchemas'
+import { loginUserSchema, addUserSchema, addSupplierSchema, addVendorSchema, addStockSchema, addBillSchema, addPackagingSchema, addInvoiceSchema, addInvoiceItemsSchema, addPrescription, reportSchema } from '@/schema/formSchemas'
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { File } from "node:buffer";
@@ -22,11 +22,11 @@ Promise<{error: boolean | undefined}> {
     return {error: true}
    }
 
-   uploadFile(formData)
+//    uploadFile(formData)
 
    await db.insert(usersTable).values({...data})
    //log what we did
-   await logActivity("Added new user: "+data.email, data.userId)
+//    await logActivity("Added new user: "+data.email, data.userId)
 
    return {error: false}
 //    redirect("/admin/dashboard")
@@ -356,4 +356,42 @@ export async function addReceiptData(row: {product: string, quantity:number, rec
         await db.update(stockTable).set({unitsPurchased: diff}).where(eq(stockTable.id, parseInt(row.product)))
 
     return{error: false}
+}
+
+export async function addNewReport(unsafeData: z.infer<typeof reportSchema>) : 
+Promise<{error: boolean | undefined}> {
+   const {success, data} = reportSchema.safeParse(unsafeData)
+
+   if (!success){
+    return {error: true}
+   }
+
+   await db.insert(reportTable).values({...data})
+
+   return {error: false}
+}
+
+export async function newReport(monthDate:  string, month: string) : 
+Promise<{error: boolean | undefined}> {
+    // const data = {
+    //     monthDate: monthDate,
+    //     month: month
+    // }
+    // check no report is already there
+    const reportCheck = await db
+      .query
+      .monthlyReport
+      .findMany({
+        where: eq(monthlyReport.monthDate, monthDate) && eq(monthlyReport.month, month)
+    })
+    console.log(reportCheck)
+
+    // if(reportCheck.length == 0){
+    //     // no matches
+    //     await db.insert(monthlyReport).values({...data})
+    //     return {error: false}
+    // } else {
+    //     return {error: false}
+    // }
+    return {error: false}
 }

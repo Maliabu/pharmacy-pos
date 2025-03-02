@@ -29,7 +29,7 @@ export default function PreviewPrescription(props: {prescriptionId: number}){
                 </div>
                 <div className="flex flex-col text-sm mt-8 w-[100px]">
                     <p>Prescription No. <span className="text-red-600">{props.prescriptionId}</span></p>
-                    <p>{date(Date())}</p>
+                    <p>{date(prescription[0].createdAt.toString())}</p>
                 </div>
             </div>
             <div>

@@ -39,6 +39,15 @@ export const loginUserSchema = z.object({
     }).max(50),
 })
 
+export const reportSchema = z.object({
+    user: z.string({required_error: "Please provide a user.",}).min(1, {
+        message: "user id required"
+    }),
+    monthDate: z.string({required_error: "Please enter a date.",}).min(1, {
+        message: "date is required"
+    }).max(50),
+})
+
 export const addStockSchema = z.object({
     name: z.string({required_error: "Please enter a name.",}).min(2, {
         message: "title should be atleast a character"

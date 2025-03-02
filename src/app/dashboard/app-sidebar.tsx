@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { BarChart, ChartBar, ChartBarIcon, File, FileEdit, LineChart, ListChecks, PenToolIcon, Pill, Plus, Receipt, Settings2, ShoppingBasket, Store, StoreIcon, Sun, Tag, TruckIcon, User, View, Wallet } from "lucide-react"
+import { BarChart, ChartBar, ChartBarIcon, File, FileArchive, FileEdit, LineChart, ListChecks, PenToolIcon, Pill, Plus, Receipt, Settings2, ShoppingBasket, Store, StoreIcon, Sun, Tag, TruckIcon, User, View, Wallet } from "lucide-react"
 
 import {
   Sidebar,
@@ -119,10 +119,15 @@ const data = {
           title: "View",
           icon: View,
           url: "/dashboard/view",
+        },
+        {
+          title: "Reports",
+          icon: FileArchive,
+          url: "/dashboard/reports",
         }
       ],
     },
-  ]
+  ],
 }
 
 export function AppSidebar() {

@@ -72,7 +72,7 @@ export default function PreviewReceipt(props: {receiptId: number}){
             </div>
             <div className="flex justify-end">
                 <div className="flex flex-col text-sm mt-8 w-[100px]">
-                    <p><span className="font-bold">Date: </span>{date(Date())}</p>
+                    <p><span className="font-bold">Date: </span>{date(receipts[0].createdAt.toString())}</p>
                 </div>
             </div>
             <div>

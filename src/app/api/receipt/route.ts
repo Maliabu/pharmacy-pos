@@ -31,7 +31,9 @@ export async function POST(req: NextRequest) {
           <script src="https://cdn.jsdelivr.net/npm/tailwind-merge@1.0.0/dist/index.umd.min.js"></script>
           </head>
           <body>
-          <img src="https://newfeelventures.com/logo.png" alt="logo" width={100} height={50} class="p-6"/>
+          <div style="text-align: center;">
+          <img src="http://localhost:3000/black.png" alt="logo" style="width: 200px; height: auto; display: inline-block;"/>
+          </div>
           ${htmlContent}
           </body>
       </html>
@@ -85,7 +87,7 @@ export async function POST(req: NextRequest) {
     const page = await browser.newPage();
     await page.setViewport({
         width: 320,  // 80mm in pixels (assuming 96 DPI, adjust as needed)
-        height: 1000, // Set a height that's appropriate for your content
+        height: 700, // Set a height that's appropriate for your content
     });
 
     // Set the HTML content on the page
@@ -125,7 +127,7 @@ export async function POST(req: NextRequest) {
     //   format: 'A4',
       printBackground: true,
       width: '80mm',
-      height: `150mm`, // Let Puppeteer calculate the height based on content
+      // height: '150mm', // Let Puppeteer calculate the height based on content
     });
 
     // Close the browser instance

@@ -204,8 +204,30 @@ export const prescriptionsTable = pgTable('prescriptions', {
   updatedAt,
 });
 
+export const reportTable = pgTable('report_settings', {
+  id: serial('id').primaryKey(),
+  user: text('name').notNull(),
+  monthDate: text('date of the month'),
+  createdAt,
+  updatedAt,
+});
+
+export const monthlyReport = pgTable('reports', {
+  id: serial('id').primaryKey(),
+  monthDate: text('date of the month'),
+  month: text('month'),
+  createdAt,
+  updatedAt,
+});
+
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
+
+export type InsertReportSetting = typeof reportTable.$inferInsert;
+export type SelectReportSetting = typeof reportTable.$inferSelect;
+
+export type InsertMonthlyReport = typeof monthlyReport.$inferInsert;
+export type SelectMonthlyReport = typeof monthlyReport.$inferSelect;
 
 export type InsertPrescription = typeof prescriptionsTable.$inferInsert;
 export type SelectPrescription = typeof prescriptionsTable.$inferSelect;
