@@ -3,27 +3,22 @@
 
 "use client"
 
-import { addInvoiceItemsSchema, addInvoiceSchema, addReceipt, search } from "@/schema/formSchemas"
-import React, { JSX, useEffect } from "react"
+import {addReceipt, search } from "@/schema/formSchemas"
+import React, { JSX } from "react"
 import { useState } from "react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { fetcher, tokenise } from "@/app/services/services"
+import { fetcher, tokenise, extractId } from "@/app/services/services"
 import { z } from "zod"
-import Invoice from "../invoice/invoice"
 import { Button } from "@/components/ui/button"
 import { Stock } from "../stock/dataColumns"
 import ReactDOMServer from "react-dom/server"
-import { addInvoiceItems, addNewInvoice, addReceiptData, logActivity, newReceipt } from "@/server/fetch.actions"
+import {  addReceiptData, logActivity, newReceipt } from "@/server/fetch.actions"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import useSWR from "swr"
 import Receipt from "./receipt"
-import { db } from "@/drizzle/db"
-import { receiptTable, stockTable } from "@/drizzle/schema"
-import { eq } from "drizzle-orm"
 import SelectSearch from "@/app/services/selectSearch"
 
 
@@ -53,7 +48,6 @@ export default function StepWise() {
       }
 
     let classname = 'visible'
-    console.log(form.getValues())
   
     // Handle row deletion
     const addRow = () => {
@@ -310,10 +304,10 @@ function Step1(props:
             <TableBody>
             {props.rows.map((row, index) => (
               <TableRow key={index}>
-                <TableCell>{props.getProductNameById(row.product[0])[0]}</TableCell>
-                <TableCell>{props.getProductNameById(row.product[0])[1]}</TableCell>
+                <TableCell>{props.getProductNameById(extractId(row.product))[0]}</TableCell>
+                <TableCell>{props.getProductNameById(extractId(row.product))[1]}</TableCell>
                 <TableCell>{row.quantity}</TableCell>
-                <TableCell>{row.quantity * parseInt(props.getProductNameById(row.product[0])[1])}</TableCell>
+                <TableCell>{row.quantity * parseInt(props.getProductNameById(extractId(row.product))[1])}</TableCell>
                 <TableCell>
                   <Button
                     onClick={() => props.handleDeleteRow(index)}

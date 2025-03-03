@@ -86,7 +86,7 @@ export default function PreviewInvoice(props: {invoiceId: number}){
                     <p className="font-bold">Billed To:</p>
                     <p>{invoice[0].address}</p>
                 </div>
-                <div className="flex flex-col text-sm mt-8 w-[100px]">
+                <div className="flex flex-col text-sm mt-8">
                     <p>Invoice No. <span className="text-red-600">{props.invoiceId}</span></p>
                     <p>{date(invoice[0].createdAt.toString())}</p>
                 </div>

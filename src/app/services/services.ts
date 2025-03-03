@@ -14,6 +14,11 @@ export function token(){
     return rand()+rand()+rand()
 }
 
+export function extractId(value: string) {
+  const match = value.match(/^\d+/); // Regex to match digits at the beginning of the string
+  return match ? match[0] : "";  // Return the matched digits (ID) or null if not found
+}
+
 export const togglePasswordVisibility = ()=>{
     const pass = document.getElementById("password")
     const see = document.getElementById("see")

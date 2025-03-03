@@ -41,7 +41,7 @@ export default function Invoice(props: {selectedRows: Stock[], classname: string
                     <p className="font-bold">Billed To:</p>
                     <p>{props.form.address}</p>
                 </div>
-                <div className="flex flex-col text-sm mt-8 w-[100px]">
+                <div className="flex flex-col text-sm mt-8">
                     <p>{date(Date())}</p>
                 </div>
             </div>

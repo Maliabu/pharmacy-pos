@@ -4,7 +4,7 @@
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import StepWise from "./stepWise";
-import { Loader2 } from "lucide-react";
+import { DollarSignIcon, Loader2, Receipt } from "lucide-react";
 import useSWR from "swr";
 import { date, fetcher } from "@/app/services/services";
 import PreviewReceipt from "./previewReceipt";
@@ -46,10 +46,11 @@ export default function Page(){
         </DialogContent>
       </Dialog>
       <div className="text-2xl font-bold tracking-tight mt-8">Receipts</div>
+      {receipt.length > 0?
       <div className="grid grid-cols-3 gap-2 bg-muted rounded-md p-4 mt-4 admin-scroll">
       {
         receipt.map(receipt => (
-          <div key={receipt.id} className="p-4 bg-background rounded-md mt-1 flex justify-between">
+          <div key={receipt.id} className="p-4 bg-background rounded-md mt-1 flex justify-between h-[70px]">
           <div className="text-sm">Receipt No. <span className="text-red-600">{receipt.id}</span><div className="text-sm text-muted-foreground leading-4">{date(receipt.createdAt.toString())}</div></div>
           <div>
           <Dialog>
@@ -69,6 +70,6 @@ export default function Page(){
           </div>
         ))
       }
-      </div>
+      </div>:<div className="bg-green-600 text-white flex justify-center p-16 rounded-lg mt-8"><Receipt/> Start making sales</div>}
     </div>
 }

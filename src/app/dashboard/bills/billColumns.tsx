@@ -76,7 +76,13 @@ export const columns: ColumnDef<Bill>[] = [
       // Custom render for nested address object
       const currency: {code: string} = row.getValue("currency");
       return `${currency.code}`;
-    },  },
+    }, 
+  },
+  {
+    accessorKey: "amount",
+    header: "amount",
+    cell: ({ row }) => <div className="lowercase">{row.getValue("amount")}</div>,
+  },
   {
     accessorKey: "createdAt",
     header: "createdAt",

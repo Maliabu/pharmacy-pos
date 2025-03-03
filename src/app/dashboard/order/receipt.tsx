@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { date } from "@/app/services/services";
+import { date, extractId } from "@/app/services/services";
 import Image from "next/image";
 
 export default function Receipt(props: {rows: {product: string,
@@ -12,7 +12,7 @@ export default function Receipt(props: {rows: {product: string,
         function total(){
             let total = 0
             props.rows.forEach(row => {
-                const unitAmount = props.getProductNameById(row.product[0])[1]
+                const unitAmount = props.getProductNameById(extractId(row.product))[1]
                 const totalAmount = parseInt(unitAmount) * row.quantity
                 total+=totalAmount
             })
@@ -25,7 +25,7 @@ export default function Receipt(props: {rows: {product: string,
                 <Image src="https://newfeelventures.com/logo.png" alt="logo" width={200} height={100} unoptimized className={props.classname}/>
             </div>
             <div className="flex justify-end">
-                <div className="flex flex-col text-sm w-[100px]">
+                <div className="flex flex-col text-sm">
                     <p><span className="font-bold">Date: </span>{date(Date())}</p>
                 </div>                
             </div>
@@ -46,10 +46,10 @@ export default function Receipt(props: {rows: {product: string,
                     {props.rows.map((row, index) => (
                     <TableRow key={index}>
                         <TableCell>{index+1}</TableCell>
-                        <TableCell>{props.getProductNameById(row.product[0])[0]}</TableCell>
-                        <TableCell>{parseInt(props.getProductNameById(row.product[0])[1]).toLocaleString()}</TableCell>
+                        <TableCell>{props.getProductNameById(extractId(row.product))[0]}</TableCell>
+                        <TableCell>{parseInt(props.getProductNameById(extractId(row.product))[1]).toLocaleString()}</TableCell>
                         <TableCell className="font-medium">{row.quantity}</TableCell>
-                        <TableCell className="font-medium">{(parseInt(props.getProductNameById(row.product[0])[1]) * row.quantity).toLocaleString()}</TableCell>
+                        <TableCell className="font-medium">{(parseInt(props.getProductNameById(extractId(row.product))[1]) * row.quantity).toLocaleString()}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

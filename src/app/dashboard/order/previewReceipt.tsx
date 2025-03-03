@@ -71,7 +71,7 @@ export default function PreviewReceipt(props: {receiptId: number}){
             <Image src="https://res.cloudinary.com/dwklt6k9c/image/upload/v1739947271/logo_filskw.png" alt="logo" width={200} height={100} unoptimized/>
             </div>
             <div className="flex justify-end">
-                <div className="flex flex-col text-sm mt-8 w-[100px]">
+                <div className="flex flex-col text-sm mt-8">
                     <p><span className="font-bold">Date: </span>{date(receipts[0].createdAt.toString())}</p>
                 </div>
             </div>
