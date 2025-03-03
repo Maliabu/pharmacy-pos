@@ -14,7 +14,11 @@ export type Prescription = {
     id: number
     physicalAddress: string,
     name: string,
-    userId: string,
+    phone: string,
+    userId: number,
+    users: {
+      name: string
+    },
     age: string,
     sex: string,
     testsDone: string,
@@ -90,6 +94,16 @@ export const columns: ColumnDef<Prescription>[] = [
         </DialogContent>
       </Dialog>
       </div>,
+  },
+  {
+    accessorKey: "users",
+    header: "prepared by",
+    cell: ({row}) => {
+      // Custom render for nested address object
+      const doctor: {name: string} | null = row.getValue("users");
+      const names = doctor?.name ?? '';
+      return `${names}`;
+    },
   },
 //   {
 //     id: "actions",

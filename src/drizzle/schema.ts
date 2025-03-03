@@ -24,7 +24,10 @@ export const usersTable = pgTable('users', {
 });
 
 export const userRelations = relations(usersTable, ({many}) => ({
-  activity: many(activityTable)
+  activity: many(activityTable),
+  prescriptions: many(prescriptionsTable),
+  receipts: many(receiptTable),
+  invoices: many(invoiceTable),
 }))
 
 
@@ -99,7 +102,7 @@ export const stockTable = pgTable('stock', {
   id: serial('id').primaryKey(),
   name: text('title').notNull(),
   description: text('description'),
-  stockStatus: text("status").notNull(),
+  stockStatus: text("status").default("active"),
   supplier: integer('supplier')
     .references(() => supplierTable.id, { onDelete: 'cascade' }),
   vendor: integer('vendor')
@@ -110,7 +113,7 @@ export const stockTable = pgTable('stock', {
   unitAmount: integer('amount').notNull(),
   unitsPurchased: integer('units').notNull(),
   paymentMeans: text('payment'),
-  packaging: integer("packaging_id").notNull().references(() => packagingTable.id, {onDelete: 'cascade'}),
+  packaging: integer("packaging_id").references(() => packagingTable.id, {onDelete: 'cascade'}),
   totalPurchaseAmount: integer('total_cost').notNull(),
   createdAt,
   updatedAt,
@@ -201,9 +204,14 @@ export const prescriptionsTable = pgTable('prescriptions', {
   testsDone: text('tests_done'),
   diagnosis: text('diagnosis'),
   prescription: text('prescription'),
+  userId: integer("user").notNull().references(() => usersTable.id, {onDelete: 'cascade'}),
   createdAt,
   updatedAt,
 });
+
+export const prescriptionRelations = relations(prescriptionsTable, ({one}) => ({
+	users: one(usersTable, { fields: [prescriptionsTable.userId], references: [usersTable.id] }),
+}))
 
 export const reportTable = pgTable('report_settings', {
   id: serial('id').primaryKey(),

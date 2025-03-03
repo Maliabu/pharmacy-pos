@@ -8,18 +8,22 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { tokenise } from "@/app/services/services"
+import { fetcher, tokenise } from "@/app/services/services"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import ReactDOMServer from "react-dom/server"
 import { addNewPrescription } from "@/server/fetch.actions"
 import Prescription from "./prescription"
 import { Textarea } from "@/components/ui/textarea"
-
+import Editor from "../components/editor"
+import useSWR from "swr"
+import { User } from "../users/userColumns"
 
 export default function StepWise() {
     const [currentStep, setCurrentStep] = useState(1)
     const [loading, setLoading] = useState(false);
+    const [value, setValue] = React.useState("")
+
     const form = useForm<z.infer<typeof addPrescription>>({
         resolver: zodResolver(addPrescription),
           defaultValues: {
@@ -30,17 +34,27 @@ export default function StepWise() {
             physicalAddress: "",
             testsDone: "",
             diagnosis: "",
-            userId: tokenise()[3]
+            prescription: "",
+            userId: parseInt(tokenise()[3])
         },
       })
     let classname = 'visible'
+
+    const { data: userData, error: userError } = useSWR(
+      form.getValues("userId") ? `/api/users/${form.getValues("userId")}` : null, // Conditional key
+      fetcher
+    );
+    let user: User[] = []
+    if (userError) return <div className="sm:w-[800px]">Error loading user</div>;
+    if (!userData) return <div className="sm:w-[800px]">Loading user...</div>;
+    if(userData){user = userData}
 
     const generatePdf = async () => {
         setLoading(true);
         classname = 'hidden'
         // const htmlContent = '<h1>Hello, this is a PDF!</h1><p>This is the content of the PDF document.</p>';
         const htmlContent = ReactDOMServer.renderToStaticMarkup(
-            <Prescription form={form.getValues()} classname={classname} />
+            <Prescription form={form.getValues()} classname={classname} user={user[0].name} />
           );
     
         try {
@@ -149,9 +163,11 @@ export default function StepWise() {
             <Step1 currentStep = { currentStep }
             button = { nextButton() }
             form={form}
+            setValue={setValue}
             /> 
             <Step2 currentStep = { currentStep }
             prev = { nextButton() }
+            user={user[0].name}
             form={form.getValues()}
             classname={classname}
             /> </div>
@@ -175,6 +191,7 @@ function Step1(props:
     {
         currentStep: number,
         form: any, 
+        setValue: React.Dispatch<React.SetStateAction<string>>,
         button:JSX.Element | null}) {
     if (props.currentStep !== 1) {
         return null
@@ -308,11 +325,15 @@ function Step1(props:
               <FormField
                   control={props.form.control}
                   name="prescription"
-                  render={({ field }) => (
+                  render={({ field: { value, onChange, ...fieldProps }  }) => (
                       <FormItem>
                       <FormLabel>Prescription</FormLabel>
                       <FormControl>
-                      <Textarea placeholder="prescription" {...field} />                      
+                      <Editor
+                      content={value}
+                      onChange={onChange}
+                      placeholder="Write your prescription here..."
+                       />
                       </FormControl>
                       <FormMessage />
                       </FormItem>
@@ -329,19 +350,20 @@ function Step1(props:
 
 function Step2(props:{currentStep: number, prev: JSX.Element, form: {physicalAddress: string,
     age: string,
-    userId: string,
+    userId: number,
     sex: string,
     name: string,
     testsDone: string,
+    phone: string,
     diagnosis: string,
     prescription: string,
     },
-    classname: string}) {
+    classname: string, user: string}) {
     if (props.currentStep !== 2) {
         return null
     }
     return (<div className="">
-        <Prescription form={props.form} classname={props.classname}/>
+        <Prescription form={props.form} classname={props.classname} user={props.user}/>
         <div>
         <div>{props.prev}</div>
         </div>

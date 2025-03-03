@@ -419,7 +419,7 @@ export default function AddStock() {
         </div>
         <Button id="submit" className="my-4" type="submit">Add Stock</Button>
         {form.formState.errors.root && (
-          <div className="bg-light p-2 rounded-md">{form.formState.errors.root.message}</div>
+          <div className="border-2 border-destructive text-destructive p-2 rounded-md">{form.formState.errors.root.message}</div>
         )}
         {form.formState.isSubmitSuccessful && (
           <div className="border border-primary text-primary p-2 text-center rounded-md"> Stock added successfully </div>

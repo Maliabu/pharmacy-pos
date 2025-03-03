@@ -1,0 +1,1 @@
+ALTER TABLE "stock" ALTER COLUMN "packaging_id" DROP NOT NULL;

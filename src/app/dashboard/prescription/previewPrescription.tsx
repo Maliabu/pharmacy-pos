@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { date, fetcher } from "@/app/services/services";
 import useSWR from "swr";
 import { Prescription } from "./prescriptionColumns";
+import parse from 'html-react-parser'
 
 export default function PreviewPrescription(props: {prescriptionId: number}){
     const { data: data2, error: error2 } = useSWR(
@@ -16,6 +16,7 @@ export default function PreviewPrescription(props: {prescriptionId: number}){
     if (error2) return <div className="sm:w-[800px]">Error loading prescriptions</div>;
     if (!data2) return <div className="sm:w-[800px]">Loading prescriptions...</div>;
     if(data2){prescription = data2}
+    console.log(prescription)
 
     return(
         <div className="sm:p-12 rounded-md sm:w-[800px]">
@@ -24,35 +25,25 @@ export default function PreviewPrescription(props: {prescriptionId: number}){
             </div>
             <div className="flex justify-between">
                 <div className="flex flex-col text-sm mt-8">
-                    <p className="font-bold">Billed To:</p>
+                <p>{prescription[0].name}</p>
+                    <p>{prescription[0].age} - {prescription[0].sex}</p>
                     <p>{prescription[0].physicalAddress}</p>
+                    <p>{prescription[0].phone}</p>
+
                 </div>
-                <div className="flex flex-col text-sm mt-8 w-[100px]">
-                    <p>Prescription No. <span className="text-red-600">{props.prescriptionId}</span></p>
+                <div className="flex flex-col text-sm mt-8">
+                    <p>{prescription[0].users.name}</p>
                     <p>{date(prescription[0].createdAt.toString())}</p>
                 </div>
             </div>
             <div>
-                <div className="mt-8 text-sm font-bold">Purchase</div>
-                <Table className="border border-gray-300">
-                <TableHeader>
-                    <TableRow className="bg-muted">
-                    <TableHead className="border border-gray-300">Tests</TableHead>
-                    <TableHead >Diagnosis</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {prescription.map((row) => (
-                    <TableRow key={row.id}>
-                        <TableCell className="font-medium boreder border-gray-300">{row.testsDone}</TableCell>
-                        <TableCell>{row.diagnosis}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-                </Table>
+                    <div className="font-bold mt-12">TESTS DONE</div>
+                    <p className="text-sm">{prescription[0].testsDone}</p>
+                    <div className="font-bold mt-6">DIAGNOSIS</div>
+                    <div className="text-sm">{prescription[0].diagnosis}</div>
                 <div className="text-sm mt-6">
-                    <p className="font-bold">Prescription</p>
-                    <p>{prescription[0].prescription}</p>
+                    <p className="font-bold">PRESCRIPTION</p>
+                    <div>{parse(prescription[0].prescription)}</div>
                 </div>
                 </div>
         </div>

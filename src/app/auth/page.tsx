@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form"
 import z from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { addUsers } from "@/server/fetch.actions"
+import { addUsers, checkEmailPhone } from "@/server/fetch.actions"
 import { addUserSchema } from '@/schema/formSchemas'
 import { handleEncryption, togglePasswordVisibility2, token, tokenise, username } from "../services/services"
 import { EyeOff } from "lucide-react"
@@ -43,16 +43,20 @@ export default function AddUser() {
     const name = form.getValues("name")
     form.setValue("token", token())
     name.length > 0?form.setValue("username", username(name)[0]+String(Math.floor((Math.random() * 100) + 1))+username(name)[1]):form.setValue("username", "")
+
      
     async function onSubmit(values: z.infer<typeof addUserSchema>) {  
+      values.userId = tokenise()[3]
       
       const app = document.getElementById('submit');
       const text = 'processing';
       if(app !== null){
         app.innerHTML = text;
       }
+      const checkUniqueData = await checkEmailPhone(values.email, values.phone)
 
-      if(values.encrPass !== "" && values.encrPass === values.confirmPassword){
+      if(checkUniqueData.message == "good"){
+        if(values.encrPass !== "" && values.encrPass === values.confirmPassword){
         // encrypt password
         const encr = handleEncryption(values.encrPass)
         values.password = (await encr).encryptedData
@@ -75,6 +79,11 @@ export default function AddUser() {
           }
           window.location.reload()
         }
+      } else {
+        form.setError("root", {
+          "message": checkUniqueData.message
+        })
+      }
     }
 
   return (
@@ -212,7 +221,7 @@ export default function AddUser() {
         </div>
         <Button id="submit" className="my-4" type="submit">Sign Up User</Button>
         {form.formState.errors.root && (
-          <div className="bg-light p-2 rounded-md">{form.formState.errors.root.message}</div>
+          <div className="border-2 border-destructive text-destructive p-2 rounded-md">{form.formState.errors.root.message}</div>
         )}
         {form.formState.isSubmitSuccessful && (
           <div className="border border-primary text-primary p-2 text-center rounded-md"> User added successfully </div>

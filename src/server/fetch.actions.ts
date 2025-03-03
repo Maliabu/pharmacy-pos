@@ -24,12 +24,39 @@ Promise<{error: boolean | undefined}> {
 
 //    uploadFile(formData)
 
-   await db.insert(usersTable).values({...data})
+   const dataAdd = await db.insert(usersTable).values({...data})
+   if(dataAdd){
    //log what we did
-   await logActivity("Added new user: "+data.email, data.userId)
+   await logActivity("Added new user: "+data.email, data.userId)}
+   else{
+    return {error: true}
+   }
 
    return {error: false}
 //    redirect("/admin/dashboard")
+}
+
+export async function checkEmailPhone(email: string, phone: string) : 
+Promise<{message: string}> {
+//    uploadFile(formData)
+
+   const check = await db.query.usersTable.findMany({
+    where: eq(usersTable.email, email)
+   })
+   if(check.length == 0){
+        //we got no match
+        const phoneCheck = await db.query.usersTable.findMany({
+            where: eq(usersTable.phone, phone)
+        })
+        if(phoneCheck.length == 0){
+            return {message: "good"}
+        } else{
+            return {message: "phone exists"}
+        }
+    }
+   else{
+    return {message: "email exists"}
+   }
 }
 
 export async function uploadFile(formData: FormData) {
@@ -162,11 +189,15 @@ Promise<{error: boolean | undefined}> {
     const supplierid = supplierId.map(supplier=>supplier.id)
     data.supplier = supplierid[0]
     data.vendor = null
-}
+    }
+    if(data.packaging1 !== ""){
    // add packaging
    const packagingId = await db.query.packagingTable.findMany({
     where: eq(packagingTable.manufacturer, data.packaging1)
    })
+   const packagingid = packagingId.map(packaging=>packaging.id)
+   data.packaging = packagingid[0]
+    }
    // add vendor
    if(data.vendor1 !== ""){
     const vendorId = await db.query.vendorTable.findMany({
@@ -175,11 +206,10 @@ Promise<{error: boolean | undefined}> {
     const vendorid = vendorId.map(vendor=>vendor.id)
     data.vendor = vendorid[0]
     data.supplier = null
-}
+    }
    const currencyid = currencyId.map(currency=>currency.id)
-   const packagingid = packagingId.map(packaging=>packaging.id)
    data.currency = currencyid[0]
-   data.packaging = packagingid[0]
+   data.packaging = null
 
    await db.insert(stockTable).values({...data})
 
@@ -288,7 +318,7 @@ Promise<{error: boolean | undefined}> {
 
    await db.insert(prescriptionsTable).values({...data})
 
-   await logActivity("Added a prescription for "+data.name, data.userId)
+   await logActivity("Added a prescription for "+data.name, data.userId.toString())
 
 
    return {error: false}

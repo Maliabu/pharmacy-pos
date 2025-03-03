@@ -13,7 +13,10 @@ export async function GET(request: Request, { params }: { params: { prescription
       .query
       .prescriptionsTable
       .findMany({
-        where: eq(prescriptionsTable.id, parseInt(prescriptionId))
+        where: eq(prescriptionsTable.id, parseInt(prescriptionId)),
+        with:{
+          users: true
+        }
       })
 
       if (!prescriptions) {

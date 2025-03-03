@@ -52,7 +52,9 @@ export const addStockSchema = z.object({
     name: z.string({required_error: "Please enter a name.",}).min(2, {
         message: "title should be atleast a character"
     }).max(50),
-    description: z.string({required_error: "Please enter a description.",}),
+    description: z.string({required_error: "Please enter a description.",}).min(2, {
+        message: "describe this product - more than 2 characters"
+    }).max(50),
     stockStatus: z.string(),
     supplier: z.coerce.number().nullable(),
     vendor: z.coerce.number().nullable(),
@@ -63,16 +65,16 @@ export const addStockSchema = z.object({
     expiryDate: z.date({required_error: "Please enter a date.",
         message: "stock should have expiry dates"
     }),
-    currency: z.coerce.number({required_error: "Please enter a currency.", message: "in what currency?"}),
+    currency: z.coerce.number({required_error: "Please enter a currency.",}),
     currency1: z.string(),
     supplier1: z.string(),
     vendor1: z.string(),
-    unitAmount: z.coerce.number({required_error: "Please enter a unit cost.", message: "you will be selling each at?"}),
+    unitAmount: z.coerce.number({required_error: "Please enter a unit cost.",}),
     unitsPurchased: z.coerce.number(),
-    packaging: z.coerce.number(),
+    packaging: z.coerce.number().nullable(),
     packaging1: z.string(),
     userId: z.string(),
-    totalPurchaseAmount: z.coerce.number({required_error: "Please enter a unit cost.", message: "how much did you spend on this whole purchase?"}),
+    totalPurchaseAmount: z.coerce.number({required_error: "Please enter a unit cost.",}),
 })
 
 //remember to coerce numbers else form doesnot submit
@@ -184,7 +186,7 @@ export const addPrescription = z.object({
     prescription: z.string({required_error: "Please enter a prescription.",}).min(2, {
         message: "you need a prescription for your diagnosis"
     }).max(200),
-    userId: z.string(),
+    userId: z.coerce.number({required_error: "Please provide a user.", message: "user is required"}),
 })
 
 export const deleteSchema = z.object({

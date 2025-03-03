@@ -5,7 +5,11 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     // Query the database
-    const prescriptions = await db.query.prescriptionsTable.findMany();
+    const prescriptions = await db.query.prescriptionsTable.findMany({
+      with: {
+        users: true
+      }
+    });
     
     // Return the users as a JSON response
     return NextResponse.json(prescriptions);
