@@ -64,7 +64,7 @@ export default function AddUser() {
         const formData = new FormData()
         formData.append("file", values.image)
 
-        const data = await addUsers(values, formData)
+        const data = await addUsers(values)
         if(data?.error){
           form.setError("root", {
             "message": "user not added"

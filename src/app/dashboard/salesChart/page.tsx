@@ -9,6 +9,8 @@ import { date, fetcher } from "@/app/services/services";
 import useSWR from "swr";
 import ActualSales from "./actualSales";
 import Projections from "./projections";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Page(){
 
@@ -38,11 +40,12 @@ export default function Page(){
     }
     const totalStock = () => {
         let total = 0
+        if(stock.length > 0){
         stock.forEach(item => {
             if(item.unitsPurchased > 0){
             total+=item.unitsPurchased}
         })
-        return total
+        return total} else return 0
     }
     
     return<div className="bg-background p-8 rounded-lg mt-2">
@@ -94,6 +97,7 @@ export default function Page(){
                 <div className="mt-2">No items due to expire yet</div>
             </div>}
         </div>
+        <div>{ stock.length > 0 ?
         <div>
             <div className=" mt-8 rounded-md">
                 <div className="text-md tracking-tight">Actual Sales</div>
@@ -104,7 +108,11 @@ export default function Page(){
                 <div className="text-md tracking-tight">Sales Projection</div>
                 <div className="text-sm tracking-tight text-muted-foreground">projections for Sales made from products paid for in full and those pending payment</div>
                 <Projections/>
-                </div>
+                </div></div> : <div className="p-16 rounded-lg bg-green-600 text-white flex flex-col justify-center mt-4">
+                    Hello, lets add some stock and get to work?
+                    <Link href="/dashboard/management" className="mt-2"><Button>Add Stock</Button>
+                    </Link>
+                    </div>}
         </div>
     </div>
 }

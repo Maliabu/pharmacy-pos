@@ -3,7 +3,7 @@
 
 "use client"
 
-import { addInvoiceItemsSchema, addInvoiceSchema, addReceipt } from "@/schema/formSchemas"
+import { addInvoiceItemsSchema, addInvoiceSchema, addReceipt, search } from "@/schema/formSchemas"
 import React, { JSX, useEffect } from "react"
 import { useState } from "react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -24,6 +24,7 @@ import Receipt from "./receipt"
 import { db } from "@/drizzle/db"
 import { receiptTable, stockTable } from "@/drizzle/schema"
 import { eq } from "drizzle-orm"
+import SelectSearch from "@/app/services/selectSearch"
 
 
 export default function StepWise() {
@@ -39,14 +40,20 @@ export default function StepWise() {
           receipt: 0
       },
     })
+    const searchForm = useForm<z.infer<typeof search>>({
+      resolver: zodResolver(search),
+        defaultValues: {
+          search: ""
+      },
+    })
       let products: Stock[] = []
       const { data, error } = useSWR("/api/stock", fetcher);
       if(data){
           products = data
       }
 
-      let classname = 'visible'
-  
+    let classname = 'visible'
+    console.log(form.getValues())
   
     // Handle row deletion
     const addRow = () => {
@@ -78,6 +85,29 @@ export default function StepWise() {
         const Product = products.find((p) => p.id.toString() === productId);
         return [Product ? Product.name : '', Product?Product.unitAmount.toString(): '0']
     };
+
+    const searchParam = searchForm.getValues("search")
+
+    function searchResults(){
+      if(searchParam === ""){
+        return (
+            <div>
+                <p className="small text-start">0 search results found</p>
+            </div>
+        )
+      } else {
+        console.log(searchParam, products)
+        if(data) {
+        const SearchFilter = products.filter((item)=>{ if(item.name.toLowerCase().includes(searchParam.toLowerCase())){return <p key={item.id}>{item.name}</p>}})
+        const myFinalSearch = SearchFilter.map((item) => {return <div key={item.id} className="grid grid-cols-1 p-4 bg-muted rounded-md mt-1"><p>{item.name}</p></div>})
+        return(
+            <div className="pt-4 text-sm p-2 rounded-md bg-muted">{myFinalSearch}</div>
+        )}
+        else{
+          return <div className="text-sm">loading products...</div>
+        }
+      }
+    }
 
     const generatePdf = async () => {
         setLoading(true);
@@ -197,7 +227,7 @@ export default function StepWise() {
           <div className="bg-light p-2 rounded-md border border-primary text-center mt-1 text-primary w-[300px]">{form.formState.errors.root.message}</div>
         )}
         {form.formState.isSubmitSuccessful && (
-          <div className="border border-primary text-primary p-2 mt-1 text-center rounded-md"> Invoice generated successfully </div>
+          <div className="border border-primary text-primary p-2 mt-1 text-center rounded-md"> Receipt generated successfully </div>
         )}
         </form>
         </Form>
@@ -221,7 +251,7 @@ function Step1(props:
     return ( 
         <div>
       <div className='text-2xl font-bold tracking-tight'>Add Products to Receipt</div>
-        <div className="flex flex-col space-y-1.5">
+        <div className="flex flex-col space-y-1.5 mt-2">
               <FormField
                   control={props.form.control}
                   name="product"
@@ -229,7 +259,8 @@ function Step1(props:
                       <FormItem>
                       <FormLabel>Select a product to add to Receipt</FormLabel>
                       <FormControl>
-                          <Select
+                      <SelectSearch products={props.products} fields={field}/>
+                          {/* <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}>
                               <SelectTrigger id="product">
@@ -242,14 +273,14 @@ function Step1(props:
                                   ))
                                 }
                                 </SelectContent>
-                          </Select>
+                          </Select> */}
                       </FormControl>
                       <FormMessage />
                       </FormItem>
                   )}
                   />
               </div>
-              <div className="flex flex-col space-y-1.5">
+              <div className="flex flex-col space-y-1.5 mt-2">
               <FormField
                   control={props.form.control}
                   name="quantity"
@@ -279,10 +310,10 @@ function Step1(props:
             <TableBody>
             {props.rows.map((row, index) => (
               <TableRow key={index}>
-                <TableCell>{props.getProductNameById(row.product)[0]}</TableCell>
-                <TableCell>{props.getProductNameById(row.product)[1]}</TableCell>
+                <TableCell>{props.getProductNameById(row.product[0])[0]}</TableCell>
+                <TableCell>{props.getProductNameById(row.product[0])[1]}</TableCell>
                 <TableCell>{row.quantity}</TableCell>
-                <TableCell>{row.quantity * parseInt(props.getProductNameById(row.product)[1])}</TableCell>
+                <TableCell>{row.quantity * parseInt(props.getProductNameById(row.product[0])[1])}</TableCell>
                 <TableCell>
                   <Button
                     onClick={() => props.handleDeleteRow(index)}

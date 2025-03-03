@@ -18,6 +18,7 @@ import { DatePicker } from "@/app/services/datePicker"
 import { fetcher, tokenise } from "@/app/services/services"
 import Packaging from "../packaging/fetchPackaging"
 import useSWR from "swr"
+import {DatePick} from "@/app/services/datePick"
 
 export default function AddStock() {
     const [currency, setCurrency] = React.useState("");
@@ -44,7 +45,8 @@ export default function AddStock() {
           unitsPurchased: 0,
           packaging: 0,
           packaging1: "",
-          userId: tokenise()[3]
+          userId: tokenise()[3],
+          totalPurchaseAmount: 0
       },
     })
     
@@ -219,7 +221,7 @@ export default function AddStock() {
               </div>
               <div className="flex flex-col space-y-1.5 mt-4">
               <div className="text-sm">Expiry Date</div>
-              <FormField
+              {/* <FormField
                   control={form.control}
                   name="expiryDate"
                   render={({ field }) => (
@@ -231,8 +233,23 @@ export default function AddStock() {
                       <FormMessage />
                       </FormItem>
                   )}
+                  /> */}
+                  <FormField
+                  control={form.control}
+                  name="expiryDate"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormControl
+                      >
+                          <DatePick field={field} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
                   />
-              </div><div className="flex flex-col space-y-1.5 mt-4">
+                  <div className="text-xs text-muted-foreground">Enter a year (eg 2030) in the blank space then click on the date next to it to open up a calendar for that year. or select by month and year (eg 7/7/2030 = July 7th 2030)</div>
+              </div>
+              <div className="flex flex-col space-y-1.5 mt-4">
               <div className="text-sm">Status of Product</div>
               <FormField
                   control={form.control}
@@ -377,6 +394,21 @@ export default function AddStock() {
                       <FormLabel>How many units are you Purchasing</FormLabel>
                       <FormControl>
                           <Input type="number" placeholder="units for purchase" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                  />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+              <FormField
+                  control={form.control}
+                  name="totalPurchaseAmount"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Cost of entire purchase</FormLabel>
+                      <FormControl>
+                          <Input type="number" placeholder="total amount spent on purchase" {...field} />
                       </FormControl>
                       <FormMessage />
                       </FormItem>

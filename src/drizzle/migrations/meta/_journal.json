@@ -85,6 +85,20 @@
       "when": 1740736951375,
       "tag": "0011_overconfident_deathbird",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1741012505966,
+      "tag": "0012_redundant_hardball",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1741012890576,
+      "tag": "0013_steep_redwing",
+      "breakpoints": true
     }
   ]
 }

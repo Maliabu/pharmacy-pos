@@ -98,7 +98,7 @@ export const receiptItemsRelations = relations(receiptTable, ({one}) => ({
 export const stockTable = pgTable('stock', {
   id: serial('id').primaryKey(),
   name: text('title').notNull(),
-  description: text('description').notNull(),
+  description: text('description'),
   stockStatus: text("status").notNull(),
   supplier: integer('supplier')
     .references(() => supplierTable.id, { onDelete: 'cascade' }),
@@ -109,8 +109,9 @@ export const stockTable = pgTable('stock', {
   currency: integer("currency_id").notNull().references(() => currencyTable.id, {onDelete: 'cascade'}),
   unitAmount: integer('amount').notNull(),
   unitsPurchased: integer('units').notNull(),
-  paymentMeans: text('payment').notNull(),
+  paymentMeans: text('payment'),
   packaging: integer("packaging_id").notNull().references(() => packagingTable.id, {onDelete: 'cascade'}),
+  totalPurchaseAmount: integer('total_cost').notNull(),
   createdAt,
   updatedAt,
 });

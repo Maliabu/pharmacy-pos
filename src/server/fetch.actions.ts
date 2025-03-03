@@ -14,7 +14,7 @@ import { desc } from 'drizzle-orm';
 
 const today = new Date()
 
-export async function addUsers(unsafeData: z.infer<typeof addUserSchema>, formData: FormData) : 
+export async function addUsers(unsafeData: z.infer<typeof addUserSchema>) : 
 Promise<{error: boolean | undefined}> {
    const {success, data} = addUserSchema.safeParse(unsafeData)
 
@@ -26,7 +26,7 @@ Promise<{error: boolean | undefined}> {
 
    await db.insert(usersTable).values({...data})
    //log what we did
-//    await logActivity("Added new user: "+data.email, data.userId)
+   await logActivity("Added new user: "+data.email, data.userId)
 
    return {error: false}
 //    redirect("/admin/dashboard")

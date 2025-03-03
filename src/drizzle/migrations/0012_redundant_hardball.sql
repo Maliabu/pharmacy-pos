@@ -1,0 +1,1 @@
+ALTER TABLE "stock" ADD COLUMN "total_cost" integer NOT NULL;

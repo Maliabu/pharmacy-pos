@@ -54,20 +54,25 @@ export const addStockSchema = z.object({
     }).max(50),
     description: z.string({required_error: "Please enter a description.",}),
     stockStatus: z.string(),
-    supplier: z.coerce.number({required_error: "Please enter a supplier.",}).nullable(),
-    vendor: z.coerce.number({required_error: "Please enter a vendor.",}).nullable(),
+    supplier: z.coerce.number().nullable(),
+    vendor: z.coerce.number().nullable(),
     paymentMeans: z.string(),
-    orderDate: z.date({required_error: "Please enter a date.",}),
-    expiryDate: z.date({required_error: "Please enter a date.",}),
-    currency: z.coerce.number({required_error: "Please enter a currency.",}),
+    orderDate: z.date({required_error: "Please enter a date.",
+        message: "add an order date"
+    }),
+    expiryDate: z.date({required_error: "Please enter a date.",
+        message: "stock should have expiry dates"
+    }),
+    currency: z.coerce.number({required_error: "Please enter a currency.", message: "in what currency?"}),
     currency1: z.string(),
     supplier1: z.string(),
     vendor1: z.string(),
-    unitAmount: z.coerce.number({required_error: "Please enter a unit cost.",}),
-    unitsPurchased: z.coerce.number({required_error: "Please enter a number.",}),
-    packaging: z.coerce.number({required_error: "Please enter a unit of purchase.",}),
+    unitAmount: z.coerce.number({required_error: "Please enter a unit cost.", message: "you will be selling each at?"}),
+    unitsPurchased: z.coerce.number(),
+    packaging: z.coerce.number(),
     packaging1: z.string(),
     userId: z.string(),
+    totalPurchaseAmount: z.coerce.number({required_error: "Please enter a unit cost.", message: "how much did you spend on this whole purchase?"}),
 })
 
 //remember to coerce numbers else form doesnot submit
@@ -117,6 +122,10 @@ export const addReceipt = z.object({
     product: z.string(),
     quantity: z.coerce.number({required_error: "Please enter a quantity",}),
     receipt: z.coerce.number({required_error: "Please enter a receipt number",}),
+})
+
+export const search = z.object({
+    search: z.string(),
 })
 
 export const addBillSchema = z.object({
