@@ -31,7 +31,6 @@ export default function Prescription(props: {classname: string, user: string, fo
 
                 </div>
                 <div className="flex flex-col text-sm mt-8">
-                    <p>{props.user}</p>
                     <p>{date(Date())}</p>
                 </div>
             </div>
@@ -45,6 +44,7 @@ export default function Prescription(props: {classname: string, user: string, fo
                     <p className="font-bold">PRESCRIPTION</p>
                     <div className="text-sm">{parse(props.form.prescription)}</div>
                 </div>
+                <p className="text-center mt-12"><span className="font-bold">Prescriber:</span> {props.user}</p>
                 <p className="text-sm text-center mt-2 py-4 border-t"><span className="font-bold">Hospital Tel:</span> 0769209573 / 0706750021 <br/><span className="font-bold">Dr Joseph Tel:</span> 0779011362 / 0702812100</p>
         </div>
     )

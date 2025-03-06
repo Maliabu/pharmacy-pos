@@ -32,7 +32,6 @@ export default function PreviewPrescription(props: {prescriptionId: number}){
 
                 </div>
                 <div className="flex flex-col text-sm mt-8">
-                    <p>{prescription[0].users.name}</p>
                     <p>{date(prescription[0].createdAt.toString())}</p>
                 </div>
             </div>
@@ -46,6 +45,7 @@ export default function PreviewPrescription(props: {prescriptionId: number}){
                     <div>{parse(prescription[0].prescription)}</div>
                 </div>
                 </div>
+                <p className="text-center mt-8 py-2 border-t"><span className="font-bold">Prescriber:</span> {prescription[0].users.name}</p>
         </div>
     )
 }

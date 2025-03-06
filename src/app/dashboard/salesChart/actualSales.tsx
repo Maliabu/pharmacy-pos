@@ -112,9 +112,9 @@ export default function ActualSales(){
   const groupedData1 = groupByYearMonth1(receipts);
   const dataForGraph1 = prepareForGraph(groupedData1);
     
-    if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/></div>;
+    if (!data) return <div className="flex p-6 rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/></div>;
     
-    return<div className="bg-background py-16 rounded-lg mt-2">
+    return<div className="border p-8 rounded-lg mt-2">
         <Graph invoices={dataForGraph} graphId="actual" receipts={dataForGraph1}/>
     </div>
 }

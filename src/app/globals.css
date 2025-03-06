@@ -112,3 +112,8 @@ body {
   overflow-x: hidden !important;
   height: 80vh !important;
 }
+.graph-scroll{
+  scroll-behavior: scroll !important;
+  overflow-x: hidden !important;
+  height: 25vh !important;
+}

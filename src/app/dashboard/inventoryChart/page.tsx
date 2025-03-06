@@ -16,8 +16,9 @@ export default function Page(){
     }
     if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/></div>;
 
-    function stockStatus(objects: Stock[]): [Stock[], Stock[], Stock[]] {
-        const active: Stock[] = [];
+    function stockStatus(objects: Stock[]): [number, number, number] {
+        const active: Stock[] = []
+        let totalActive = 0, totalQuarantine = 0, totalSafety = 0
         const quarantine: Stock[] = [];
         const safety: Stock[] = [];
       
@@ -34,12 +35,21 @@ export default function Page(){
             safety.push(obj);
           }
         });
-        return [active, quarantine, safety]
+        active.forEach((obj) => {
+          totalActive+=obj.unitsPurchased
+        })
+        quarantine.forEach((obj) => {
+          totalQuarantine+=obj.unitsPurchased
+        })
+        safety.forEach((obj) => {
+          totalSafety+=obj.unitsPurchased
+        })
+        return [totalActive, totalQuarantine, totalSafety]
     }
-    const perTotal = stockStatus(stock)[0].length + stockStatus(stock)[1].length + stockStatus(stock)[2].length
-    const perActive = (stockStatus(stock)[0].length/perTotal)*100
-    const perQuarantine = (stockStatus(stock)[1].length/perTotal)*100
-    const perSafety = (stockStatus(stock)[2].length/perTotal)*100
+    const perTotal = stockStatus(stock)[0] + stockStatus(stock)[1] + stockStatus(stock)[2]
+    const perActive = (stockStatus(stock)[0]/perTotal)*100
+    const perQuarantine = (stockStatus(stock)[1]/perTotal)*100
+    const perSafety = (stockStatus(stock)[2]/perTotal)*100
 
     const activeData = [
         { name: 'Filled', value: perActive },
@@ -57,21 +67,21 @@ export default function Page(){
         <div className="grid sm:grid-cols-3 gap-2">
             <div className="p-6 bg-green-600 text-green-200 rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
-                    {stockStatus(stock)[0].length}
+                    {stockStatus(stock)[0]}
                 </div>
                 <span>Active Stock</span>
                 <div className="text-sm leading-4 text-green-100 p-3 rounded-md bg-green-500 mt-4">Passed quality checks and Ready for dispatch or use</div>
             </div>
             <div className="p-6 bg-muted rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
-                {stockStatus(stock)[1].length}
+                {stockStatus(stock)[1]}
                 </div>
                 <span>Quarantine stock</span>
                 <div className="text-sm leading-4 text-gray-200 p-3 rounded-md bg-gray-500 mt-4">Pending quality checks and NOT Ready for dispatch or use</div>
             </div>
             <div className="p-6 border text-red-600 border-red-600 rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
-                {stockStatus(stock)[2].length}
+                {stockStatus(stock)[2]}
                 </div>
                 <span>Buffer/Safety Stock</span>
                 <div className="text-sm leading-4 text-red-100 p-3 rounded-md bg-red-500 mt-4">Set Aside for emergency</div>
