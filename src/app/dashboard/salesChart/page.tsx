@@ -68,7 +68,7 @@ export default function Page(){
                     {totalStock()}
                 </div>
                 <span>Products</span>
-                <div className="text-sm leading-4 text-green-200 p-3 rounded-md bg-green-600 mt-4">Total products in stock</div>
+                <div className="text-sm leading-4 text-green-200 p-3 rounded-md bg-green-700 mt-4">Total products in stock</div>
             </div> :
             <div className="p-6 bg-red-600 text-red-200 rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
@@ -104,9 +104,9 @@ export default function Page(){
             </div>:
             <div className="p-6 bg-muted rounded-lg col-span-2 flex bg-primary text-green-200 flex-col justify-center items-center">
                 <ThumbsUp size={40}/>
-                <div className="mt-2 p-2 bg-green-600 rounded-md">No items due to expire yet</div></div> : <div className="p-6 bg-muted rounded-lg col-span-2 flex bg-primary text-green-200 flex-col justify-center items-center">
+                <div className="mt-2 p-2 bg-green-700 rounded-md">No items due to expire yet</div></div> : <div className="p-6 bg-muted rounded-lg col-span-2 flex bg-primary text-green-200 flex-col justify-center items-center">
                 <ThumbsUp size={40}/>
-                <div className="mt-2 p-2 bg-green-600 rounded-md">No items due to expire yet</div>
+                <div className="mt-2 p-2 bg-green-700 rounded-md">No items due to expire yet</div>
             </div>}
         </div>
         {totalStock() >= 1? filterObjectsByDaysRemaining(stock)[1].length >= 1?
@@ -131,20 +131,20 @@ export default function Page(){
                 <CarouselNext className="mr-16 text-white border bg-red-500 border-red-500 hover:bg-red-500 hover:text-red-300" />
                 </Carousel>
             </div>:
-            <div className="p-4 rounded-md bg-green-600 text-white">
+            <div className="p-4 rounded-md bg-green-700 text-white">
                 <Pill size={20}/>
                 <div className="mt-2">No expired stock in inventory</div>
             </div>:
-            <div className="p-4 rounded-md bg-red-600 text-white">
+            <div className="p-4 rounded-md bg-red-700 text-white">
                 <Info size={20}/>
                 <div className="mt-2">Please re-stock</div>
             </div>
             }
         <div>
-            <div className="border text-gray-700 dark:text-gray-400 p-6 rounded-lg mt-2">
-                <div className="flex flex-row bg-muted p-6 rounded-lg">
+            <div className="border text-gray-600 p-6 rounded-lg mt-2">
+                <div className="flex flex-row bg-green-600 text-green-200 p-6 rounded-lg">
                     <div>
-                    <div className="text-sm">{date(Date())}</div>
+                    <div className="text-sm p-2 rounded-md bg-green-700">{date(Date())}</div>
                     </div>
                     <div className="px-5 border-l ml-5">
                         <div className="text-5xl font-bold tracking-tight">{currentMonth()}</div>

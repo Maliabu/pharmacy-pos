@@ -77,7 +77,7 @@ export default function Page(){
       ];
     return<div className="bg-background p-8 rounded-lg mt-2">
     <div>
-        <div className="py-4">Stock Overview</div>
+        <div className="pb-4">Stock Overview</div>
     </div>
         <div className="grid sm:grid-cols-3 gap-2">
             <div className="p-6 bg-green-600 text-green-200 rounded-lg">
@@ -85,21 +85,21 @@ export default function Page(){
                     {stockStatus(stock)[0]}
                 </div>
                 <span>Active Stock</span>
-                <div className="text-sm leading-4 text-green-100 p-3 rounded-md bg-green-500 mt-4">Passed quality checks and Ready for dispatch or use</div>
+                <div className="text-sm leading-4 text-green-100 p-3 rounded-md bg-green-700 mt-4">Passed quality checks and Ready for dispatch or use</div>
             </div>
             <div className="p-6 bg-muted rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
                 {stockStatus(stock)[1]}
                 </div>
                 <span>Quarantine stock</span>
-                <div className="text-sm leading-4 text-gray-200 p-3 rounded-md bg-gray-500 mt-4">Pending quality checks and NOT Ready for dispatch or use</div>
+                <div className="text-sm leading-4 text-gray-200 p-3 rounded-md bg-gray-600 mt-4">Pending quality checks and NOT Ready for dispatch or use</div>
             </div>
             <div className="p-6 border text-red-600 border-red-600 rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
                 {stockStatus(stock)[2]}
                 </div>
                 <span>Buffer/Safety Stock</span>
-                <div className="text-sm leading-4 text-red-100 p-3 rounded-md bg-red-500 mt-4">Set Aside for emergency</div>
+                <div className="text-sm leading-4 text-red-100 p-3 rounded-md bg-red-600 mt-4">Set Aside for emergency</div>
             </div>
         </div>
         <div className="grid sm:grid-cols-3 gap-2 mt-2 bg- rounded-lg">
@@ -112,7 +112,7 @@ export default function Page(){
           <div className="bg-green-600 text-green-200 p-8 rounded-lg">
           <div className="text-5xl font-bold tracking-tight">{stockStatus(stock)[3]}</div>
           <div>UnTracked Stock</div>
-          <div className="text-sm bg-green-500 mt-4 p-2 rounded-md">Doesnot belong to any categories of stock</div>
+          <div className="text-sm bg-green-700 mt-4 p-2 rounded-md">Doesnot belong to any categories of stock</div>
           </div>
           <div>
             <DonutChart data={unTrackedData} name="untracked"/>
