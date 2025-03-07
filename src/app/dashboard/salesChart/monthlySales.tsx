@@ -9,6 +9,7 @@ import { Invoice } from "../invoice/invoiceColumns";
 import Graph, { YearData } from "./monthGraph";
 import { Receipt } from "../order/page";
 import MonthGraph from "./monthGraph";
+import { Bill } from "../bills/billColumns";
 
 export default function MonthlySales() {
 
@@ -22,6 +23,12 @@ export default function MonthlySales() {
     const { data: data1, error: error1 } = useSWR("/api/receipt/receipt", fetcher);
     if (data1) {
         receipts = data1;
+    }
+
+    let bills: Bill[] = []
+    const { data: data2, error: error2 } = useSWR("/api/bills", fetcher);
+    if(data2){
+        bills = data2
     }
     
     // Step 1: Grouping by day (instead of year and month)
@@ -72,6 +79,27 @@ export default function MonthlySales() {
         }, {} as Record<number, number>);
     };
 
+    const groupByDay2 = (data1: Bill[]) => {
+        const currentMonth = new Date().getMonth(); // Get the current month (0-11)
+        const currentYear = new Date().getFullYear(); // Get the current year
+        return data1.reduce((acc, bill) => {
+                // Get the date from createdAt
+                const createdAt = new Date(bill.createdAt);
+                const day = createdAt.getDate(); // Get the day of the month (1-31)
+                const month = createdAt.getMonth(); // Get the month (0-11)
+                const year = createdAt.getFullYear(); // Get the year
+
+                // Only accumulate data for the current month and year
+                if (month === currentMonth && year === currentYear) {
+                    if (!acc[day]) {
+                        acc[day] = 0;
+                    }
+                    acc[day] += bill.amount;
+                }
+            return acc;
+        }, {} as Record<number, number>);
+    };
+
     // Step 2: Structure the data for the graph
     const prepareForGraph = (groupedData: Record<number, number>) => {
         const result: YearData[] = [];
@@ -106,10 +134,13 @@ export default function MonthlySales() {
 
     const groupedData1 = groupByDay1(receipts);
     const dataForGraph1 = prepareForGraph(groupedData1);
+
+    const groupedData2 = groupByDay2(bills);
+    const dataForGraph2 = prepareForGraph(groupedData2);
     
     if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin" /></div>;
 
     return <div className="bg-transparent pt-16 rounded-lg mt-2">
-        <MonthGraph invoices={dataForGraph} graphId="actual" receipts={dataForGraph1} />
+        <MonthGraph invoices={dataForGraph} graphId="actual" receipts={dataForGraph1} bills={dataForGraph2}/>
     </div>;
 }

@@ -142,13 +142,12 @@ export default function Page(){
             }
         <div>
             <div className="border text-gray-700 dark:text-gray-400 p-6 rounded-lg mt-2">
-                <div className="flex flex-row bg-green-600 text-green-200 p-6 rounded-lg">
-                    <div><BarChartBig size={60}/>
-                    <div className="text-sm">CurrentMonth sales</div>
+                <div className="flex flex-row bg-muted p-6 rounded-lg">
+                    <div>
+                    <div className="text-sm">{date(Date())}</div>
                     </div>
                     <div className="px-5 border-l ml-5">
-                        <div className="text-sm">{date(Date())}</div>
-                        <div className="text-4xl font-bold tracking-tight">{currentMonth()}</div>
+                        <div className="text-5xl font-bold tracking-tight">{currentMonth()}</div>
                         <div className="text-sm">Sales for this month</div>
                     </div>
                 </div>

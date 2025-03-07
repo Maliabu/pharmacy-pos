@@ -8,6 +8,7 @@ import useSWR from "swr";
 import { Invoice } from "../invoice/invoiceColumns";
 import Graph, { YearData } from "./paidGraph";
 import { Receipt } from "../order/page";
+import { Bill } from "../bills/billColumns";
 
 export default function ActualSales(){
 

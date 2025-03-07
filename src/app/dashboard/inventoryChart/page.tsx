@@ -16,11 +16,12 @@ export default function Page(){
     }
     if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/></div>;
 
-    function stockStatus(objects: Stock[]): [number, number, number] {
+    function stockStatus(objects: Stock[]): [number, number, number, number] {
         const active: Stock[] = []
-        let totalActive = 0, totalQuarantine = 0, totalSafety = 0
+        let totalActive = 0, totalQuarantine = 0, totalSafety = 0, totalNone = 0
         const quarantine: Stock[] = [];
         const safety: Stock[] = [];
+        const unTracked: Stock[] = [];
       
         objects.forEach((obj) => {
           const status = obj.stockStatus;
@@ -28,11 +29,14 @@ export default function Page(){
           if (status == "active") {
             active.push(obj);
           }
-          if (status == "quarantine") {
+          else if (status == "quarantine") {
             quarantine.push(obj);
           }
-          if (status == "safety") {
+          else if (status == "safety") {
             safety.push(obj);
+          }
+          else{
+            unTracked.push(obj);
           }
         });
         active.forEach((obj) => {
@@ -44,12 +48,16 @@ export default function Page(){
         safety.forEach((obj) => {
           totalSafety+=obj.unitsPurchased
         })
-        return [totalActive, totalQuarantine, totalSafety]
+        unTracked.forEach((obj) => {
+          totalNone+=obj.unitsPurchased
+        })
+        return [totalActive, totalQuarantine, totalSafety, totalNone]
     }
-    const perTotal = stockStatus(stock)[0] + stockStatus(stock)[1] + stockStatus(stock)[2]
+    const perTotal = stockStatus(stock)[0] + stockStatus(stock)[1] + stockStatus(stock)[2] + stockStatus(stock)[3]
     const perActive = (stockStatus(stock)[0]/perTotal)*100
     const perQuarantine = (stockStatus(stock)[1]/perTotal)*100
     const perSafety = (stockStatus(stock)[2]/perTotal)*100
+    const perUntracked = (stockStatus(stock)[3]/perTotal)*100
 
     const activeData = [
         { name: 'Filled', value: perActive },
@@ -63,7 +71,14 @@ export default function Page(){
         { name: 'Filled', value: perSafety },
         { name: 'Empty', value: 100 - perSafety }
       ];
+      const unTrackedData = [
+        { name: 'Filled', value: perUntracked },
+        { name: 'Empty', value: 100 - perUntracked }
+      ];
     return<div className="bg-background p-8 rounded-lg mt-2">
+    <div>
+        <div className="py-4">Stock Overview</div>
+    </div>
         <div className="grid sm:grid-cols-3 gap-2">
             <div className="p-6 bg-green-600 text-green-200 rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
@@ -87,13 +102,21 @@ export default function Page(){
                 <div className="text-sm leading-4 text-red-100 p-3 rounded-md bg-red-500 mt-4">Set Aside for emergency</div>
             </div>
         </div>
-        <div>
-            <div className="text-2xl tracking-tight font-bold mt-8">Stock Overview</div>
-        </div>
-        <div className="grid sm:grid-cols-3 gap-2">
+        <div className="grid sm:grid-cols-3 gap-2 mt-2 bg- rounded-lg">
             <DonutChart data={activeData} name="active"/>
             <DonutChart data={quarantineData} name="quarantine"/>
             <DonutChart data={safetyData} name="safety"/>
+        </div>
+        <div className="py-4">Stock UnTracked</div>
+        <div className="grid grid-cols-2">
+          <div className="bg-green-600 text-green-200 p-8 rounded-lg">
+          <div className="text-5xl font-bold tracking-tight">{stockStatus(stock)[3]}</div>
+          <div>UnTracked Stock</div>
+          <div className="text-sm bg-green-500 mt-4 p-2 rounded-md">Doesnot belong to any categories of stock</div>
+          </div>
+          <div>
+            <DonutChart data={unTrackedData} name="untracked"/>
+          </div>
         </div>
     </div>
 }

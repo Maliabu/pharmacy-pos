@@ -5,7 +5,7 @@ const DonutChart = (props:{data:{name: string, value: number}[], name: string}) 
   const COLORS = ['#4caf50', '#e0e0e0']; // Green for filled, gray for empty
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={200}>
       <PieChart>
         <Pie
           data={props.data}
@@ -22,7 +22,7 @@ const DonutChart = (props:{data:{name: string, value: number}[], name: string}) 
             <Cell key={`cell-${index}`} fill={COLORS[index]} />
           ))}
           <Label
-            value={`${props.data[0].value}%`+` ${props.name}`} // Display percentage for filled section
+            value={`${props.data[0].value.toFixed(2)}%`+` ${props.name}`} // Display percentage for filled section
             position="center" // Center of the donut
             style={{
               fontSize: '13px',

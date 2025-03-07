@@ -13,7 +13,7 @@ export interface YearData {
   totalSales: number;
 }
 
-export default function MonthGraph(props: { invoices: YearData[], receipts: YearData[], graphId: string }) {
+export default function MonthGraph(props: { invoices: YearData[], receipts: YearData[], graphId: string, bills: YearData[] }) {
 
   // Prepare the data for the LineChart (flattened daily data)
   const flattenedData = props.invoices.flatMap((yearData) =>
@@ -36,8 +36,18 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
     }))
   );
 
+  const flattenedBillData = props.bills.flatMap((yearData) =>
+    yearData.months.flatMap((monthData) => ({
+      year: yearData.year,  // Pass year explicitly as part of the data
+      month: monthData.month,
+      day: monthData.day,
+      totalAmount: monthData.totalAmount,
+      type: 'Bills'
+    }))
+  );
+
   // Combine invoices and receipts data into a single array
-  const combinedData = [...flattenedData, ...flattenedReceiptData];
+  const combinedData = [...flattenedData, ...flattenedReceiptData, ...flattenedBillData];
 
   // Group the data by year and type (Invoice/Receipt)
   const groupedData = combinedData.reduce((acc, data) => {
@@ -67,19 +77,21 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
 
     // If no entry exists for this day, create one
     if (!dayData) {
-      dayData = { day, Invoices: 0, Receipts: 0 };
+      dayData = { day, Invoices: 0, Receipts: 0, Bills: 0 };
       acc.push(dayData);
     }
 
     // Add the totalAmount to the correct field (Invoices or Receipts)
     if (type === 'Invoices') {
       dayData.Invoices += totalAmount;
-    } else if (type === 'Receipts') {
+    } if (type === 'Receipts') {
       dayData.Receipts += totalAmount;
+    }else if (type === 'Bills') {
+      dayData.Bills += totalAmount;
     }
 
     return acc;
-  }, [] as { day: number, Invoices: number, Receipts: number }[]);
+  }, [] as { day: number, Invoices: number, Receipts: number, Bills: number }[]);
 
   // Line components for both invoices and receipts
   const lineCombinedComponents = [
@@ -100,6 +112,15 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
         stroke="#2196f3"  // Blue for receipts
         name={`${yearData.year} Receipts`} // Including year in the name
       />
+    )),
+    ...props.bills.map((yearData) => (
+      <Line
+        key={`${yearData.year} Bills`}
+        type="monotone"
+        dataKey="Bills"
+        stroke="#000"  // Blue for receipts
+        name={`${yearData.year} Bills`} // Including year in the name
+      />
     ))
   ];
 
@@ -113,7 +134,7 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
           content={({ payload, label }) => {
             if (!payload || payload.length === 0) return null;
             const data = payload[0].payload; // Get the first data point for the tooltip
-            const { Invoices, Receipts } = data;
+            const { Invoices, Receipts, Bills } = data;
 
             return (
               <div style={{
@@ -127,6 +148,7 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
                 <p><strong>Day: </strong>{label}</p>  {/* Showing Day */}
                 <p><strong>Invoices: </strong>{Invoices.toLocaleString()}</p>
                 <p><strong>Receipts: </strong>{Receipts.toLocaleString()}</p>
+                <p><strong>Bills: </strong>{Bills.toLocaleString()}</p>
               </div>
             );
           }}
@@ -134,7 +156,7 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
         <Legend
           content={({ payload }) => {
             return (
-              <div style={{ fontSize: '13px', listStyleType: 'none' }} className='grid grid-cols-2 gap-8'>
+              <div style={{ fontSize: '13px', listStyleType: 'none' }} className='grid grid-cols-3 gap-8'>
                 {payload?.map((entry, index) => {
                   // Split the year and type from the entry value (e.g., "2021 Invoices")
                   const [year, ...typeParts] = entry.value.split(' ');
