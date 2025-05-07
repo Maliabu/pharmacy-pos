@@ -87,7 +87,7 @@ export default function Login(){
     return(
             <div className="sm:p-16 p-2 sm:grid sm:grid-cols-2 bg-muted">
             <div className="p-10 sm:rounded-l-3xl sr:rounded-t-2xl flex flex-col justify-center items-center bg-background text-muted sm:columns-1"> 
-               <img src="/logo.png" alt="logo"/>                  
+               <img src="/logo.png" alt="logo" width={300} height={100}/>                  
             </div>
                 <div className="p-8 sm:p-12 sm:rounded-r-2xl sr:rounded-b-2xl bg-background dark:bg-muted">
                   <div className="text-4xl tracking-tight font-bold sm:my-8 grid justify-center items-center">Login</div>

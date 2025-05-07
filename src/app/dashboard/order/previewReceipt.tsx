@@ -13,6 +13,8 @@ export interface ReceiptItems{
         name: string
         description: string
         unitAmount: number
+        unitsPurchased: number
+        totalPurchaseAmount: number
         orderDate: Date
     },
     user:{

@@ -1,10 +1,10 @@
 "use server"
 
 import { db } from "@/drizzle/db";
-import { Bills, activityTable, currencyTable, invoiceItemsTable, invoiceTable, monthlyReport, packagingTable, prescriptionsTable, receipt, receiptTable, reportTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
+import { Bills, activityTable, currencyTable, invoiceItemsTable, invoiceTable, monthlyReport, notificationsTable, packagingTable, prescriptionsTable, receipt, receiptTable, reportTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
 // import "use-server"
 import { z } from "zod";
-import { loginUserSchema, addUserSchema, addSupplierSchema, addVendorSchema, addStockSchema, addBillSchema, addPackagingSchema, addInvoiceSchema, addInvoiceItemsSchema, addPrescription, reportSchema } from '@/schema/formSchemas'
+import { loginUserSchema, addUserSchema, addSupplierSchema, addVendorSchema, addStockSchema, addBillSchema, addPackagingSchema, addInvoiceSchema, addInvoiceItemsSchema, addPrescription, reportSchema, addNotificationSchema } from '@/schema/formSchemas'
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { File } from "node:buffer";
@@ -257,6 +257,22 @@ Promise<{error: boolean | undefined}> {
 //    redirect("/admin/dashboard")
 }
 
+export async function addNewNotification(unsafeData: z.infer<typeof addNotificationSchema>) : 
+Promise<{error: boolean | undefined}> {
+   const {success, data} = addNotificationSchema.safeParse(unsafeData)
+
+   if (!success){
+    return {error: true}
+   }
+
+   await db.insert(notificationsTable).values({...data})
+
+   await logActivity("Added new Notification: "+data.notification, data.from.toString())
+
+   return {error: false}
+//    redirect("/admin/dashboard")
+}
+
 export async function addNewInvoice(unsafeData: z.infer<typeof addInvoiceSchema>) : 
 Promise<{error: boolean | undefined, id: number}> {
    const {success, data} = addInvoiceSchema.safeParse(unsafeData)
@@ -403,25 +419,24 @@ Promise<{error: boolean | undefined}> {
 
 export async function newReport(monthDate:  string, month: string) : 
 Promise<{error: boolean | undefined}> {
-    // const data = {
-    //     monthDate: monthDate,
-    //     month: month
-    // }
+    const data = {
+        monthDate: monthDate,
+        month: month
+    }
     // check no report is already there
     const reportCheck = await db
       .query
       .monthlyReport
       .findMany({
-        where: eq(monthlyReport.monthDate, monthDate) && eq(monthlyReport.month, month)
+        where: eq(monthlyReport.month, month)
     })
-    console.log(reportCheck)
 
-    // if(reportCheck.length == 0){
-    //     // no matches
-    //     await db.insert(monthlyReport).values({...data})
-    //     return {error: false}
-    // } else {
-    //     return {error: false}
-    // }
+    if(reportCheck.length == 0){
+        // no matches
+        await db.insert(monthlyReport).values({...data})
+        return {error: false}
+    } else {
+        return {error: false}
+    }
     return {error: false}
 }

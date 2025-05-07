@@ -2,20 +2,31 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 
-import { Bell, Loader2, Moon, Sun } from "lucide-react";
+import { Bell, Dot, Loader2, Moon, Sun } from "lucide-react";
 import Profile from "../auth/profile";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
-import { fetcher, tokenise } from "../services/services";
+import { fetcher, setStatus, status, tokenise } from "../services/services";
 import useSWR from "swr";
 import { User } from "./users/userColumns";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Notify } from "./notifications/page";
 
 export default function Header(){
+    const [stat, setStat] = useState('old')
+    const [disabled, setDisabled] = useState(false);
     const { setTheme } = useTheme()
+    useEffect(() => {
+        setStat(status())
+    },[])
     let user: User[] = []
+    let notes: Notify[] = []
+
     const logged: User[] = []
     const { data, error } = useSWR("/api/users", fetcher);
+    const { data: notifications, error: notError } = useSWR("/api/notifications", fetcher);
     if(data){
         user = data
         user.forEach(user => {
@@ -24,7 +35,33 @@ export default function Header(){
             }
         })
     }
+    if(notifications){
+        notes = notifications
+    }
+    let hasNew = notes?.some((n: Notify) => n.status === "new");
+
     if (!data) return <div className="flex bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/>Loading Users ...</div>;
+
+    function notify(){
+        if(hasNew){
+            return "bg-muted dark:text-green-400 text-green-600 animate-bounce rounded-full w-10 h-10 flex justify-center items-center"
+        } else {
+            return "bg-muted text-gray-400 rounded-full w-10 h-10 flex justify-center items-center"
+        }
+    }
+    const handleClick = async () => {
+        hasNew = false;
+        const userId = tokenise()[3]
+    
+        // Mark notifications as read
+        await fetch(`/api/notifications/${userId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            }
+          });
+          
+      };
     return <div className="">
         <div className="bg-background rounded-lg grid sm:grid-cols-2 gap-2">
             <div className="sm:col-span-1">
@@ -61,7 +98,8 @@ export default function Header(){
                     </DropdownMenu>
                     <div className="mx-3">
                     <Profile/></div>
-                <Bell/></div>
+                    <Link href="/dashboard/notifications" className={notify()} onClick={handleClick}>
+                    <Bell size={18}/><Dot className="absolute -mt-5 -mr-3" size={40}/></Link></div>
             </div>
         </div>
     </div>

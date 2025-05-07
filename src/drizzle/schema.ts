@@ -190,8 +190,32 @@ export const activityTable = pgTable('activity', {
     updatedAt,
 });
 
+export const notificationsTable = pgTable('notifications', {
+  id: serial('id').primaryKey(),
+  from: integer("user").notNull().references(() => usersTable.id, {onDelete: 'cascade'}),
+  status: text('status').notNull(),
+  notification: text('notification').notNull(),
+    createdAt,
+    updatedAt,
+});
+
+export const notificationUsersTable = pgTable('notification_users', {
+  id: serial('id').primaryKey(),
+  notification: integer('notification_id').notNull().references(() => notificationsTable.id, { onDelete: 'cascade' }),
+  user: integer('user_id').notNull().references(() => usersTable.id, { onDelete: 'cascade' }),
+});
+
 export const activityRelations = relations(activityTable, ({ one }) => ({
 	users: one(usersTable, { fields: [activityTable.user], references: [usersTable.id] }),
+}));
+
+export const notificationsRelations = relations(notificationsTable, ({ one }) => ({
+	users: one(usersTable, { fields: [notificationsTable.from], references: [usersTable.id] }),
+}));
+
+export const notificationsUserRelations = relations(notificationUsersTable, ({ one }) => ({
+	notification: one(notificationsTable, { fields: [notificationUsersTable.notification], references: [notificationsTable.id] }),
+	user: one(usersTable, { fields: [notificationUsersTable.user], references: [usersTable.id] }),
 }));
 
 export const prescriptionsTable = pgTable('prescriptions', {
@@ -261,3 +285,9 @@ export type SelectActivity = typeof activityTable.$inferSelect;
 
 export type InsertPackaging = typeof packagingTable.$inferInsert;
 export type SelectPackaging = typeof packagingTable.$inferSelect;
+
+export type InsertNotification = typeof notificationsTable.$inferInsert;
+export type SelectNotification = typeof notificationsTable.$inferSelect;
+
+export type InsertNotificationsUser = typeof notificationUsersTable.$inferInsert;
+export type SelectNotificationsUser = typeof notificationUsersTable.$inferSelect;

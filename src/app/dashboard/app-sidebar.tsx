@@ -120,11 +120,11 @@ const data = {
           icon: View,
           url: "/dashboard/view",
         },
-        // {
-        //   title: "Reports",
-        //   icon: FileArchive,
-        //   url: "/dashboard/reports",
-        // }
+        {
+          title: "Reports",
+          icon: FileArchive,
+          url: "/dashboard/reports",
+        }
       ],
     },
   ],

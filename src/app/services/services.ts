@@ -66,6 +66,20 @@ export function tokenise(){
     return [name, username, email, id, userType]
 }
 
+export function status(){
+  let status = ''
+  if(window){
+      status = localStorage.getItem('status') || 'old'
+  }
+  return status
+}
+
+export function setStatus(){
+  if(window){
+    localStorage.setItem('status', 'old')
+  }
+}
+
 export function nextCourse(){
   if(window){
       return localStorage.getItem("nextCourse") || ''
@@ -252,6 +266,14 @@ export function getMyDay(num: number | null){
 
 export function date(dateString: string){
     const date = new Date(dateString)
-    return date.toDateString()
+    return date.toLocaleString("en-US", {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
 }
 

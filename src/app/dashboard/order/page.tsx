@@ -11,12 +11,15 @@ import PreviewReceipt from "./previewReceipt";
 
 export type Receipt = {
   id: number
-  user: number
+  user: {
+    name: string
+  };
   receipts: [{
     product: {
       name: string
       unitAmount: number
       unitsPurchased: number
+      totalPurchaseAmount: number
     }
     quantity: number
     createdAt: string

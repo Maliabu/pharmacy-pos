@@ -5,15 +5,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Stock } from "../stock/dataColumns";
 import { BarChartBig, Info, Loader2, Pill, ThumbsUp } from "lucide-react";
-import { date, fetcher, getMyMonth } from "@/app/services/services";
+import { date, fetcher, getMyMonth, setStatus } from "@/app/services/services";
 import useSWR from "swr";
 import ActualSales from "./actualSales";
 import Projections from "./projections";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import MonthlySales from "./monthlySales";
+import { Toaster } from "sonner";
+import { useDailyReminder } from "../notifications/reminder";
+import { Notify } from "../notifications/page";
 
 export default function Page(){
+    useDailyReminder()
 
     let stock: Stock[] = []
     const { data, error } = useSWR("/api/stock", fetcher);
@@ -61,6 +65,7 @@ export default function Page(){
     }
     
     return<div className="bg-background p-8 rounded-lg mt-2">
+        <Toaster className="bg-background text-foreground"/>
         <div className="grid sm:grid-cols-3 gap-2">
             {totalStock() >=10?
             <div className="p-6 bg-primary text-green-200 rounded-lg">

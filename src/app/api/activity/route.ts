@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { db } from "@/drizzle/db";
+import { activityTable } from "@/drizzle/schema";
+import { desc } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 // This will handle the GET request to /api/packaging
@@ -8,7 +11,8 @@ export async function GET() {
     const activities = await db.query.activityTable.findMany({
         with:{
             users: true
-        }
+        },
+        orderBy: (activityTable, { desc }) => [desc(activityTable.createdAt)],
     });
     
     // Return the users as a JSON response

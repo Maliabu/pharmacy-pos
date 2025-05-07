@@ -142,6 +142,12 @@ export const addBillSchema = z.object({
     userId: z.string(),
 })
 
+export const addNotificationSchema = z.object({
+    notification: z.string({required_error: "Please provide your notification.",}),
+    status: z.string(),
+    from: z.coerce.number({required_error: "Please enter a user id.",}),
+})
+
 export const addPackagingSchema = z.object({  
     manufacturer: z.string({required_error: "Please enter name of manufacturer.",}).min(2, {
     message: "name should be atleast a character"

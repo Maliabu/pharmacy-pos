@@ -28,7 +28,8 @@ export type Stock = {
     unitsPurchased: number
     vendor: {
       name: string
-    },
+    }
+    totalPurchaseAmount: number
   }
 
   function expired(expiryDate: string){

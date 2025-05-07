@@ -120,6 +120,20 @@
       "when": 1741036007021,
       "tag": "0016_hot_leech",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1746622926412,
+      "tag": "0017_awesome_bullseye",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1746623036045,
+      "tag": "0018_lonely_zemo",
+      "breakpoints": true
     }
   ]
 }

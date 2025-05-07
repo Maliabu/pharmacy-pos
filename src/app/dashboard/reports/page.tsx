@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import useSWR from "swr";
 import Reports from "./reports";
 import { useEffect, useState } from "react";
+import MonthlyReport from "./monthlyReport";
 
 type Settings = {
     id: number
@@ -21,17 +22,17 @@ export default function ReportSettings(){
   const { data, error } = useSWR("/api/reports", fetcher);
   const {data: reports, error: reportError} = useSWR('/api/reports/generateReport', fetcher)
   useEffect(() => {
-    if (reports.length > 0) {
-        setReport(reports); // Store the generated report
-      } else {
+    if (reports == undefined) {
         setReport([]); // Store the generated report
+      } else if(reports.length > 0) {
+        setReport(reports); // Store the generated report
       }
   }, [reports]);
 
   if(data){
     settings = data
   }
-
+  console.log(settings)
   if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/>Loading settings ...</div>;
 
 
@@ -48,6 +49,6 @@ export default function ReportSettings(){
     Current Setting: <span className="p-2 ml-4 bg-destructive text-white rounded-md">{settings[0].monthDate}</span>
     </div>
       </div>
-      
+      <MonthlyReport monthDate={settings[0].monthDate}/>
     </div>  
 }
