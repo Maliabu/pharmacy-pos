@@ -19,7 +19,7 @@ export const addUserSchema = z.object({
         message: "Password must be atleast 8 characters"
     }).max(50),
     userId: z.string(),
-    image: z.any()
+    image: z.any(),
 }).superRefine(({ confirmPassword, encrPass }, ctx) => {
     if (confirmPassword !== encrPass) {
       ctx.addIssue({
