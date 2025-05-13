@@ -74,12 +74,12 @@ export default function Page(){
         { name: 'Filled', value: perUntracked },
         { name: 'Empty', value: 100 - perUntracked }
       ];
-    return<div className="bg-background p-8 rounded-lg mt-2">
+    return<div className="bg-background sm:p-8 p-4 rounded-lg mt-2">
     <div>
         <div className="pb-4">Stock Overview</div>
     </div>
         <div className="grid sm:grid-cols-3 gap-2">
-            <div className="p-6 bg-green-600 text-green-200 rounded-lg">
+            <div className="sm:p-6 p-2 bg-green-600 text-green-200 rounded-lg">
                 <div className="text-5xl font-bold tracking-tight">
                     {stockStatus(stock)[0]}
                 </div>
@@ -107,7 +107,7 @@ export default function Page(){
             <DonutChart data={safetyData} name="safety"/>
         </div>
         <div className="py-4">Stock UnTracked</div>
-        <div className="grid grid-cols-2">
+        <div className="grid sm:grid-cols-2">
           <div className="bg-green-600 text-green-200 p-8 rounded-lg">
           <div className="text-5xl font-bold tracking-tight">{stockStatus(stock)[3]}</div>
           <div>UnTracked Stock</div>

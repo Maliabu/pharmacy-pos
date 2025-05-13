@@ -40,7 +40,7 @@ export default function Notifications(){
             <div className="text-2xl font-bold">Notifications</div>
             <div className="h-10 w-10 bg-primary text-md text-muted font-bold rounded-full flex justify-center items-center ">{notify.length + 1}</div>
             </div>
-            <div className="bg-muted rounded-lg sm:p-6 p-4 sm:w-1/2 mt-6 admin">
+            <div className="bg-muted rounded-lg sm:p-6 p-4 sm:w-3/4 mt-6 admin">
             
             {
                         notify.map((notes, index) => (

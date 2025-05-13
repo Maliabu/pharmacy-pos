@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     setMounted(true)
   },[router])
   return (
-    <div>
+    <div className="bg-muted">
     {mounted && <SidebarProvider>
       <AppSidebar />
       <main className=" sm:p-6 w-full">

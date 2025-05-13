@@ -2,7 +2,7 @@ import React from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Label } from 'recharts';
 
 const DonutChart = (props:{data:{name: string, value: number}[], name: string}) => {
-  const COLORS = ['#4caf50', '#e0e0e0']; // Green for filled, gray for empty
+  const COLORS = ['#4caf50', '#e0e0e030']; // Green for filled, gray for empty
 
   return (
     <ResponsiveContainer width="100%" height={200}>
