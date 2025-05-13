@@ -10,6 +10,7 @@ import Graph, { YearData } from "./monthGraph";
 import { Receipt } from "../order/page";
 import MonthGraph from "./monthGraph";
 import { Bill } from "../bills/billColumns";
+import MonthRepGraph from "./monthlyRepGraph";
 
 export default function MonthlySales() {
 
@@ -138,9 +139,14 @@ export default function MonthlySales() {
     const groupedData2 = groupByDay2(bills);
     const dataForGraph2 = prepareForGraph(groupedData2);
     
-    if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin" /></div>;
+    if (!data) return <div className="flex sm:p-6 p-4 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin" /></div>;
 
-    return <div className="bg-transparent pt-16 rounded-lg mt-2">
-        <MonthGraph invoices={dataForGraph} graphId="actual" receipts={dataForGraph1} bills={dataForGraph2}/>
-    </div>;
+    return <div>
+    <div className="bg-transparent hidden sm:block pt-8 rounded-lg mt-2">
+    <MonthGraph invoices={dataForGraph} graphId="actual" receipts={dataForGraph1} bills={dataForGraph2}/>
+</div>
+        <div className="bg-transparent sm:hidden pt-4 rounded-lg mt-2">
+        <MonthRepGraph invoices={dataForGraph} graphId="actual" receipts={dataForGraph1} bills={dataForGraph2}/>
+    </div>
+    </div>
 }

@@ -39,24 +39,24 @@ export default function Page(){
     }
     if (!userData) return <div className="flex bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/>Loading Users ...</div>;
 
-    return<div className="bg-background p-8 rounded-lg mt-2">
+    return<div className="bg-background sm:p-8 p-4 rounded-lg mt-2">
         <div className="grid sm:grid-cols-2 gap-2">
             <div className="p-4 col-span-1 text-3xl font-bold tracking-tight">                
                 <div className="h-20 w-20 bg-primary text-muted text-5xl rounded-full flex justify-center items-center ">{name[0]?name[0].toUpperCase():name[0]}</div>
-                <div className="flex justify-between items-center">Account <span className="text-sm p-2 rounded-full bg-muted">{userType}</span></div>
-                <div className="text-sm font-medium text-muted-foreground">This is your login account to access this dashboard. User accounts can only be created and updated by an admin account.</div>
+                <div className="flex justify-between bg-muted p-2 rounded-lg my-4 items-center">Account <span className="text-sm p-2 rounded-full border-2 border-primary">{userType}</span></div>
+                <div className="text-sm text-muted-foreground">This is your login account to access this dashboard. User accounts can only be created and updated by an admin account.</div>
             <div className=" rounded-md">
                 <div className="text-sm">Name: <div className="text-muted-foreground text-sm font-medium">{name}</div></div>
                 <div className="mt-3 text-sm">Email: <div className="text-muted-foreground text-sm font-medium">{email}</div></div>
                 <div className="mt-3 text-sm">Username: <div className="text-muted-foreground text-sm font-medium">{username}</div></div>
             </div>
             </div>
-            <div className="p-6 bg-muted rounded-lg">
+            <div className="sm:p-6 p-4 bg-muted rounded-lg">
                 <div className=" text-2xl font-bold items-center ">LoggedIn Users:</div>
                 <div className="p-2 mt-2">{logged.map(user => (
                     <div key={user.id} className="admin bg-background rounded-lg p-2 mt-1 flex justify-between items-center">
                     <div className="h-10 w-10 -ml-4 border border-2 border-muted bg-primary text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
-                    <div className="text-xs p-2 bg-muted rounded-full">{user.name}</div>
+                    <div className="text-xs p-2 bg-muted rounded-full sm:block hidden">{user.name}</div>
                     <div className="text-sm"><span className="text-xs text-muted-foreground font-bold">last login:</span><br/>{date(user.lastLogin)}</div>
                     </div>
                 ))}</div>

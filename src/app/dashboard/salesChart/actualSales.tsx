@@ -115,7 +115,7 @@ export default function ActualSales(){
     
     if (!data) return <div className="flex p-6 rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/></div>;
     
-    return<div className="border p-8 rounded-lg mt-2">
+    return<div className="border sm:p-8 p-4 rounded-lg mt-2">
         <Graph invoices={dataForGraph} graphId="actual" receipts={dataForGraph1}/>
     </div>
 }

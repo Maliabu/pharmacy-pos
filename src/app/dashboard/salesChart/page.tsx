@@ -64,7 +64,7 @@ export default function Page(){
         return month    
     }
     
-    return<div className="bg-background p-8 rounded-lg mt-2">
+    return<div className="bg-background sm:p-8 p-4 rounded-lg mt-2">
         <Toaster className="bg-background text-foreground"/>
         <div className="grid sm:grid-cols-3 gap-2">
             {totalStock() >=10?
@@ -116,7 +116,7 @@ export default function Page(){
         </div>
         {totalStock() >= 1? filterObjectsByDaysRemaining(stock)[1].length >= 1?
             <div>
-                <div className="text-gray-600 flex items-center justify-between font-bold my-2"> Expired Stock in Inventory <div className="h-10 w-10 flex justify-center rounded-full bg-red-600 text-white items-center">{filterObjectsByDaysRemaining(stock)[1].length}</div></div>
+                <div className="text-gray-600 flex items-center justify-between text-sm font-bold my-2"> Expired Stock in Inventory <div className="h-10 w-10 flex justify-center rounded-full bg-red-600 text-white items-center">{filterObjectsByDaysRemaining(stock)[1].length}</div></div>
                 <Carousel className="sm:w-full sm:px-16 mt-2 sm:py-6 bg-muted rounded-md">
                 <CarouselContent className="-ml-1">
                     {filterObjectsByDaysRemaining(stock)[1].map((product) => (
@@ -146,8 +146,8 @@ export default function Page(){
             </div>
             }
         <div>
-            <div className="border text-gray-600 p-6 rounded-lg mt-2">
-                <div className="flex flex-row bg-green-600 text-green-200 p-6 rounded-lg">
+            <div className="border text-gray-600 sm:p-6 p-2 rounded-lg mt-2">
+                <div className="flex flex-row bg-green-600 text-green-200 sm:p-6 p-2 rounded-lg">
                     <div>
                     <div className="text-sm p-2 rounded-md bg-green-700">{date(Date())}</div>
                     </div>

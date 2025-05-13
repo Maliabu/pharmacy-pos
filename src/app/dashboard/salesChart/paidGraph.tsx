@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 
@@ -68,8 +69,8 @@ const areaCombinedComponents = [
     <ResponsiveContainer width="100%" height={200}>
     <AreaChart data={combinedData}>
       <CartesianGrid strokeDasharray="none" stroke="none" />
-      <XAxis dataKey="month" tick={{ fontSize: 10 }} />
-      <YAxis tick={{ fontSize: 12 }} />
+      {/* <XAxis dataKey="month" tick={{ fontSize: 10 }} /> */}
+      {/* <YAxis tick={{ fontSize: 12 }} /> */}
       <Tooltip
         content={({ payload, label }) => {
           if (!payload || payload.length === 0) return null;
@@ -97,7 +98,7 @@ const areaCombinedComponents = [
       />
       <Legend
         content={({ payload }) => (
-          <ul style={{ fontSize: '13px', listStyleType: 'none' }}>
+          <ul style={{ fontSize: '13px', listStyleType: 'none' }} className='mt-4'>
             {payload?.map((entry, index) => {
               const [year, type] = entry.value.split(' ');  // Extract the year and type (either 'Invoices' or 'Receipts')
               const yearNum = parseInt(year);  // Convert year to number

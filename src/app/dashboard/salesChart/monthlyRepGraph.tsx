@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend, Area, AreaChart } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 
 interface MonthData {
   month: string;
@@ -14,7 +14,7 @@ export interface YearData {
   totalSales: number;
 }
 
-export default function MonthGraph(props: { invoices: YearData[], receipts: YearData[], graphId: string, bills: YearData[] }) {
+export default function MonthRepGraph(props: { invoices: YearData[], receipts: YearData[], graphId: string, bills: YearData[] }) {
 
   // Prepare the data for the LineChart (flattened daily data)
   const flattenedData = props.invoices.flatMap((yearData) =>
@@ -97,7 +97,7 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
   // Line components for both invoices and receipts
   const lineCombinedComponents = [
     ...props.invoices.map((yearData) => (
-      <Area
+      <Line
         key={`${yearData.year} Invoices`}
         type="monotone"
         dot={false}
@@ -107,7 +107,7 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
       />
     )),
     ...props.receipts.map((yearData) => (
-      <Area
+      <Line
         key={`${yearData.year} Receipts`}
         dot={false}
         type="monotone"
@@ -117,7 +117,7 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
       />
     )),
     ...props.bills.map((yearData) => (
-      <Area
+      <Line
         key={`${yearData.year} Bills`}
         type="monotone"
         dot={false}
@@ -129,8 +129,8 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
   ];
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <AreaChart data={transformedData}>
+    <ResponsiveContainer width="100%" height={800}>
+      <LineChart data={transformedData}>
         <CartesianGrid strokeDasharray="none" stroke="none" />
         {/* <XAxis dataKey="day" tick={{ fontSize: 12 }} />  XAxis shows days */}
         {/* <YAxis tick={{ fontSize: 12 }} className='hidden' /> */}
@@ -160,7 +160,7 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
         <Legend
           content={({ payload }) => {
             return (
-              <div style={{ fontSize: '13px', listStyleType: 'none' }} className='grid grid-cols-3 gap-8 mt-4 admin'>
+              <div style={{ fontSize: '13px', listStyleType: 'none' }} className='grid grid-cols-1 gap-4 mt-4 admin'>
                 {payload?.map((entry, index) => {
                   // Split the year and type from the entry value (e.g., "2021 Invoices")
                   const [year, ...typeParts] = entry.value.split(' ');
@@ -202,7 +202,7 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
           }}
         />
         {lineCombinedComponents}
-      </AreaChart>
+      </LineChart>
     </ResponsiveContainer>
   );
 }

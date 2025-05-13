@@ -117,3 +117,19 @@ body {
   overflow-x: hidden !important;
   height: 25vh !important;
 }
+.back-image{
+  background-image: url("./assets/pharm.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.transparent{
+  background-color: rgba(255, 255, 255, 0.544);
+}
+.recharts-responsive-container{
+  height: 400px;
+}
+@media (max-width: 768px) {
+  .responsive-chart-container {
+    height: 700px; /* Height for mobile screens */
+  }
+}

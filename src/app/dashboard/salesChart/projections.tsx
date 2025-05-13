@@ -115,7 +115,7 @@ export default function Projections(){
     
     if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/></div>;
     
-    return<div className="bg-muted p-8 rounded-lg mt-2">
+    return<div className="bg-muted sm:p-8 p-4 rounded-lg mt-2">
         <ProjectionGraph invoices={dataForGraph} graphId="actual" receipts={dataForGraph1}/>
     </div>
 }
