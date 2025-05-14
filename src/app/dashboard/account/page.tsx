@@ -41,15 +41,15 @@ export default function Page(){
 
     return<div className="bg-background sm:p-8 p-4 rounded-lg mt-2">
         <div className="grid sm:grid-cols-12 gap-2">
-            <div className=" sm:col-span-12 text-3xl font-bold tracking-tight"> 
+            <div className=" sm:col-span-12 text-3xl font-bold"> 
                 <div className="sm:grid sm:grid-cols-12 gap-4">
                     <div className="sm:col-span-8">   
-                <div className="flex justify-between bg-muted p-2 rounded-lg my-4 items-center">{name} <span className="text-sm p-2 rounded-full border-2 border-primary">{userType}</span></div>
-                <div className="text-sm font-normal text-foreground">This is your login account to access this dashboard. User accounts can only be created and updated by an admin account.</div>
-            <div className=" rounded-md">
-                <div className="text-sm">Name: <div className="text-muted-foreground text-sm font-medium">{name}</div></div>
-                <div className="mt-3 text-sm">Email: <div className="text-muted-foreground text-sm font-medium">{email}</div></div>
-                <div className="mt-3 text-sm">Username: <div className="text-muted-foreground text-sm font-medium">{username}</div></div>
+                <div className="flex justify-between bg-muted p-2 tracking-tight rounded-lg my-4 items-center">{name} <span className="text-sm p-2 rounded-full border-2 border-primary">{userType}</span></div>
+                <div className="sm:text-xs text-sm font-normal text-foreground">This is your login account to access this dashboard. User accounts can only be created and updated by an admin account.</div>
+            <div className="grid sm:grid-cols-3 py-4 rounded-md text-sm">
+                <div>Name: <div className="text-muted-foreground text-sm font-medium">{name}</div></div>
+                <div>Email: <div className="text-muted-foreground text-sm font-medium">{email}</div></div>
+                <div>Username: <div className="text-muted-foreground text-sm font-medium">{username}</div></div>
             </div>
                     </div>
                     <div className="sm:col-span-4 p-4 grid items-center justify-center bg-muted rounded-lg">
@@ -60,11 +60,11 @@ export default function Page(){
             <div className="sm:p-6 p-4 bg-muted rounded-lg sm:col-span-12">
                 <div className=" text-2xl font-bold items-center tracking-tight">LoggedIn Users:</div>
                 <div className="p-2 mt-2">{logged.map(user => (
-                    <div key={user.id} className="admin bg-background rounded-lg mt-1 grid grid-cols-4 gap-4 justify-between items-center">
-                    <div className="h-12 w-12 text-lg -ml-6 border border-8 border-muted bg-green-600 text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
-                    <div className="text-xs p-2 rounded-full sm:block hidden">{user.name}</div>
-                    <div className="text-xs flex"><MapPin size={18} className="mr-2"/> {user.loginLocation}</div>
-                    <div className="text-xs sm:mr-6 mr-4"><span className="text-muted-foreground font-bold">last login:</span><br/>{date(user.lastLogin)}</div>
+                    <div key={user.id} className="admin bg-background p-2 rounded-lg mt-1 grid grid-cols-12 gap-4 justify-between items-center">
+                    <div className="h-12 w-12 text-lg -ml-6 border col-span-1 border-8 border-muted bg-green-600 text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
+                    <div className="text-xs p-2 sm:col-span-2 rounded-full sm:block hidden">{user.name}</div>
+                    <div className="text-xs flex col-span-5"><MapPin size={18} className={user.loginLocation==''?'mr-2 text-muted-foreground':'mr-2 text-primary'}/> {user.loginLocation}</div>
+                    <div className="text-xs sm:mr-6 mr-4 sm:col-span-4 col-span-6"><span className="text-muted-foreground font-bold">last login:</span><br/>{date(user.lastLogin)}</div>
                     </div>
                 ))}</div>
             </div>
