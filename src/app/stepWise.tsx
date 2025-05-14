@@ -155,7 +155,7 @@ export default function StepWise() {
             //create obj
             if(account !== ''){
                 const encr = await handleEncryption(values.email)
-                const link = 'localhost:3000/reset?email='+encodeURIComponent(encr.encryptedData)+'&init='+encodeURIComponent(encr.initVector)
+                const link = 'https://newfeelventures.com/reset?email='+encodeURIComponent(encr.encryptedData)+'&init='+encodeURIComponent(encr.initVector)
                 const sendEmail = await sendHtmlEmail(values.email, 'Password Reset', account, link)
                 if(sendEmail == true){
                     setButtonText('Email Successful')
