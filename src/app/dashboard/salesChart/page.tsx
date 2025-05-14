@@ -146,7 +146,7 @@ export default function Page(){
             </div>
             }
         <div>
-            <div className="border text-gray-600 sm:p-6 p-2 rounded-lg mt-2">
+            <div className="bg-secondary text-gray-600 sm:p-6 p-2 rounded-lg mt-2">
                 <div className="flex flex-row bg-green-600 text-green-200 sm:p-6 p-2 rounded-lg">
                     <div>
                     <div className="text-sm p-2 rounded-md bg-green-700">{date(Date())}</div>

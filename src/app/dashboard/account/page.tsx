@@ -44,7 +44,7 @@ export default function Page(){
             <div className=" sm:col-span-12 text-3xl font-bold tracking-tight"> 
                 <div className="sm:grid sm:grid-cols-12 gap-4">
                     <div className="sm:col-span-8">   
-                <div className="flex justify-between bg-muted p-2 rounded-lg my-4 items-center">Account <span className="text-sm p-2 rounded-full border-2 border-primary">{userType}</span></div>
+                <div className="flex justify-between bg-muted p-2 rounded-lg my-4 items-center">{name} <span className="text-sm p-2 rounded-full border-2 border-primary">{userType}</span></div>
                 <div className="text-sm font-normal text-foreground">This is your login account to access this dashboard. User accounts can only be created and updated by an admin account.</div>
             <div className=" rounded-md">
                 <div className="text-sm">Name: <div className="text-muted-foreground text-sm font-medium">{name}</div></div>
@@ -61,7 +61,7 @@ export default function Page(){
                 <div className=" text-2xl font-bold items-center ">LoggedIn Users:</div>
                 <div className="p-2 mt-2">{logged.map(user => (
                     <div key={user.id} className="admin bg-background rounded-lg mt-1 flex justify-between items-center">
-                    <div className="h-16 w-16 text-lg -ml-6 border border-8 border-muted bg-primary text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
+                    <div className="h-16 w-16 text-lg -ml-6 border border-8 border-muted bg-sky-600 text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
                     <div className="text-xs p-2 bg-muted rounded-full sm:block hidden">{user.name}</div>
                     <div className="text-sm sm:mr-6 mr-4"><span className="text-xs text-muted-foreground font-bold">last login:</span><br/>{date(user.lastLogin)}</div>
                     </div>

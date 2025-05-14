@@ -26,10 +26,10 @@ export const togglePasswordVisibility = ()=>{
     if(pass !== null && see !== null){
     if(pass.getAttribute('type') === "password"){
         pass.setAttribute('type', 'text')
-        see.innerHTML = "Password: Now you see me"
+        see.innerHTML = ""
     } else{
         pass.setAttribute('type', 'password')
-        see.innerHTML = "Password: Now you dont"
+        see.innerHTML = ""
     }}
 }
 export const togglePasswordVisibility2 = ()=>{
@@ -77,6 +77,12 @@ export function status(){
 export function setStatus(){
   if(window){
     localStorage.setItem('status', 'old')
+  }
+}
+
+export function currentUrl(){
+  if(window){
+    return window.location.href
   }
 }
 

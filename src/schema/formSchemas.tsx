@@ -39,6 +39,31 @@ export const loginUserSchema = z.object({
     }).max(50),
 })
 
+export const resetPasswordSchema = z.object({
+    email: z.string({required_error: "Please enter your email.",}).min(5, {
+        message: "email too short"
+    }),
+})
+
+export const passwordResetSchema = z.object({
+    email: z.string(),
+    password: z.string(),
+    confirmPassword: z.string({required_error: "Please confirm your password.",}),
+    decInit: z.string(),
+    encrPass: z.string({required_error: "Please enter a password.",}).min(2, {
+        message: "Password must be atleast 8 characters"
+    }).max(50),
+    userId: z.string(),
+}).superRefine(({ confirmPassword, encrPass }, ctx) => {
+    if (confirmPassword !== encrPass) {
+      ctx.addIssue({
+        code: "custom",
+        message: "The passwords did not match",
+        path: ['confirmPassword']
+      });
+    }
+  });
+
 export const reportSchema = z.object({
     user: z.string({required_error: "Please provide a user.",}).min(1, {
         message: "user id required"

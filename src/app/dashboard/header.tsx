@@ -69,7 +69,7 @@ export default function Header(){
             <div className=" bg-muted py-1 px-4 rounded-md flex justify-between items-center">
                 <div className="text-sm">Logged in users: {logged.length}</div>
                 <div className="flex">{logged.map(user => (
-                    <div key={user.id} className="h-8 w-8 -ml-4 border border-2 border-muted bg-primary text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
+                    <div key={user.id} className="h-8 w-8 -ml-4 border border-2 border-muted bg-green-600 text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
                 ))}</div>
             </div>}
             </div>

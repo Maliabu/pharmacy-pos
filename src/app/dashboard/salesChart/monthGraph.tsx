@@ -102,7 +102,8 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
         type="monotone"
         dot={false}
         dataKey="Invoices"
-        stroke="#4caf50"  // Green for invoices
+        stroke="#2196f3"
+        fill='#2196f3'  // Green for invoices
         name={`${yearData.year} Invoices`} // Including year in the name
       />
     )),
@@ -112,7 +113,8 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
         dot={false}
         type="monotone"
         dataKey="Receipts"
-        stroke="#2196f3"  // Blue for receipts
+        fill='#4caf60'
+        stroke='#4caf60'  // Blue for receipts
         name={`${yearData.year} Receipts`} // Including year in the name
       />
     )),
@@ -122,7 +124,8 @@ export default function MonthGraph(props: { invoices: YearData[], receipts: Year
         type="monotone"
         dot={false}
         dataKey="Bills"
-        stroke="#000"  // Blue for receipts
+        fill='#ceff00'
+        stroke="#ceff00"  // Blue for receipts
         name={`${yearData.year} Bills`} // Including year in the name
       />
     ))

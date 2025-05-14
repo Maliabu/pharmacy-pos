@@ -4,12 +4,12 @@ import { db } from "@/drizzle/db";
 import { Bills, activityTable, currencyTable, invoiceItemsTable, invoiceTable, monthlyReport, notificationsTable, packagingTable, prescriptionsTable, receipt, receiptTable, reportTable, stockTable, supplierTable, usersTable, vendorTable} from "@/drizzle/schema";
 // import "use-server"
 import { z } from "zod";
-import { loginUserSchema, addUserSchema, addSupplierSchema, addVendorSchema, addStockSchema, addBillSchema, addPackagingSchema, addInvoiceSchema, addInvoiceItemsSchema, addPrescription, reportSchema, addNotificationSchema } from '@/schema/formSchemas'
+import { loginUserSchema, addUserSchema, addSupplierSchema, addVendorSchema, addStockSchema, addBillSchema, addPackagingSchema, addInvoiceSchema, addInvoiceItemsSchema, addPrescription, reportSchema, addNotificationSchema, passwordResetSchema } from '@/schema/formSchemas'
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { File } from "node:buffer";
 import { promises as fs } from "node:fs";
-import { sendEmail } from "../nodemailer";
+import { sendPasswordResetLInk } from "../nodemailer";
 import { desc } from 'drizzle-orm';
 
 const today = new Date()
@@ -74,9 +74,47 @@ export async function uploadFile(formData: FormData) {
     revalidatePath("/");
 }
 
-export async function sendHtmlEmail(email: string, title:string, name:string){
-    sendEmail(email, title, name)
+export async function sendHtmlEmail(email: string, title:string, name:string, link: string){
+    sendPasswordResetLInk(email, title, name, link)
     return true
+}
+
+export async function checkEmail(email: string){
+    const check = await db.query.usersTable.findFirst({where:eq(usersTable.email, email)})
+    if(check !== undefined){
+        return {error: true, name: check.name, email: check.email}
+    } else {
+        return {error: false, name: "", email: email}
+    }
+}
+
+export async function resetPassword(unsafeData: z.infer<typeof passwordResetSchema>) : 
+Promise<{error: boolean}> {
+   const {success, data} = passwordResetSchema.safeParse(unsafeData)
+
+   if (!success){
+    return {error: true}
+   }
+
+   try{
+
+    const reset = await db.update(usersTable).set({password: data.password}).where(eq(usersTable.email, data.email))
+ 
+    if(reset.rowCount !== 0) {
+        const activity = await logActivity("Updated their password", data.userId)
+        if(activity.error == false){
+            return {error: false}
+        } else {
+            return {error: true}
+        }
+    }
+    return {error: true}
+
+   } catch(error) {
+        console.log(error)
+        return {error: true}
+   }
+
 }
 
 export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>){
@@ -100,6 +138,7 @@ export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>){
    const checkEmail = await db.query.usersTable.findFirst({
     where: eq(usersTable.email, data.email)
    })
+
    if(checkEmail && checkEmail.isActive === true){
     encrPass = checkEmail.password
     initVector = checkEmail.decInit
@@ -118,10 +157,13 @@ export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>){
     }).where(
         eq(usersTable.email, data.email)
     )
+    await logActivity(name+" Logged in", id.toString())
+    return [token, encrPass, initVector, usertype, email, username, name, id.toString(), userType]
+
+   } else {
+    return []
    }
-   await logActivity(name+" Logged in", id.toString())
    
-   return [token, encrPass, initVector, usertype, email, username, name, id.toString(), userType]
 }
 
 export async function logout(formData: FormData): Promise<{error: boolean}>{
