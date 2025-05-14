@@ -13,7 +13,8 @@ export async function GET() {
                     product: true
                 }
             }
-        }
+        },
+        orderBy: (receipt, { desc }) => [desc(receipt.createdAt)],
     });
     
     // Return the users as a JSON response

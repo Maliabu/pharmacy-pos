@@ -32,17 +32,16 @@ export default function ReportSettings(){
   if(data){
     settings = data
   }
-  console.log(settings)
   if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/>Loading settings ...</div>;
 
 
 
-  return<div className="bg-background p-8 rounded-lg mt-2">
-    <div className="text-3xl font-bold tracking-tight">Reports</div>
+  return<div className="bg-background sm:p-8 p-4 rounded-lg mt-2">
+    <div className="text-2xl font-bold tracking-tight">Reports</div>
     <div className="text-sm text-muted-foreground mt-8">Settings</div>
     <div className="text-sm">Set a date for when reports will be generated every month (number between 1 and 7). If no date is set then by DEFAULT reports will be generated on the LAST DAY of the month at MIDNIGHT.</div>
 
-    <div className="flex flex-row justify-between bg-muted p-2 mt-2 rounded-lg">
+    <div className="sm:flex sm:flex-row sm:justify-between bg-muted p-2 mt-2 rounded-lg">
       <div>
     <Reports/></div>
     <div className=" p-3 rounded-md text-sm">

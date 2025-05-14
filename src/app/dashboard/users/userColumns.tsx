@@ -17,6 +17,7 @@ export type User = {
     lastLogin: string
     isLoggedIn: boolean
     username: string
+    loginLocation: string
   }
 
 export const columns: ColumnDef<User>[] = [

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { date } from "@/app/services/services";
 import { User } from "../users/userColumns";
-import { Loader2 } from "lucide-react";
+import { Loader2, MapPin } from "lucide-react";
 
 export default function Page(){
     const [email, setEmail] = useState("")
@@ -58,12 +58,13 @@ export default function Page(){
                 </div> 
             </div>
             <div className="sm:p-6 p-4 bg-muted rounded-lg sm:col-span-12">
-                <div className=" text-2xl font-bold items-center ">LoggedIn Users:</div>
+                <div className=" text-2xl font-bold items-center tracking-tight">LoggedIn Users:</div>
                 <div className="p-2 mt-2">{logged.map(user => (
-                    <div key={user.id} className="admin bg-background rounded-lg mt-1 flex justify-between items-center">
-                    <div className="h-16 w-16 text-lg -ml-6 border border-8 border-muted bg-sky-600 text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
-                    <div className="text-xs p-2 bg-muted rounded-full sm:block hidden">{user.name}</div>
-                    <div className="text-sm sm:mr-6 mr-4"><span className="text-xs text-muted-foreground font-bold">last login:</span><br/>{date(user.lastLogin)}</div>
+                    <div key={user.id} className="admin bg-background rounded-lg mt-1 grid grid-cols-4 gap-4 justify-between items-center">
+                    <div className="h-12 w-12 text-lg -ml-6 border border-8 border-muted bg-green-600 text-background grid font-bold rounded-full justify-center items-center">{user.name[0].toUpperCase()}</div>
+                    <div className="text-xs p-2 rounded-full sm:block hidden">{user.name}</div>
+                    <div className="text-xs flex"><MapPin size={18} className="mr-2"/> {user.loginLocation}</div>
+                    <div className="text-xs sm:mr-6 mr-4"><span className="text-muted-foreground font-bold">last login:</span><br/>{date(user.lastLogin)}</div>
                     </div>
                 ))}</div>
             </div>

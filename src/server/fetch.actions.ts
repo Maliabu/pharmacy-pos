@@ -117,7 +117,7 @@ Promise<{error: boolean}> {
 
 }
 
-export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>){
+export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>, address: string){
    const {success, data} = loginUserSchema.safeParse(unsafeData)
 
    if (!success){
@@ -153,7 +153,8 @@ export async function loginUser(unsafeData: z.infer<typeof loginUserSchema>){
     // before login, update isloggedin and lastlogin
     await db.update(usersTable).set({
         isLoggedIn: true,
-        lastLogin: today
+        lastLogin: today,
+        loginLocation: address
     }).where(
         eq(usersTable.email, data.email)
     )

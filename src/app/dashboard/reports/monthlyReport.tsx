@@ -48,13 +48,13 @@ export default function MonthlyReport(props: {monthDate: string}){
     if (!data) return <div>loading...</div>
     // check monthly report for no entries yet
 
-    return<div className=" p-3 bg-muted rounded-md text-sm grid grid-cols-3 gap-2 mt-1">
+    return<div className=" p-3 bg-muted rounded-md text-sm grid sm:grid-cols-3 gap-2 mt-1">
     {
         report.length > 0?
         report.map(reports => (
             <div key={reports.id} className=" bg-background rounded-md">
                 <div className="flex flex-row justify-between">
-                    <div className="font-bold bg-green-700 text-green-100 p-3 rounded-l-md">{reports.monthDate}<br/> {reports.month}</div>
+                    <div className="font-bold p-3 rounded-l-md">{reports.monthDate}<br/> {reports.month}</div>
                     <div className="p-3">
                     <Dialog>
                     <DialogTrigger>

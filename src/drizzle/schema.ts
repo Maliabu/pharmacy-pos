@@ -19,6 +19,7 @@ export const usersTable = pgTable('users', {
   decInit: varchar('decInitVector').notNull(),
   isLoggedIn: boolean("is_logged_in").notNull().default(false),
   lastLogin: timestamp('last_login'),
+  loginLocation: text('login_location').default(''),
   createdAt,
   updatedAt,
 });

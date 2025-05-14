@@ -134,6 +134,13 @@
       "when": 1746623036045,
       "tag": "0018_lonely_zemo",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1747235327745,
+      "tag": "0019_tough_shiver_man",
+      "breakpoints": true
     }
   ]
 }

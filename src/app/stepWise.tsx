@@ -23,7 +23,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { sendPasswordResetLInk } from "@/nodemailer"
 
 
-export default function StepWise() {
+export default function StepWise(props:{address: string}) {
     const [currentStep, setCurrentStep] = useState(1)
     const [loading, setLoading] = useState(false);
     const { setTheme } = useTheme() 
@@ -56,7 +56,7 @@ export default function StepWise() {
         if(app !== null){
           app.innerHTML = text;
         }
-          const data = await loginUser(values)
+          const data = await loginUser(values, props.address)
           if(data.length !== 0){
           const first = data[0]
           const second = data[1]

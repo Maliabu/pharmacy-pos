@@ -29,7 +29,7 @@ const data = {
           url: "/dashboard/salesChart",
         },
         {
-          title: "New Order",
+          title: "New Receipt",
           icon: Plus,
           url: "/dashboard/order",
         },

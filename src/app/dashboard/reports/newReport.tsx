@@ -108,7 +108,7 @@ export default function NewMonthReport(props: {month: string}){
             }
         })
     }
-    if(!monthReceipt) return <div>Loading receipts...</div>
+    if(!monthReceipt) return <div>Loading report...</div>
     return (
         <div className="sm:p-8 rounded-md sm:w-[800px]">
             <div className="pb-6 flex flex-col items-center justify-center text-center">

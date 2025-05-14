@@ -8,6 +8,7 @@ import { DollarSignIcon, Loader2, Receipt } from "lucide-react";
 import useSWR from "swr";
 import { date, fetcher } from "@/app/services/services";
 import PreviewReceipt from "./previewReceipt";
+import { Button } from "@/components/ui/button";
 
 export type Receipt = {
   id: number
@@ -33,10 +34,10 @@ export default function Page(){
       receipt = data
   }
   if (!data) return <div className="flex p-6 bg-background rounded-md justify-center items-center mt-2"><Loader2 className="animate-spin"/>Loading Receipts ...</div>;
-    return<div className="bg-background p-8 rounded-lg mt-2">
+    return<div className="bg-background sm:p-8 p-4 rounded-lg mt-2">
         <Dialog>
         <DialogTrigger>
-        <div className="p-2 bg-primary rounded-md text-sm text-green-100">New Purchase</div>
+        <Button className="p-2 bg-primary rounded-md text-sm text-green-100">New Receipt</Button>
         </DialogTrigger>
         <DialogContent className="sm:w-[800px] h-screen overflow-y-auto">
         <DialogHeader className="hidden">
@@ -48,9 +49,9 @@ export default function Page(){
         <StepWise/>
         </DialogContent>
       </Dialog>
-      <div className="text-2xl font-bold tracking-tight mt-8">Receipts</div>
+      <div className="text-2xl font-bold tracking-tight mt-6">Receipts</div>
       {receipt.length > 0?
-      <div className="grid grid-cols-3 gap-2 bg-muted rounded-md p-4 mt-4 admin-scroll">
+      <div className="grid sm:grid-cols-3 gap-2 bg-muted rounded-md p-4 mt-4 admin-scroll">
       {
         receipt.map(receipt => (
           <div key={receipt.id} className="p-4 bg-background rounded-md mt-1 flex justify-between h-[70px]">
